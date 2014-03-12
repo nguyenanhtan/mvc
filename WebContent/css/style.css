@@ -18,6 +18,11 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 	 border: 2px solid black;
 	 white-space: nowrap;
 }
+#right
+{
+	float:left;
+	margin-left:15px;
+}
 .btn-opt-require
 {
 	height: 33px;
@@ -74,4 +79,7 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 .opacity-60
 {
 	opacity:0.6;
+}
+div#box-require{
+	border:1px solid #123;
 }
