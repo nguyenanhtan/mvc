@@ -1,0 +1,77 @@
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
+#map-canvas { height: 570px; width:75%;float:left; border: #123 solid 1px;}
+#route{
+  
+  }
+#console{
+  	float:left;
+  }
+.labels {
+	 color: red;
+	 background-color: white;
+	 font-family: "Lucida Grande", "Arial", sans-serif;
+	 font-size: 10px;
+	 font-weight: bold;
+	 text-align: center;
+	 width: 60px;     
+	 border: 2px solid black;
+	 white-space: nowrap;
+}
+.btn-opt-require
+{
+	height: 33px;
+	width:33px;
+	padding:0;
+	margin:0;
+	border:none;
+	cursor:pointer;
+}
+#btn-add{
+	background: url("../img/add-icon-32-32.png") center no-repeat
+}
+#btn-remove
+{
+	background: url("../img/delete-icon-32-32.png") center no-repeat
+}
+#btn-pickup
+{
+	background: url("../img/Map-Marker-Ball-Azure-icon.png") center no-repeat
+}
+#btn-deliver
+{
+	background: url("../img/Map-Marker-Ball-Pink-icon.png") center no-repeat
+}
+#btn-pickup:focus
+{
+		background: url("../img/Map-Marker-Ball-Right-Azure-icon.png") center no-repeat
+}
+#btn-deliver:focus
+{
+	background: url("../img/Map-Marker-Ball-Right-Pink-icon.png") center no-repeat
+}
+#form-opt-require
+{
+		
+}
+#form-opt-require p
+{
+	display:inline-block;
+	min-width:60px;
+	margin:0px;
+		
+}
+#form-opt-require input.ipt-text
+{
+	width:100px;
+	margin:1px;
+	
+}
+.clear
+{
+	clear: both;
+}
+.opacity-60
+{
+	opacity:0.6;
+}
