@@ -1,3 +1,4 @@
+*{font-family:ubuntu;}
 html { height: 100% }
 body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 #map-canvas { height: 570px; width:75%;float:left; border: #123 solid 1px;}
@@ -38,6 +39,10 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 #btn-remove
 {
 	background: url("../img/delete-icon-32-32.png") center no-repeat
+}
+#btn-save
+{
+	background: url("../img/3floppy-unmount-icon.png") center no-repeat
 }
 #btn-pickup
 {
@@ -81,5 +86,27 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 	opacity:0.6;
 }
 div#box-require{
-	border:1px solid #123;
+	border:1px solid #DFDBD4;
+	border-radius: 10px;
+    margin-top: 5px;
+}
+.btn-require
+{
+	background: url("../img/edit-clipboard-icon.png") top no-repeat;
+	width:50px;
+	height:50px;
+	border:none;
+	color:#2D82B9;
+	font-weight:bold;
+}
+.header-box
+{
+	padding:5px 5px;
+	margin:0;
+	margin-bottom:5px;
+	border-bottom:1px solid #DFDBD4;
+}
+.row-opt
+{
+	padding:0px 5px;		
 }

@@ -13,6 +13,8 @@
 	</script>
     <script type="text/javascript" src="./js/mapAPI.js">    
     </script>
+    <script type="text/javascript" src="./js/Request.js">    
+    </script>
   </head>
   <body>
  
@@ -20,39 +22,48 @@
 
 <div id="map-canvas"></div>
 <div id="right">
-<input type="button" id="route" value="Route" onclick="calcRoute(1,2)"/>     
+
 <p id="console"></p>
-<input type="button" id="btn-add" class="btn-opt-require"/>
-<input type="button" id="btn-remove" class="btn-opt-require"/>
+<input type="button" id="btn-add" class="btn-opt-require" title="New require"/>
+<input type="button" id="btn-save" class="btn-opt-require" title="Save require"/>
+<input type="button" id="btn-remove" class="btn-opt-require" title="Remove require"/>
 
 <form id="form-opt-require">
 <div id="box-require">
-	<div>
+	<h3 class="header-box">Input require</h3>
+	<div class="row-opt">
 		<input type="button" id="btn-pickup" class="btn-opt-require"/>
-		<input type="text" value="position pickup" class="opacity-60" id="pos-pickup"/>
+		<input type="text" value="Position pickup" title="Position pickup" class="opacity-60" id="pos-pickup" readonly="readonly"/>
 	</div>
-	<div>
+	<div class="row-opt">
 		<input type="button" id="btn-deliver" class="btn-opt-require"/>
-		<input type="text" value="position deliver" class="opacity-60" id="pos-deliver"/>
+		<input type="text" value="Position deliver" title="Position deliver" class="opacity-60" id="pos-deliver" readonly="readonly"/>
 	
 	</div>
-	<div>
+	<div class="row-opt">
 		<p>Weight:</p><input class="ipt-text" type="number" value=""/>
 	</div>
-	<div>
+	<div class="row-opt">
 		<p>Ep:</p><input class="ipt-text" type="time" value=""/>
 	</div>
-	<div>
+	<div class="row-opt">
 		<p>Lp:</p><input class="ipt-text" type="time" value=""/>
 	</div>
-	<div>
+	<div class="row-opt">
 		<p>Ed:</p><input class="ipt-text" type="time" value=""/>
 	</div>
-	<div>
+	<div class="row-opt">
 		<p>Lp:</p><input class="ipt-text" type="time" value=""/>
 	</div>
 </div>
 </form>
+<div>
+<input type="button" class="btn-require" value="1"/>
+<input type="button" class="btn-require" value="2"/>
+<input type="button" class="btn-require" value="3"/>
+<input type="button" class="btn-require" value="4"/>
+</div>
+<input type="button" id="route" value="Route" onclick="calcRoute(1,0)"/>     
 </div>
   </body>
 </html>
