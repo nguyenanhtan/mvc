@@ -40,8 +40,19 @@ function initialize()
 	  	      map: map,
 	  	      draggable:true,
 	  	      title:"dragable",
-	  	      icon: icon_marker
+	  	      animation: google.maps.Animation.BOUNCE,
+	  	      icon: icon_marker,
+	  	      sdf:1
 	  	  });
+		  google.maps.event.addListener(dmarker, 'mouseover', function() {
+		  	    dmarker.setAnimation(null);
+		  });
+		  google.maps.event.addListener(dmarker, 'click', function() {
+		  	    
+		  });
+		  google.maps.event.addListener(dmarker, 'mouseout', function() {
+		  	    dmarker.setAnimation(google.maps.Animation.BOUNCE);
+		  });
 		  google.maps.event.addListener(dmarker, 'mouseup', function() {
 		  	    //alert(dmarker.getPosition());
 		  	    pos_deliver.value = dmarker.getPosition();
@@ -56,9 +67,17 @@ function initialize()
 	  	      position: location,
 	  	      map: map,
 	  	      draggable:true,
+	  	      animation: google.maps.Animation.BOUNCE,
 	  	      title:"Kéo để chuyển vị trí!",
-	  	      icon: icon_marker
+	  	      icon: icon_marker,
+	  	      sdf:1
 	  	  });
+		  google.maps.event.addListener(pmarker, 'mouseover', function() {
+		  	    pmarker.setAnimation(null);
+		  });
+		  google.maps.event.addListener(pmarker, 'mouseout', function() {
+		  	    pmarker.setAnimation(google.maps.Animation.BOUNCE);
+		  });
 		  google.maps.event.addListener(pmarker, 'mouseup', function() {
 		  	    //alert(pmarker.getPosition());
 			  pos_pickup.value = pmarker.getPosition();
