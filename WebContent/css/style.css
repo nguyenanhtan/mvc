@@ -110,3 +110,20 @@ div#box-require{
 {
 	padding:0px 5px;		
 }
+#confirm
+{
+	border:1px solid #DFDBD4;	
+	border-radius:0px 10px 0 10px;
+	
+}
+#cfm-yes, #cfm-no
+{
+	float:right;
+	
+}
+#message
+{
+	border-bottom:1px solid #DFDBD4;
+	padding:5px;
+	margin:0;
+}

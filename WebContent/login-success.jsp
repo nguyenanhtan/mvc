@@ -15,6 +15,12 @@
     </script>
     <script type="text/javascript" src="./js/Request.js">    
     </script>
+    <script type="text/javascript" src="./js/onbutton.js">    
+    </script>
+    <script type="text/javascript" src="./js/variable.js">    
+    </script>
+    <script type="text/javascript" src="./js/init.js">    
+    </script>
   </head>
   <body>
  
@@ -27,7 +33,12 @@
 <input type="button" id="btn-add" class="btn-opt-require" title="New require"/>
 <input type="button" id="btn-save" class="btn-opt-require" title="Save require"/>
 <input type="button" id="btn-remove" class="btn-opt-require" title="Remove require"/>
-
+<div id="confirm">	
+	<p id="message"> sad</p>
+	<input type="button" id="cfm-yes" value="Yes"></input>
+	<input type="button" id="cfm-no" value="No"></input>	
+	<div class="clear"></div>
+</div>
 <form id="form-opt-require">
 <div id="box-require">
 	<h3 class="header-box">Input require</h3>
@@ -41,19 +52,19 @@
 	
 	</div>
 	<div class="row-opt">
-		<p>Weight:</p><input class="ipt-text" type="number" value=""/>
+		<p>Weight:</p><input class="ipt-text" type="number" value="0" id="ipt-weight"/>
 	</div>
 	<div class="row-opt">
-		<p>Ep:</p><input class="ipt-text" type="time" value=""/>
+		<p>Ep:</p><input class="ipt-text" type="time" value="0" id="ipt-Ep"/>
 	</div>
 	<div class="row-opt">
-		<p>Lp:</p><input class="ipt-text" type="time" value=""/>
+		<p>Lp:</p><input class="ipt-text" type="time" value="9999" id="ipt-Lp"/>
 	</div>
 	<div class="row-opt">
-		<p>Ed:</p><input class="ipt-text" type="time" value=""/>
+		<p>Ed:</p><input class="ipt-text" type="time" value="0" id="ipt-Ed"/>
 	</div>
 	<div class="row-opt">
-		<p>Lp:</p><input class="ipt-text" type="time" value=""/>
+		<p>Ld:</p><input class="ipt-text" type="time" value="9999" id="ipt-Ld"/>
 	</div>
 </div>
 </form>

@@ -1,17 +1,3 @@
-var map;
-var directionsDisplay;
-var markers = new Array();
-var icon_pickup = "./img/Map-Marker-Ball-Azure-icon.png";
-var icon_deliver = "./img/Map-Marker-Ball-Pink-icon.png";
-var icon_marker = "";//icon_pickup;
-var btn_pickup = document.getElementById("btn-pickup");
-var btn_deliver = document.getElementById("btn-deliver");
-var pos_pickup;
-var pos_deliver;
-var ele_focus = null;
-var directionsService = new google.maps.DirectionsService();
-var patt_pos=/^\(-{0,1}\d*\.{0,1}\d+,\s{0,1}-{0,1}\d*\.{0,1}\d+\)$/;	
-
 function initialize() 
 {	
 	directionsDisplay = new google.maps.DirectionsRenderer();
@@ -122,32 +108,4 @@ function initialize()
 	}
 
  google.maps.event.addDomListener(window, 'load', initialize);  
- window.onload = function(){
-	 btn_pickup = document.getElementById("btn-pickup");
-	 btn_deliver = document.getElementById("btn-deliver");
-	 pos_pickup = document.getElementById("pos-pickup");
-	 pos_deliver = document.getElementById("pos-deliver");
-	 btn_pickup.onclick = function(){
-		 if(patt_pos.test(pos_pickup.value))
-		 {
-			 btn_pickup.blur();
-		 }		 
-	 };
-	 btn_deliver.onclick = function(){
-		 if(patt_pos.test(pos_deliver.value))
-		 {
-			 btn_deliver.blur();
-		 }		 
-	 };
-	 //alert("btn_pickup: "+btn_pickup);
- };
-$(document).ready(function(){	
-	$("*").focus(function(){ele_focus = this;});
-	$("*").blur(function(){ele_focus = null;});
-	$("#btn-save").click(function(){
-		var r = new Request(12, 2, 4, 6, 7, 8, 9);
-		r.print();
-		r.pickup = 2;
-		r.print();
-	});
-});
+ 
