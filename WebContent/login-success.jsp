@@ -27,12 +27,13 @@
 <p>You are successfully logged in!</p>
 
 <div id="map-canvas"></div>
+<div id="bound-right">
 <div id="right">
 
 <p id="console"></p>
 <input type="button" id="btn-add" class="btn-opt-require" title="New require"/>
 <input type="button" id="btn-save" class="btn-opt-require" title="Save require"/>
-<input type="button" id="btn-remove" class="btn-opt-require" title="Remove require"/>
+<!-- <input type="button" id="btn-remove" class="btn-opt-require" title="Remove require"/> -->
 <div id="confirm">	
 	<p id="message"> sad</p>
 	<input type="button" id="cfm-yes" value="Yes"></input>
@@ -68,13 +69,39 @@
 	</div>
 </div>
 </form>
+<p class="line clear"></p>
 <div>
-<input type="button" class="btn-require" value="1"/>
-<input type="button" class="btn-require" value="2"/>
-<input type="button" class="btn-require" value="3"/>
-<input type="button" class="btn-require" value="4"/>
+<ul id="list-request">
+	<li>
+	<input type="button" class="btn-require" value="1"/>
+	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
+	</li>
+	<li>
+	<input type="button" class="btn-require" value="2"/>
+	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
+	</li>
+	<li>
+	<input type="button" class="btn-require" value="3"/>
+	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
+	</li>
+	<li>
+	<input type="button" class="btn-require" value="4"/>
+	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
+	</li>
+	<li>
+	<input type="button" class="btn-require" value="4"/>
+	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
+	</li>
+	<li>
+	<input type="button" class="btn-require" value="4"/>
+	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
+	</li>
+</ul>
 </div>
+<div class="clear"></div>
+<p class="line clear"></p>
 <input type="button" id="route" value="Route" onclick="calcRoute(1,0)"/>     
+</div>
 </div>
   </body>
 </html>

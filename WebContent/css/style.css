@@ -22,7 +22,7 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 #right
 {
 	float:left;
-	margin-left:15px;
+	padding-left:15px;
 }
 .btn-opt-require
 {
@@ -98,6 +98,7 @@ div#box-require{
 	border:none;
 	color:#2D82B9;
 	font-weight:bold;
+	cursor:pointer;
 }
 .header-box
 {
@@ -126,4 +127,31 @@ div#box-require{
 	border-bottom:1px solid #DFDBD4;
 	padding:5px;
 	margin:0;
+}
+.icon-remove
+{
+	position:relative;
+	left:-25px;
+	top:17px;
+}
+ul#list-request
+{
+	list-style-type:none;
+	padding:0;
+	margin:0;
+}
+ul#list-request li
+{
+	float:left;
+}
+#bound-right
+{
+	padding:0;
+	margin:0;
+	width:24%;
+	float:left;
+}
+.line
+{
+	border-bottom:1px solid #DFDBD4;
 }

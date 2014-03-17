@@ -24,8 +24,10 @@ var cfm_yes;
 var cfm_no;
 
 var ele_focus = null;
-var req_active = null;
+var req_active = 0;
 var req_counter = 0;
+var dmarker;
+var pmarker;
 
 var directionsService = new google.maps.DirectionsService();
 var patt_pos=/^\(-{0,1}\d*\.{0,1}\d+,\s{0,1}-{0,1}\d*\.{0,1}\d+\)$/;	

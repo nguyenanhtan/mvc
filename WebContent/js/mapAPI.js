@@ -15,60 +15,79 @@ function initialize()
   }
   function placeMarker(location) {	 
 	  //alert( ele_focus.id+"/"+btn_deliver+"/"+btn_pickup);
-	  //alert(pos_deliver);
+	  //alert(req_counter);
 	  //pos_deliver.value = "OK";
 	  if(btn_deliver == ele_focus)
 	  {
 		  icon_marker = icon_deliver;
 		  pos_deliver.value = location;
-		  var dmarker = new google.maps.Marker({
+		  dmarker = new google.maps.Marker({
 	  	      position: location,
 	  	      map: map,
 	  	      draggable:true,
-	  	      title:"dragable",
+	  	      title:"R"+req_counter,
 	  	      animation: google.maps.Animation.BOUNCE,
 	  	      icon: icon_marker,
-	  	      sdf:1
+	  	      id:req_counter,
 	  	  });
 		  google.maps.event.addListener(dmarker, 'mouseover', function() {
-		  	    dmarker.setAnimation(null);
+			  if(req_active != this.id)
+			  {
+		  	      this.setAnimation(null); 
+			  }
 		  });
 		  google.maps.event.addListener(dmarker, 'click', function() {
-		  	    
+			  if(req_active == this.id)
+			  {
+				  activeRequest(this.id);
+			  }
 		  });
 		  google.maps.event.addListener(dmarker, 'mouseout', function() {
-		  	    dmarker.setAnimation(google.maps.Animation.BOUNCE);
+		  	  if(this.id == req_active)
+		  	  {
+		  		  this.setAnimation(google.maps.Animation.BOUNCE);
+		  	  }
 		  });
 		  google.maps.event.addListener(dmarker, 'mouseup', function() {
 		  	    //alert(dmarker.getPosition());
 		  	    pos_deliver.value = dmarker.getPosition();
 		  });
-		  markers.push(dmarker);
+		  //markers.push(dmarker);
 	  }
 	  else if(btn_pickup == ele_focus)
 	  {
 		  icon_marker = icon_pickup;
 		  pos_pickup.value = location;
-		  var pmarker = new google.maps.Marker({
+		  pmarker = new google.maps.Marker({
 	  	      position: location,
 	  	      map: map,
 	  	      draggable:true,
 	  	      animation: google.maps.Animation.BOUNCE,
-	  	      title:"Kéo để chuyển vị trí!",
+	  	      title:"R"+req_counter,
 	  	      icon: icon_marker,
-	  	      sdf:1
+	  	      id:req_counter
 	  	  });
 		  google.maps.event.addListener(pmarker, 'mouseover', function() {
-		  	    pmarker.setAnimation(null);
+		  	    
+			  if(req_active != this.id)
+			  {
+		  	      this.setAnimation(null); 
+			  }
+		  });
+		  google.maps.event.addListener(pmarker, 'click', function() {
+			  activeRequest(this.id);		  	    
 		  });
 		  google.maps.event.addListener(pmarker, 'mouseout', function() {
-		  	    pmarker.setAnimation(google.maps.Animation.BOUNCE);
+			  if(this.id == req_active)
+		  	  {
+		  		  this.setAnimation(google.maps.Animation.BOUNCE);
+		  	  }
 		  });
 		  google.maps.event.addListener(pmarker, 'mouseup', function() {
 		  	    //alert(pmarker.getPosition());
 			  pos_pickup.value = pmarker.getPosition();
 		  });
-		  markers.push(pmarker);
+		  //markers.push(pmarker);
 		  
 	  }
 	  if(btn_deliver == ele_focus || btn_pickup == ele_focus)
@@ -81,9 +100,6 @@ function initialize()
 	  	  google.maps.event.addListener(marker, 'click', function() {
 	  	       infowindow.open(map,marker);
 	  	  });
-	  	  
-
-	  	  
 	  }	  
     }
   function calcRoute(mStart,mEnd) {

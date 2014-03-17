@@ -30,19 +30,30 @@ window.onload = function(){
 		 }		 
 	 };
 	 btn_add.onclick = function()
-	 {	 	
+	 {	
 		
+		$("#form-opt-require").slideDown(300);
 	 	if(checkOpt())
 	 	{
 	 		confirm("Do you want to save the require?");
 	 		cfm_yes.onclick = function()
 	 		{
 	 			$("div#confirm").slideUp(300);
+	 			saveReq();	 			
+	 			resetOpt();
+	 			stopAnimation();
+	 			req_active = req_counter;
+	 			//alert("YES");
 	 		};
 	 		cfm_no.onclick = function()
 	 		{
 	 			resetOpt();
 	 			$("div#confirm").slideUp(300);
+	 			dmarker.setMap(null);
+	 			pmarker.setMap(null);
+	 			req_active = req_current;
+
+	 			
 	 		};
 	 	}
 	 	else
@@ -51,13 +62,33 @@ window.onload = function(){
 	 		//confirm("Do you want to save the require?");	 		
 	 	}
 	 };
+//	 btn_remove.onclick = function(){
+//		 
+//		 if(req_active != null)
+//		 {
+//			 removeReq(req_active);
+//		 }
+//		 else
+//		 {
+//			 alert("Request active is null");
+//		 }
+//		 
+//	 };
+
+	 btn_save.onclick = function(){		 
+		 
+		 $("#form-opt-require").slideUp(300);
+		 if(checkOpt())
+		 {
+			 saveReq();
+		 }
+		 //resetOpt();
+		 
+	 };
 	 //alert("btn_pickup: "+btn_pickup);
  };
 $(document).ready(function(){	
 	$("*").focus(function(){ele_focus = this;});
-	$("*").blur(function(){ele_focus = null;});
-	$("#btn-save").click(function(){
-		
-	});
+	$("*").blur(function(){ele_focus = null;});	
 	$("div#confirm").hide();
 });
