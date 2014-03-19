@@ -25,7 +25,7 @@ function initialize()
 	  	      position: location,
 	  	      map: map,
 	  	      draggable:true,
-	  	      title:"R"+req_counter,
+	  	      title:"R "+req_counter,
 	  	      animation: google.maps.Animation.BOUNCE,
 	  	      icon: icon_marker,
 	  	      id:req_counter,
@@ -89,6 +89,10 @@ function initialize()
 		  });
 		  //markers.push(pmarker);
 		  
+	  }
+	  else
+	  {
+		  alert("NO");
 	  }
 	  if(btn_deliver == ele_focus || btn_pickup == ele_focus)
 	  {		

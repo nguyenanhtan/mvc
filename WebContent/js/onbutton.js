@@ -36,6 +36,12 @@ function confirm(mes)
 	message.innerHTML = mes;
 	$("div#confirm").slideDown(300);
 }
+function out(mes)
+{
+	//alert("sasfs");
+	$("#console").text(mes);
+	$("#console").slideDown(500).delay(5000).slideUp(500);	
+}
 function resetOpt()
 {
 	pos_pickup.value = "Position pickup";
@@ -50,11 +56,33 @@ function resetOpt()
 }
 function saveReq()
 {
-	tmp_request = new Request(req_counter,pmarker,dmarker,ipt_weight.value,ipt_Ep,ipt_Lp,ipt_Ed,ipt_Ld);
+	tmp_request = new Request(req_counter,pmarker,dmarker,ipt_weight.value,ipt_Ep.value,ipt_Lp.value,ipt_Ed.value,ipt_Ld.value);
 	req_counter++;
 	arr_request.push(tmp_request);
 	//dmarker = null;
 	//pmarker = null;
+}
+function updateReq()
+{
+	if(checkOpt())
+	{
+		for(var i = 0;i < arr_request.length;i++)
+		{
+			if(arr_request[i].id == id)
+			{
+				arr_request[i].weight = ipt_weight.value;
+				arr_request[i].Ep = ipt_Ep.value;
+				arr_request[i].Lp = ipt_Lp.value;
+				arr_request[i].Ed = ipt_Ed.value;
+				arr_request[i].Ld = ipt_Ld.value;
+				break;
+			}
+		}
+	}
+	else
+	{
+		message("Đầu vào không hợp lệ");
+	}
 }
 function removeReq(id)
 {

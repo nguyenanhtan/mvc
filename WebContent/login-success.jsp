@@ -9,8 +9,7 @@
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgaadJHrg37wH05ZRMDmpe_oC2DwL8iyg&sensor=true">
     </script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
-	</script>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="./js/mapAPI.js">    
     </script>
     <script type="text/javascript" src="./js/Request.js">    
@@ -30,7 +29,7 @@
 <div id="bound-right">
 <div id="right">
 
-<p id="console"></p>
+
 <input type="button" id="btn-add" class="btn-opt-require" title="New require"/>
 <input type="button" id="btn-save" class="btn-opt-require" title="Save require"/>
 <!-- <input type="button" id="btn-remove" class="btn-opt-require" title="Remove require"/> -->
@@ -69,6 +68,7 @@
 	</div>
 </div>
 </form>
+<p id="console">sdfg</p>
 <p class="line clear"></p>
 <div>
 <ul id="list-request">

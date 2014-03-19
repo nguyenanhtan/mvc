@@ -16,19 +16,28 @@ window.onload = function(){
 	 message = document.getElementById("message");
 	 cfm_yes = document.getElementById("cfm-yes");
 	 cfm_no = document.getElementById("cfm-no");
+	 box_console = document.getElementById("console");
 	 
-	 btn_pickup.onclick = function(){		 
+	 btn_pickup.onclick = function(){		
+		 alert("click");
 		 if(patt_pos.test(pos_pickup.value))
 		 {
 			 btn_pickup.blur();
-		 }		 
+		 }				 
 	 };
+//	 btn_pickup.onfocus = function(){
+//		alert("focus"); 
+//	 };
+//	 btn_pickup.onblur = function(){
+//			alert("blur"); 
+//		 };
 	 btn_deliver.onclick = function(){
 		 if(patt_pos.test(pos_deliver.value))
 		 {
 			 btn_deliver.blur();
 		 }		 
 	 };
+	 
 	 btn_add.onclick = function()
 	 {	
 		
@@ -40,55 +49,37 @@ window.onload = function(){
 	 		{
 	 			$("div#confirm").slideUp(300);
 	 			saveReq();	 			
-	 			resetOpt();
 	 			stopAnimation();
-	 			req_active = req_counter;
-	 			//alert("YES");
 	 		};
 	 		cfm_no.onclick = function()
-	 		{
-	 			resetOpt();
+	 		{	 			
 	 			$("div#confirm").slideUp(300);
 	 			dmarker.setMap(null);
 	 			pmarker.setMap(null);
-	 			req_active = req_current;
-
-	 			
 	 		};
 	 	}
-	 	else
-	 	{
-	 		resetOpt();
-	 		//confirm("Do you want to save the require?");	 		
-	 	}
+	 	stopAnimation();
+	 	resetOpt();
 	 };
-//	 btn_remove.onclick = function(){
-//		 
-//		 if(req_active != null)
-//		 {
-//			 removeReq(req_active);
-//		 }
-//		 else
-//		 {
-//			 alert("Request active is null");
-//		 }
-//		 
-//	 };
-
-	 btn_save.onclick = function(){		 
-		 
+	 btn_save.onclick = function(){				 
 		 $("#form-opt-require").slideUp(300);
+		 out("Can't save");
 		 if(checkOpt())
 		 {
 			 saveReq();
 		 }
-		 //resetOpt();
-		 
+		 else
+		 {
+			
+		 }
+		 resetOpt();
 	 };
-	 //alert("btn_pickup: "+btn_pickup);
  };
 $(document).ready(function(){	
+	$("#console").hide();
 	$("*").focus(function(){ele_focus = this;});
 	$("*").blur(function(){ele_focus = null;});	
+	
+	
 	$("div#confirm").hide();
 });

@@ -22,6 +22,7 @@ var box_confirm;
 var message;
 var cfm_yes;
 var cfm_no;
+var console;
 
 var ele_focus = null;
 var req_active = 0;
