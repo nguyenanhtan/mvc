@@ -55,52 +55,33 @@
 		<p>Weight:</p><input class="ipt-text" type="number" value="0" id="ipt-weight"/>
 	</div>
 	<div class="row-opt">
-		<p>Ep:</p><input class="ipt-text" type="time" value="0" id="ipt-Ep"/>
+		<p>Ep:</p><input class="ipt-text" type="time" value="00:00" id="ipt-Ep"/>
 	</div>
 	<div class="row-opt">
-		<p>Lp:</p><input class="ipt-text" type="time" value="9999" id="ipt-Lp"/>
+		<p>Lp:</p><input class="ipt-text" type="time" value="23:59" id="ipt-Lp"/>
 	</div>
 	<div class="row-opt">
-		<p>Ed:</p><input class="ipt-text" type="time" value="0" id="ipt-Ed"/>
+		<p>Ed:</p><input class="ipt-text" type="time" value="00:00" id="ipt-Ed"/>
 	</div>
 	<div class="row-opt">
-		<p>Ld:</p><input class="ipt-text" type="time" value="9999" id="ipt-Ld"/>
+		<p>Ld:</p><input class="ipt-text" type="time" value="23:59" id="ipt-Ld"/>
 	</div>
 </div>
 </form>
-<p id="console">sdfg</p>
+<p id="console"></p>
 <p class="line clear"></p>
 <div>
 <ul id="list-request">
-	<li>
+<!-- 	<li>
 	<input type="button" class="btn-require" value="1"/>
 	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
-	</li>
-	<li>
-	<input type="button" class="btn-require" value="2"/>
-	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
-	</li>
-	<li>
-	<input type="button" class="btn-require" value="3"/>
-	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
-	</li>
-	<li>
-	<input type="button" class="btn-require" value="4"/>
-	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
-	</li>
-	<li>
-	<input type="button" class="btn-require" value="4"/>
-	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
-	</li>
-	<li>
-	<input type="button" class="btn-require" value="4"/>
-	<img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">
-	</li>
+	</li>	 -->
 </ul>
 </div>
 <div class="clear"></div>
 <p class="line clear"></p>
 <input type="button" id="route" value="Route" onclick="calcRoute(1,0)"/>     
+<input type="button" id="Out" value="Out" onclick="showOut()"/>   
 </div>
 </div>
   </body>

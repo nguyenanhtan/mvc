@@ -19,18 +19,12 @@ window.onload = function(){
 	 box_console = document.getElementById("console");
 	 
 	 btn_pickup.onclick = function(){		
-		 alert("click");
+		 //alert("click");
 		 if(patt_pos.test(pos_pickup.value))
 		 {
 			 btn_pickup.blur();
 		 }				 
 	 };
-//	 btn_pickup.onfocus = function(){
-//		alert("focus"); 
-//	 };
-//	 btn_pickup.onblur = function(){
-//			alert("blur"); 
-//		 };
 	 btn_deliver.onclick = function(){
 		 if(patt_pos.test(pos_deliver.value))
 		 {
@@ -41,44 +35,105 @@ window.onload = function(){
 	 btn_add.onclick = function()
 	 {	
 		
-		$("#form-opt-require").slideDown(300);
-	 	if(checkOpt())
+		$("#form-opt-require").slideDown(300);	
+		if(req_active == req_counter)
+		{
+		 	if(checkOpt())
+		 	{
+		 		confirm("Do you want to save the require?");
+		 		cfm_yes.onclick = function()
+		 		{
+		 			$("div#confirm").slideUp(300);
+		 			saveReq();	 		 			
+		 			//stopAnimation();
+		 			disReq();
+		 			req_active = req_counter;
+		 			resetOpt();
+		 		};
+		 		cfm_no.onclick = function()
+		 		{	 			
+		 			$("div#confirm").slideUp(300);
+		 			dmarker.setMap(null);
+		 			pmarker.setMap(null);
+		 			resetOpt();
+		 		};
+		 	}
+		 	else
+		 	{
+		 		if(dmarker != null)
+		 		{
+		 			dmarker.setMap(null);
+		 		}
+		 		if(pmarker != null)
+		 		{
+		 			pmarker.setMap(null);
+		 		}
+		 		//stopAnimation();
+		 		req_active = req_counter;
+		 		disReq();
+			 	resetOpt();
+		 	}
+		}
+	 	else
 	 	{
-	 		confirm("Do you want to save the require?");
-	 		cfm_yes.onclick = function()
+	 		if(dmarker != null)
 	 		{
-	 			$("div#confirm").slideUp(300);
-	 			saveReq();	 			
-	 			stopAnimation();
-	 		};
-	 		cfm_no.onclick = function()
-	 		{	 			
-	 			$("div#confirm").slideUp(300);
 	 			dmarker.setMap(null);
+	 		}
+	 		if(pmarker != null)
+	 		{
 	 			pmarker.setMap(null);
-	 		};
+	 		}
+	 		//stopAnimation();
+	 		req_active = req_counter;
+	 		disReq();
+		 	resetOpt();
 	 	}
-	 	stopAnimation();
-	 	resetOpt();
+	 	
+	 	
+	 	
 	 };
 	 btn_save.onclick = function(){				 
-		 $("#form-opt-require").slideUp(300);
-		 out("Can't save");
+		 //$("#form-opt-require").slideUp(300);
+		 
 		 if(checkOpt())
 		 {
 			 saveReq();
+			 disReq();
+	 	     req_active = req_counter;
 		 }
 		 else
 		 {
-			
+			 out("invalid");
+			 if(dmarker != null)
+	 		{
+	 			dmarker.setMap(null);
+	 		}
+	 		if(pmarker != null)
+	 		{
+	 			pmarker.setMap(null);
+	 		}
 		 }
 		 resetOpt();
 	 };
  };
 $(document).ready(function(){	
 	$("#console").hide();
-	$("*").focus(function(){ele_focus = this;});
-	$("*").blur(function(){ele_focus = null;});	
+	$("*").focus(function(){
+		if($(this).is("#btn-pickup") && !patt_pos.test(pos_pickup.value))
+		{
+			ele_focus = this;
+		}
+		else if($(this).is("#btn-deliver") && !patt_pos.test(pos_deliver.value))
+		{
+			ele_focus = this;
+		}
+		
+	});
+
+	$("*").blur(function(){
+		//ele_focus = null;
+	});	
 	
 	
 	$("div#confirm").hide();

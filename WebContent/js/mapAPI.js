@@ -16,7 +16,7 @@ function initialize()
   function placeMarker(location) {	 
 	  //alert( ele_focus.id+"/"+btn_deliver+"/"+btn_pickup);
 	  //alert(req_counter);
-	  //pos_deliver.value = "OK";
+	  //pos_deliver.value = "OK";	  
 	  if(btn_deliver == ele_focus)
 	  {
 		  icon_marker = icon_deliver;
@@ -26,31 +26,44 @@ function initialize()
 	  	      map: map,
 	  	      draggable:true,
 	  	      title:"R "+req_counter,
-	  	      animation: google.maps.Animation.BOUNCE,
+//	  	      animation: google.maps.Animation.BOUNCE,
 	  	      icon: icon_marker,
 	  	      id:req_counter,
 	  	  });
-		  google.maps.event.addListener(dmarker, 'mouseover', function() {
-			  if(req_active != this.id)
-			  {
-		  	      this.setAnimation(null); 
-			  }
+		  google.maps.event.addListener(dmarker, 'mouseover', function() {	
+			  	  //box_console.innerHTML += "mouseover<br/>";
+		  	      //this.setAnimation(null); 		  	      
 		  });
 		  google.maps.event.addListener(dmarker, 'click', function() {
-			  if(req_active == this.id)
-			  {
+			  //box_console.innerHTML += "click<br/>";
+			  if(dmarker != this && dmarker != null)
+		      {
+				  dmarker.setMap(null);
+				  if(pmarker != null)
+			      {
+					  pmarker.setMap(null);
+			      }
+		      }
+			  
 				  activeRequest(this.id);
-			  }
 		  });
 		  google.maps.event.addListener(dmarker, 'mouseout', function() {
-		  	  if(this.id == req_active)
-		  	  {
-		  		  this.setAnimation(google.maps.Animation.BOUNCE);
-		  	  }
+			  //box_console.innerHTML += "mouseout<br/>";
+//		  	  if(this.id == req_active)
+//		  	  {
+//		  		  this.setAnimation(google.maps.Animation.BOUNCE);
+//		  	  }
+//		  	  else
+//		  	  {
+//		  	  }
 		  });
 		  google.maps.event.addListener(dmarker, 'mouseup', function() {
 		  	    //alert(dmarker.getPosition());
-		  	    pos_deliver.value = dmarker.getPosition();
+			  //box_console.innerHTML += "mouseup<br/>";
+			  if(this.id == req_active)
+			  {
+				  pos_deliver.value = this.getPosition();
+			  }
 		  });
 		  //markers.push(dmarker);
 	  }
@@ -62,48 +75,56 @@ function initialize()
 	  	      position: location,
 	  	      map: map,
 	  	      draggable:true,
-	  	      animation: google.maps.Animation.BOUNCE,
+//	  	      animation: google.maps.Animation.BOUNCE,
 	  	      title:"R"+req_counter,
 	  	      icon: icon_marker,
 	  	      id:req_counter
 	  	  });
 		  google.maps.event.addListener(pmarker, 'mouseover', function() {
-		  	    
-			  if(req_active != this.id)
-			  {
-		  	      this.setAnimation(null); 
-			  }
+		  	      //this.setAnimation(null); 
 		  });
 		  google.maps.event.addListener(pmarker, 'click', function() {
+			  
+			  if(pmarker != this && pmarker != null)
+		      {
+				  pmarker.setMap(null);
+				  if(dmarker != null)
+			      {
+					  dmarker.setMap(null);
+			      }
+		      }
 			  activeRequest(this.id);		  	    
 		  });
 		  google.maps.event.addListener(pmarker, 'mouseout', function() {
-			  if(this.id == req_active)
-		  	  {
-		  		  this.setAnimation(google.maps.Animation.BOUNCE);
-		  	  }
+//			  if(this.id == req_active)
+//		  	  {
+//		  		  this.setAnimation(google.maps.Animation.BOUNCE);
+//		  	  }
 		  });
 		  google.maps.event.addListener(pmarker, 'mouseup', function() {
 		  	    //alert(pmarker.getPosition());
-			  pos_pickup.value = pmarker.getPosition();
+			  if(this.id == req_active)
+			  {
+				  pos_pickup.value = this.getPosition();
+			  }
 		  });
 		  //markers.push(pmarker);
 		  
 	  }
 	  else
 	  {
-		  alert("NO");
+		  //alert("NO");
 	  }
 	  if(btn_deliver == ele_focus || btn_pickup == ele_focus)
 	  {		
 		  ele_focus.blur();
 		  ele_focus = null;
-		  var infowindow = new google.maps.InfoWindow({
-		      content: "Heheheheheheh"
-		  });
-	  	  google.maps.event.addListener(marker, 'click', function() {
-	  	       infowindow.open(map,marker);
-	  	  });
+//		  var infowindow = new google.maps.InfoWindow({
+//		      content: "Heheheheheheh"
+//		  });
+//	  	  google.maps.event.addListener(pmarker, 'click', function() {
+//	  	       infowindow.open(map,pmarker);
+//	  	  });
 	  }	  
     }
   function calcRoute(mStart,mEnd) {

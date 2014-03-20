@@ -4,6 +4,9 @@ var markers = new Array();
 var arr_request = new Array();
 var icon_pickup = "./img/Map-Marker-Ball-Azure-icon.png";
 var icon_deliver = "./img/Map-Marker-Ball-Pink-icon.png";
+var icon_deliver_nact = "./img/Map-Marker-Flag-1-Right-Pink-icon.png";
+var icon_pickup_nact = "./img/Map-Marker-Flag-1-Right-Chartreuse-icon.png";
+
 var icon_marker = "";//icon_pickup;
 //Element
 var btn_pickup = null;
@@ -33,3 +36,4 @@ var pmarker;
 var directionsService = new google.maps.DirectionsService();
 var patt_pos=/^\(-{0,1}\d*\.{0,1}\d+,\s{0,1}-{0,1}\d*\.{0,1}\d+\)$/;	
 var patt_num=/^\d+$/;
+var patt_time=/^\d\d:\d\d$/;
