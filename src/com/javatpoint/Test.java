@@ -10,11 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class Test extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
-		if (request.getParameter("data") != null) { 
-		 
-		} else{
-		 
-		}
+		response.getWriter().write("<p>:2222v :v :v</p>");
 	}	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)

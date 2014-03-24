@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 public class ControllerServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
+		response.getWriter().write("<p>:v :v :v</p>");
+		/*response.setContentType("text/html");
 		PrintWriter out=response.getWriter();
 		
 		String name=request.getParameter("name");
@@ -33,7 +34,7 @@ public class ControllerServlet extends HttpServlet {
 			RequestDispatcher rd=request.getRequestDispatcher("login-error.jsp");
 			rd.forward(request, response);
 		}
-		
+		*/
 		
 	}
 

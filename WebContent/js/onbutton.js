@@ -98,7 +98,7 @@ function updateReq()
 		out("Đầu vào không hợp lệ");
 	}
 }
-function removeReq(id)
+function removeReq(id,obj)
 {
 	for(var i = 0;i < arr_request.length;i++)
 	{
@@ -106,13 +106,18 @@ function removeReq(id)
 		{
 			arr_request[i].pickup.setMap(null);
 			arr_request[i].deliver.setMap(null);
-			arr_request.splice(i, 1);
-			alert(arr_request.length);
-			req_active = null;
+			arr_request.splice(i, 1);			
+			//req_active = null;
 			break;
 		}
 	}
-	resetOpt();
+	//resetOpt();
+	if(req_active == id)
+	{
+		req_active = req_counter;
+		resetOpt();
+	}
+	$(obj).parent().remove();
 }
 function disReq()
 {
@@ -179,10 +184,39 @@ function loadReq(req)
 }
 function addReq(req)
 {
-	treq = '<li><input type="button" class="btn-require" value="'+req.id+'"/><img title="Remove" src="./img/Close-2-icon.png" class="icon-remove">	</li>';
+	treq = '<li><input type="button" onclick="clickReq(this.value)" class="btn-require" value="'+req.id+'"/><img title="Remove" src="./img/Close-2-icon.png" class="icon-remove" onclick="removeReq('+req.id+',this)">	</li>';
 	$("#list-request").append(treq);
 }
 function showOut()
 {
 	alert(req_active);
+}
+function clickReq(id)
+{
+	//alert("id: "+id);
+	//out("clickR");
+	if(req_active == req_counter)
+	{
+		if(pmarker != null)
+	      {
+			  pmarker.setMap(null);				  
+	      }	
+		if(dmarker != null)
+	      {
+			  dmarker.setMap(null);
+	      }
+	}
+	activeRequest(id);
+}
+function postData()
+{
+	$.ajax({url:"ControllerServlet",
+			data:{
+				name:"Donald Duck",
+			    city:"Duckburg"
+			},
+			success:function(data,status){
+			    alert("Data: " + data + "\nStatus: " + status);
+			  }});
+	//);
 }
