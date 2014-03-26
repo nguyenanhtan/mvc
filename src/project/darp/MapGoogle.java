@@ -34,6 +34,8 @@ public class MapGoogle extends MapTransport {
 					float value = Float.parseFloat(distance.get("value").toString());
 					System.out.println(value);
 					matrixDistance[i][j] = value;
+					matrixDistance[j][i] = value;
+					
 					j++;
 				}
 				i++;
@@ -44,6 +46,11 @@ public class MapGoogle extends MapTransport {
 			e.printStackTrace();
 		}
 		
+	}
+	@Override
+	public int getT(int i,int j)
+	{
+		return (int)matrixDistance[i][j]/30;
 	}
 	
 }

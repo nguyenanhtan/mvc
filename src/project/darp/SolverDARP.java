@@ -97,11 +97,13 @@ public class SolverDARP {
 			}
 		}
 	}
-	public SolverDARP(String Jmatrix) {
+	public SolverDARP(String Jmatrix, int m, int n, int[] weight,int[] Ep,int[] Lp,int[] Ed,int[] Ld) {
 		// TODO Auto-generated constructor stub
 //		map = new MapTransport("fileMap.drp");
 		map = new MapGoogle(Jmatrix);
-		readProblem();
+		System.out.println(m+":"+n);
+		readProblem(m,n,weight,Ep,Lp,Ed,Ld);
+		System.out.println(m+":"+n);
 		s = new int[2*(m+n)];
 		v = new int[2*(m+n)];
 		t = new int[2*(m+n)];
@@ -633,8 +635,34 @@ public class SolverDARP {
 		this.m = m;
 		this.n = n;
 		this.requires = new Require[this.n];
+		if(weight == null)
+		{
+			this.printfError("weight is null");
+		}
+		else if(Ep == null)
+		{
+			this.printfError("Ep is null");
+		}
+		else if(Lp == null)
+		{
+			this.printfError("Lp is null");
+		}
+		else if(Ed == null)
+		{
+			this.printfError("Ed is null");
+		}
+		else if(Ld == null)
+		{
+			this.printfError("Ld is null");
+		}
+		else
+		{
+			this.println("Data is valid");
+		}
+		
 		for(int i = 0;i < weight.length;i++)
 		{
+			this.requires[i] = new Require();
 			requires[i].setWeight(weight[i]);
 			requires[i].setEp(Ep[i]);
 			requires[i].setEd(Ed[i]);
@@ -691,7 +719,7 @@ public class SolverDARP {
 		System.err.println("-----------------");
 		System.exit(0);
 	}
-	private void println(String msg)
+	public void println(String msg)
 	{
 		System.out.println(msg);
 	}
