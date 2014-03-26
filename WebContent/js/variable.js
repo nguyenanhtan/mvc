@@ -2,6 +2,8 @@ var map;
 var directionsDisplay;
 var markers = new Array();
 var arr_request = new Array();
+var arr_matrix_distances;
+
 var icon_pickup = "./img/Map-Marker-Ball-Azure-icon.png";
 var icon_deliver = "./img/Map-Marker-Ball-Pink-icon.png";
 var icon_deliver_nact = "./img/Map-Marker-Flag-1-Right-Pink-icon.png";

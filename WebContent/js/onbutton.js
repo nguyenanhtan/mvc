@@ -208,15 +208,101 @@ function clickReq(id)
 	}
 	activeRequest(id);
 }
+function getParameterRequest(prm)
+{
+	var drtn = new Array();
+	for(var i = 0;i < arr_request.length ; i++)
+	{
+		switch(prm)
+		{
+		case 'pickup':
+			drtn[i] = arr_request[i].pickup;
+			break;
+		case 'deliver':
+			drtn[i] = arr_request[i].deliver;
+			break;
+		case 'pickup-position':
+			drtn[i] = arr_request[i].pickup.getPosition();
+			break;
+		case 'deliver-position':
+			drtn[i] = arr_request[i].deliver.getPosition();
+			break;
+		case 'weight':
+			drtn[i] = arr_request[i].weight;
+			break;
+		case 'Ep':
+			drtn[i] = arr_request[i].Ep;
+			break;
+		case 'Lp':
+			drtn[i] = arr_request[i].Lp;
+			break;
+		case 'Ed':
+			drtn[i] = arr_request[i].Ed;
+			break;
+		case 'Ld':
+			drtn[i] = arr_request[i].Ld;
+			break;
+		default: return null;
+		}
+	}
+	return drtn;
+}
+function calculateDistances() {
+	  var service = new google.maps.DistanceMatrixService();
+	  service.getDistanceMatrix(
+	    {
+	      origins: getParameterRequest("pickup-position").concat(getParameterRequest("deliver-position")),
+	      destinations: getParameterRequest("pickup-position").concat(getParameterRequest("deliver-position")),
+	      travelMode: google.maps.TravelMode.DRIVING,
+	      unitSystem: google.maps.UnitSystem.METRIC,
+	      avoidHighways: false,
+	      avoidTolls: false
+	    }, callback);
+	  //window.setTimeout(postData,4000);
+}
+function callback(response, status) {
+	  if (status != google.maps.DistanceMatrixStatus.OK) 
+	  {
+	    //alert('Error was: ' + status);
+	    out("Can't get matrix distance");
+	    arr_matrix_distances = null;
+	  } else {
+		  arr_matrix_distances = response.rows;
+		  out("Get success!");  
+	  }	
+	  
+	  //alert("CALLBACK");
+}
 function postData()
 {
-	$.ajax({url:"ControllerServlet",
-			data:{
-				name:"Donald Duck",
-			    city:"Duckburg"
-			},
-			success:function(data,status){
-			    alert("Data: " + data + "\nStatus: " + status);
-			  }});
+	//calculateDistances();
+	//alert(JSON.stringify(getParameterRequest("pickup-position")));
+	//alert(JSON.stringify(arr_matrix_distances.rows));
+	$.ajax(
+			{
+				url:"ControllerServlet",
+				type:"POST",
+				//dataType: "jsonp", 
+				//contentType: "application/json",
+				data:{			   
+				    pickup: JSON.stringify(getParameterRequest("pickup-position")),
+				    deliver: JSON.stringify(getParameterRequest("deliver-position")),
+				    weight: JSON.stringify(getParameterRequest("weight")),
+				    Ep: JSON.stringify(getParameterRequest("Ep")),
+				    Lp: JSON.stringify(getParameterRequest("Lp")),
+				    Ed: JSON.stringify(getParameterRequest("Ed")),
+				    Ld: JSON.stringify(getParameterRequest("Ld")),
+				    matrix_distances:JSON.stringify(arr_matrix_distances)
+				},
+				success:function(data)
+				{
+			    	alert("Data: " + data + "\nStatus: ");
+			 	},
+				error:function(status,stt,err)
+				{
+					alert("Status: "+stt + "    ERR: "+err);
+				}
+			}
+			);
 	//);
 }

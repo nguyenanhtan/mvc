@@ -82,6 +82,7 @@
 <p class="line clear"></p>
 <input type="button" id="route" value="Route" onclick="calcRoute(1,0)"/>     
 <input type="button" id="Out" value="Out" onclick="showOut()"/>   
+<input type="button" id="get-matrix-distances" value="Get Matrix Distance" onclick="calculateDistances()"/>   
 <input type="button" id="post-data" value="Post" onclick="postData()"/>   
 </div>
 </div>
