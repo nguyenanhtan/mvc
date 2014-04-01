@@ -1,4 +1,4 @@
-*{font-family:ubuntu;}
+*{font-family:ubuntu;margin:0;padding:0}
 html { height: 100% }
 body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 #map-canvas { height: 570px; width:75%;float:left; border: #123 solid 1px;}
@@ -33,8 +33,9 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 #right
 {
 	float:left;
-	padding-left:15px;
+	padding-left:5%;
 	height:100%;
+	width:95%;
 }
 .btn-opt-require
 {
@@ -148,11 +149,11 @@ div#box-require{
 }
 div#div-list-request
 {
-	border:1px solid #DFDBD4;
-	border-radius:10px;
+/* 	border:1px solid #DFDBD4;
+	border-radius:10px; */
 	display:-webkit-box;
-	min-height:50px;
-	
+	/* min-height:50px; */
+	margin-top:5px;
 }
 div#div-console
 {
@@ -190,4 +191,33 @@ ul#list-request li
 .line
 {
 	border-bottom:1px solid #DFDBD4;
+}
+#depot
+{
+	margin-top:10px;
+	padding:5px;
+	/*border:1px solid #DFDBD4;
+	border-radius:10px;*/
+	height:30px;
+}
+#depot img
+{
+	
+}
+#depot p
+{
+	float:left;
+}
+#depot input
+{
+	width:40px;	
+	margin:0;
+}
+div#box-button
+{
+	margin-top:10px; 
+}
+div#box-button input
+{
+	padding:2px 3px;
 }

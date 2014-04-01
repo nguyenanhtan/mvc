@@ -42,7 +42,7 @@ function out(mes)
 {
 	//alert("sasfs");
 	//$("#console").hide();
-	$("#console").html($("#console").html()+"<div>"+mes+"</div>");
+	$("#console").html("<div>"+mes+"</div>" + $("#console").html());
 	//$("#console").slideDown(500).delay(5000).slideUp(500);	
 }
 function resetOpt()
@@ -292,9 +292,8 @@ function postData()
 			{
 				url:"ControllerServlet",
 				type:"POST",
-				//dataType: "jsonp", 
-				//contentType: "application/json",
-				data:{		
+				data:{
+					num_vehicle:JSON.stringify($("#num-vehicle").val()),
 					depot: JSON.stringify(depot.getPosition()),
 				    pickup: JSON.stringify(getParameterRequest("pickup-position")),
 				    deliver: JSON.stringify(getParameterRequest("deliver-position")),

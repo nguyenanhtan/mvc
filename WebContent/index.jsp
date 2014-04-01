@@ -69,7 +69,15 @@
 	</div>
 </div>
 </form>
+<div id="depot">
+<p>
+	<img src="./img/bus-orange-icon.png">
+</p>
+<p>
+	<input type="number" id="num-vehicle" value="3" min="0"/>
+</p>
 
+</div>
 <p class="clear"></p>
 
 <div id="div-list-request">
@@ -82,10 +90,12 @@
 </div>
 
 <div class="clear"></div>
+<div id="box-button">
 <input type="button" id="route" value="Route" onclick="calcRoute(1,0)"/>     
 <input type="button" id="Out" value="Out" onclick="showOut()"/>   
 <input type="button" id="get-matrix-distances" value="Get Matrix Distance" onclick="calculateDistances()"/>   
 <input type="button" id="post-data" value="Post" onclick="postData()"/>
+</div>
 <div id="div-console">
 <h4>Console <span id="clear-console">clear</span></h4>
 <p id="console"></p>

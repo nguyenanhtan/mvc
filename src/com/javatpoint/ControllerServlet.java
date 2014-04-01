@@ -32,10 +32,12 @@ public class ControllerServlet extends HttpServlet {
 			String Ed = request.getParameter("Ed");
 			String Ld = request.getParameter("Ld");
 			String depot = request.getParameter("depot");
-			System.out.println(depot);
+			String snVehicle = request.getParameter("num_vehible");
+			
+			System.out.println(snVehicle);
 			//System.exit(0);
 			int[] arrWeight = parser(weight);
-			int numVehicle = 3;
+			int numVehicle = Integer.parseInt(snVehicle);
 			int numRequest = arrWeight.length;
 			
 			SolverDARP S = new SolverDARP(matrix,numVehicle,numRequest,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld));
