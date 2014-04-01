@@ -11,8 +11,19 @@ function initialize()
     google.maps.event.addListener(map, 'click', function(event) {
     	  placeMarker(event.latLng);
       });
-    
+    putDepot(new google.maps.LatLng(21.006738,105.84138));
   }
+function putDepot(location)
+{
+	depot = new google.maps.Marker({
+	      position: location,
+	      map: map,
+	      draggable:true,
+	      title:"Depot",
+//	      animation: google.maps.Animation.BOUNCE,
+	      icon: icon_depot,
+	  });
+}
   function placeMarker(location) {	 
 	  //alert( ele_focus.id+"/"+btn_deliver+"/"+btn_pickup);
 	  //alert(req_counter);

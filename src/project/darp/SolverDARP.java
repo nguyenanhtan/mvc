@@ -721,7 +721,7 @@ public class SolverDARP {
 	}
 	public void println(String msg)
 	{
-		System.out.println(msg);
+		//System.out.println(msg);
 	}
 	private void println(HashSet<Integer> x)
 	{

@@ -247,12 +247,21 @@ function getParameterRequest(prm)
 	}
 	return drtn;
 }
+function getRangeMatrix()
+{
+	var pk = getParameterRequest("pickup-position");
+	var dl = getParameterRequest("deliver-position");
+	var dp = new Array();
+	dp[0] = depot.getPosition();
+	//out(dp.concat(pk,dl));
+	return dp.concat(pk,dl);
+}
 function calculateDistances() {
 	  var service = new google.maps.DistanceMatrixService();
 	  service.getDistanceMatrix(
 	    {
-	      origins: getParameterRequest("pickup-position").concat(getParameterRequest("deliver-position")),
-	      destinations: getParameterRequest("pickup-position").concat(getParameterRequest("deliver-position")),
+	      origins: getRangeMatrix(),
+	      destinations: getRangeMatrix(),
 	      travelMode: google.maps.TravelMode.DRIVING,
 	      unitSystem: google.maps.UnitSystem.METRIC,
 	      avoidHighways: false,
@@ -278,13 +287,15 @@ function postData()
 	//calculateDistances();
 	//alert(JSON.stringify(getParameterRequest("pickup-position")));
 	//alert(JSON.stringify(arr_matrix_distances.rows));
+	//alert(JSON.stringify(depot.getPosition()));
 	$.ajax(
 			{
 				url:"ControllerServlet",
 				type:"POST",
 				//dataType: "jsonp", 
 				//contentType: "application/json",
-				data:{			   
+				data:{		
+					depot: JSON.stringify(depot.getPosition()),
 				    pickup: JSON.stringify(getParameterRequest("pickup-position")),
 				    deliver: JSON.stringify(getParameterRequest("deliver-position")),
 				    weight: JSON.stringify(getParameterRequest("weight")),

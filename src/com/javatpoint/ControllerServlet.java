@@ -31,8 +31,9 @@ public class ControllerServlet extends HttpServlet {
 			String Lp= request.getParameter("Lp");
 			String Ed = request.getParameter("Ed");
 			String Ld = request.getParameter("Ld");
-			
-			
+			String depot = request.getParameter("depot");
+			System.out.println(depot);
+			//System.exit(0);
 			int[] arrWeight = parser(weight);
 			int numVehicle = 3;
 			int numRequest = arrWeight.length;

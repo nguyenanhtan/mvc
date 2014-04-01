@@ -8,10 +8,12 @@ var icon_pickup = "./img/Map-Marker-Ball-Azure-icon.png";
 var icon_deliver = "./img/Map-Marker-Ball-Pink-icon.png";
 var icon_deliver_nact = "./img/Map-Marker-Flag-1-Right-Pink-icon.png";
 var icon_pickup_nact = "./img/Map-Marker-Flag-1-Right-Chartreuse-icon.png";
-var icon_depot = "./img/bus-ticket-icon.png";
+var icon_depot = "./img/bus-orange-icon.png";
+
 
 var icon_marker = "";//icon_pickup;
 //Element
+var depot = null;
 var btn_pickup = null;
 var btn_deliver = null;
 var pos_pickup;
