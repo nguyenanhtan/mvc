@@ -34,7 +34,7 @@ public class ControllerServlet extends HttpServlet {
 			
 			
 			int[] arrWeight = parser(weight);
-			int numVehicle = 10;System.out.println("S: ");
+			int numVehicle = 3;
 			int numRequest = arrWeight.length;
 			
 			SolverDARP S = new SolverDARP(matrix,numVehicle,numRequest,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld));

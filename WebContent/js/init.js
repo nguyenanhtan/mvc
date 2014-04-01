@@ -17,7 +17,10 @@ window.onload = function(){
 	 cfm_yes = document.getElementById("cfm-yes");
 	 cfm_no = document.getElementById("cfm-no");
 	 box_console = document.getElementById("console");
-	 
+	 /*for(var i = 0;i < 59;i++)
+		{
+			out("cdsgs");
+		}*/
 	 btn_pickup.onclick = function(){		
 		 //alert("click");
 		 if(patt_pos.test(pos_pickup.value))
@@ -116,9 +119,10 @@ window.onload = function(){
 		 }
 		 resetOpt();
 	 };
+	 
  };
 $(document).ready(function(){	
-	$("#console").hide();
+	//$("#console").hide();
 	$("*").focus(function(){
 		if($(this).is("#btn-pickup") && !patt_pos.test(pos_pickup.value))
 		{
@@ -135,6 +139,8 @@ $(document).ready(function(){
 		//ele_focus = null;
 	});	
 	
-	
+	$("#clear-console").click(function(){
+		$("#console").html("");
+	});
 	$("div#confirm").hide();
 });

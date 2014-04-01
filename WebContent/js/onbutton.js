@@ -41,9 +41,9 @@ function confirm(mes)
 function out(mes)
 {
 	//alert("sasfs");
-	$("#console").hide();
-	$("#console").text(mes);
-	$("#console").slideDown(500).delay(5000).slideUp(500);	
+	//$("#console").hide();
+	$("#console").html($("#console").html()+"<div>"+mes+"</div>");
+	//$("#console").slideDown(500).delay(5000).slideUp(500);	
 }
 function resetOpt()
 {

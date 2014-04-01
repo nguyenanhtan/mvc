@@ -5,8 +5,19 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 #route{
   
   }
+ #clear-console
+ {
+ 	cursor:pointer;
+ 	color:#ff0000;
+ 	float:right;
+ }
 #console{
   	color:#ff0000;
+  	overflow-y:scroll;
+  	height: 109px;
+	margin-top: 0;
+	padding:5px;
+	
   }
 .labels {
 	 color: red;
@@ -23,6 +34,7 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 {
 	float:left;
 	padding-left:15px;
+	height:100%;
 }
 .btn-opt-require
 {
@@ -134,11 +146,34 @@ div#box-require{
 	left:-25px;
 	top:17px;
 }
+div#div-list-request
+{
+	border:1px solid #DFDBD4;
+	border-radius:10px;
+	display:-webkit-box;
+	min-height:50px;
+	
+}
+div#div-console
+{
+	border:1px solid #DFDBD4;
+	border-radius:10px;
+	height:150px;
+	margin-top:10px;
+	
+}
+div#div-console h4
+{
+	padding:5px;
+	margin:0;
+	border-bottom:1px solid #DFDBD4;
+}
 ul#list-request
 {
 	list-style-type:none;
 	padding:0;
 	margin:0;
+
 }
 ul#list-request li
 {
@@ -150,6 +185,7 @@ ul#list-request li
 	margin:0;
 	width:24%;
 	float:left;
+	height:570px;
 }
 .line
 {
