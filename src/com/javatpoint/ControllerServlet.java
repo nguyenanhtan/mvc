@@ -1,28 +1,22 @@
 package com.javatpoint;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.Map;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
-import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 
-import project.darp.MapGoogle;
 import project.darp.SolverDARP;
 import project.darp.SolverDARP.Solution;
 
 
 public class ControllerServlet extends HttpServlet {
 	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		try{
 			String matrix = request.getParameter("matrix_distances");
@@ -32,12 +26,20 @@ public class ControllerServlet extends HttpServlet {
 			String Ed = request.getParameter("Ed");
 			String Ld = request.getParameter("Ld");
 			String depot = request.getParameter("depot");
-			String snVehicle = request.getParameter("num_vehible");
+			String snVehicle = request.getParameter("num_vehicle");
 			
 			System.out.println(snVehicle);
 			//System.exit(0);
 			int[] arrWeight = parser(weight);
-			int numVehicle = Integer.parseInt(snVehicle);
+			int numVehicle = 0;
+			try
+			{
+				numVehicle = Integer.parseInt(snVehicle.substring(1, snVehicle.length()-1));
+				System.out.println("numVehicle: "+numVehicle);
+			}catch(Exception e)
+			{
+				System.out.println(e.toString());
+			}
 			int numRequest = arrWeight.length;
 			
 			SolverDARP S = new SolverDARP(matrix,numVehicle,numRequest,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld));

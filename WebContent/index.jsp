@@ -24,7 +24,7 @@
   <body>
  
 <!-- <p>You are successfully logged in!</p> -->
-<p></p>
+<p id="header">Run best in browser support HTML5 and CSS3</p>
 
 <div id="map-canvas"></div>
 <div id="bound-right">
@@ -44,16 +44,29 @@
 <div id="box-require">
 	<h3 class="header-box">Input require</h3>
 	<div class="row-opt">
-		<input type="button" id="btn-pickup" class="btn-opt-require"/>
+		<input type="button" id="btn-pickup" class="btn-opt-require" title="Marker pickup"/>
 		<input type="text" value="Position pickup" title="Position pickup" class="opacity-60" id="pos-pickup" readonly="readonly"/>
 	</div>
 	<div class="row-opt">
-		<input type="button" id="btn-deliver" class="btn-opt-require"/>
-		<input type="text" value="Position deliver" title="Position deliver" class="opacity-60" id="pos-deliver" readonly="readonly"/>
-	
+		<p>Duration </p>
+		<input class="ipt-text" type="number" value="0" min="0" id="ipt-duration-pickup"/>
+		<p class="minute-text">(minute)</p>
+	</div>
+	<div class="line"></div>
+	<div class="row-opt">
+		<input type="button" id="btn-deliver" class="btn-opt-require" title="Marker deliver"/>
+		<input type="text" value="Position deliver" title="Position deliver" class="opacity-60" id="pos-deliver" readonly="readonly"/>	
 	</div>
 	<div class="row-opt">
-		<p>Weight:</p><input class="ipt-text" type="number" value="0" id="ipt-weight"/>
+		<p>Duration </p>
+		<input class="ipt-text" type="number" value="0" min="0" id="ipt-duration-deliver"/>
+		<p class="minute-text">(minute)</p>
+	</div>
+	<div class="line"></div>
+	<div class="row-opt">
+		<p>Weight:</p>
+		<input class="ipt-text" type="number" value="1" min="1" id="ipt-weight"/>
+		<p class="red italic"> (num of person)</p>
 	</div>
 	<div class="row-opt">
 		<p>Ep:</p><input class="ipt-text" type="time" value="00:00" id="ipt-Ep"/>
@@ -76,7 +89,7 @@
 <p>
 	<input type="number" id="num-vehicle" value="3" min="0"/>
 </p>
-
+<p class="red italic"> vehicles</p>
 </div>
 <p class="clear"></p>
 

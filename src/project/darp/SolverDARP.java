@@ -4,7 +4,6 @@ import org.w3c.dom.*;
 import javax.xml.parsers.*;
 
 import java.io.File;
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,7 +11,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.TreeMap;
 public class SolverDARP {
 
@@ -356,7 +354,7 @@ public class SolverDARP {
 		Map.Entry<Integer, ArrayList<int[]>> mapEntry = null;
 		if(it.hasNext())
 		{
-			mapEntry = (Map.Entry)it.next();			
+			mapEntry = (Map.Entry<Integer, ArrayList<int[]>>)it.next();			
 		}
 		for(int[] x:mapEntry.getValue())
 		{			
@@ -411,7 +409,7 @@ public class SolverDARP {
 		Iterator it = mapSizeR.entrySet().iterator();
 		if(it.hasNext())
 		{
-			Map.Entry<Integer, Integer> mapEntry = (Map.Entry)it.next();			
+			Map.Entry<Integer, Integer> mapEntry = (Map.Entry<Integer, Integer>)it.next();			
 			HashMap<Integer, ArrayList<int[]>> rt = new HashMap<Integer, ArrayList<int[]>>();//
 			rt.put(mapEntry.getValue(),map.get(mapEntry.getValue()));
 			
@@ -668,6 +666,8 @@ public class SolverDARP {
 			requires[i].setEd(Ed[i]);
 			requires[i].setLp(Lp[i]);
 			requires[i].setLd(Ld[i]);
+			requires[i].setDuarationPickup(i+1);
+			requires[i].setDuarationDeliver(i+n+1);
 		}
 		
 	}
