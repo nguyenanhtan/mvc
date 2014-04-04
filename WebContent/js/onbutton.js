@@ -166,7 +166,9 @@ function activeRequest(id)
 			arr_request[i].pickup.setIcon(icon_pickup);
 			arr_request[i].deliver.setIcon(icon_deliver);
 			arr_request[i].pickup.setDraggable(true);
-			arr_request[i].deliver.setDraggable(true);			
+			arr_request[i].deliver.setDraggable(true);
+			arr_request[i].deliver.setZIndex(9999);
+			arr_request[i].pickup.setZIndex(9999);
 			loadReq(arr_request[i]);
 			break;
 		}
@@ -306,7 +308,7 @@ function postData()
 				},
 				success:function(data)
 				{
-			    	alert("Data: " + data);
+			    	out("Data receive: " + data);
 			    	parseJSON(data);
 			    	calcRoute();
 			 	},
