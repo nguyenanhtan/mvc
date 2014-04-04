@@ -666,8 +666,10 @@ public class SolverDARP {
 			requires[i].setEd(Ed[i]);
 			requires[i].setLp(Lp[i]);
 			requires[i].setLd(Ld[i]);
-			requires[i].setDuarationPickup(i+1);
-			requires[i].setDuarationDeliver(i+n+1);
+			//requires[i].setDuarationPickup(i+1);
+			//requires[i].setDuarationDeliver(i+n+1);
+			requires[i].setPickup(i+1);
+			requires[i].setDeliver(i+n+1);
 		}
 		
 	}
@@ -721,7 +723,7 @@ public class SolverDARP {
 	}
 	public void println(String msg)
 	{
-		//System.out.println(msg);
+		System.out.println(msg);
 	}
 	private void println(HashSet<Integer> x)
 	{

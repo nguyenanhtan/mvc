@@ -1,3 +1,4 @@
+var directionsService = new google.maps.DirectionsService();
 function initialize() 
 {	
 	directionsDisplay = new google.maps.DirectionsRenderer();
@@ -12,6 +13,7 @@ function initialize()
     	  placeMarker(event.latLng);
       });
     putDepot(new google.maps.LatLng(21.006738,105.84138));
+
   }
 function putDepot(location)
 {
@@ -138,26 +140,72 @@ function putDepot(location)
 //	  	  });
 	  }	  
     }
-  function calcRoute(mStart,mEnd) {
-	  if(mStart > markers.length || mEnd > markers.length)
+  function calcRoute() {	
+	  out("Calc Route");
+	  var start = depot;
+	  var end = depot;//arr_request[0].pickup;
+	  //out(depot.getPosition());
+	  for(var k = 0;k < data_response.numVehicle;k++)
 	  {
-	  	alert("mStart > markers.length || mEnd > markers.length");
+		  waypts = getRoute(k);
+		  //out("way.len = "+waypts.length);
+		  if(waypts.length > 0)
+		  {
+			  var request = {
+			      origin:start.getPosition(),
+			      destination:end.getPosition(),
+			      waypoints: waypts,
+			      travelMode: google.maps.TravelMode.DRIVING,
+			      optimizeWaypoints: false
+			  };
+			  //ut("__k___"+k+"____");
+			  directionsService.route(request, function(response, status) {
+				  out("Status: "+status);
+			    if (status == google.maps.DirectionsStatus.OK) {
+			      directionsDisplay.setDirections(response);
+			    }
+			    else
+			    {
+			    	alert("Error route: "+status);
+			    }
+			  });
+		  }
+		  else
+		  {
+			  out("****NO ROUTE***");
+		  }
 	  }
-	  var start = markers[mStart].getPosition();
-	  var end = markers[mEnd].getPosition();
-	  var request = {
-	      origin:start,
-	      destination:end,
-	      travelMode: google.maps.TravelMode.DRIVING,
-	      optimizeWaypoints: true
-	  };
-	  directionsService.route(request, function(response, status) {
-		  //alert("Status: "+status);
-	    if (status == google.maps.DirectionsStatus.OK) {
-	      directionsDisplay.setDirections(response);
-	    }
-	  });
 	}
-
+function getRoute(i)
+{
+	var waypts = [];
+	Solution = data_response.Solution;
+	pcurrent = Solution[i];
+	m = data_response.numVehicle;
+	n = data_response.numRequest;
+	while(pcurrent < data_response.numVehicle + 2*data_response.numRequest)
+	{
+		if(pcurrent < m+n)
+		{
+			waypts.push({
+				location:arr_request[pcurrent - m].pickup.getPosition(),
+				stopover:true
+			});
+			//out(arr_request[pcurrent - m].pickup.getPosition());
+		}
+		else
+		{			
+			waypts.push({
+				location:arr_request[pcurrent - m - n].deliver.getPosition(),
+				stopover:true
+			});
+			//out(arr_request[pcurrent - m - n].deliver.getPosition());
+		}
+		
+		pcurrent = Solution[pcurrent];
+	}
+	
+	return waypts;
+}
  google.maps.event.addDomListener(window, 'load', initialize);  
  

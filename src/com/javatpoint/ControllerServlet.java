@@ -1,7 +1,13 @@
 package com.javatpoint;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,85 +15,48 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import project.darp.SolverDARP;
 import project.darp.SolverDARP.Solution;
 
+import java.io.StringWriter;
 
 public class ControllerServlet extends HttpServlet {
-	
+	int numVehicle = 0;
+	int numRequest = 0;
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		try{
-			String matrix = request.getParameter("matrix_distances");
-			String weight = request.getParameter("weight");
-			String Ep = request.getParameter("Ep");
-			String Lp= request.getParameter("Lp");
-			String Ed = request.getParameter("Ed");
-			String Ld = request.getParameter("Ld");
-			String depot = request.getParameter("depot");
-			String snVehicle = request.getParameter("num_vehicle");
-			
-			System.out.println(snVehicle);
-			//System.exit(0);
-			int[] arrWeight = parser(weight);
-			int numVehicle = 0;
-			try
-			{
-				numVehicle = Integer.parseInt(snVehicle.substring(1, snVehicle.length()-1));
-				System.out.println("numVehicle: "+numVehicle);
-			}catch(Exception e)
-			{
-				System.out.println(e.toString());
-			}
-			int numRequest = arrWeight.length;
-			
-			SolverDARP S = new SolverDARP(matrix,numVehicle,numRequest,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld));
-			System.out.println("S: ");
-			Solution Sol = S.LNSFFPA(100, 120);
-			S.println("Rout cost: "+Sol.getRoutCost());
-			S.println(Sol.getS());
-//		}catch(Exception e)
-//		{
-//			//System.err.println(e.toString());
-//		}
-		response.getWriter().write("sd");
-		System.out.println("*********");
-//		Map<String, String[]> prmMap = request.getParameterMap();
-//		for (Map.Entry<String, String[]> entry : prmMap.entrySet()) {
-//            String key = entry.getKey();         // parameter name
-//            String[] value = entry.getValue();   // parameter values as array of String
-//            String sVal = "";
-//            for(String s:value)
-//            {
-//            	sVal += (s + ";  ");
-//            }
-//            System.out.println(key+" --> "+sVal);
-//		}
-		//System.out.println("r: "+request.getParameterMap() );
-		/*response.setContentType("text/html");
-		PrintWriter out=response.getWriter();
+		String matrix = request.getParameter("matrix_distances");
+		String weight = request.getParameter("weight");
+		String Ep = request.getParameter("Ep");
+		String Lp= request.getParameter("Lp");
+		String Ed = request.getParameter("Ed");
+		String Ld = request.getParameter("Ld");
+		//String depot = request.getParameter("depot");
+		String snVehicle = request.getParameter("num_vehicle");
 		
-		String name=request.getParameter("name");
-		String password=request.getParameter("password");
+		System.out.println(snVehicle);
+		//System.exit(0);
+		int[] arrWeight = parser(weight);
 		
-		LoginBean bean=new LoginBean();
-		bean.setName(name);
-		bean.setPassword(password);
-		request.setAttribute("bean",bean);
-		
-		boolean status=bean.validate();
-		
-		if(status){
-			RequestDispatcher rd=request.getRequestDispatcher("login-success.jsp");
-			rd.forward(request, response);
+		try
+		{
+			numVehicle = Integer.parseInt(snVehicle.substring(1, snVehicle.length()-1));
+			System.out.println("numVehicle: "+numVehicle);
+		}catch(Exception e)
+		{
+			System.out.println(e.toString());
 		}
-		else{
-			RequestDispatcher rd=request.getRequestDispatcher("login-error.jsp");
-			rd.forward(request, response);
-		}
-		*/
+		numRequest = arrWeight.length;
 		
+		SolverDARP S = new SolverDARP(matrix,numVehicle,numRequest,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld));
+
+		Solution Sol = S.LNSFFPA(1010, 12000);		
+		response.getWriter().write(encodeResponse(Sol.getS()));
+
 	}
 
 	@Override
@@ -136,5 +105,21 @@ public class ControllerServlet extends HttpServlet {
 		System.out.println("\n__________________");
 		return data;
 	}
-	
+	private String encodeResponse(int[] sol)
+	{
+		JSONObject erp = new JSONObject();
+		JSONArray arr = new JSONArray();		
+		for(int x:sol)
+		{
+			arr.add(x);
+		}
+		erp.put("Solution", arr);
+		erp.put("numVehicle", numVehicle);
+		erp.put("numRequest", numRequest);
+		String jsonText = JSONValue.toJSONString(erp);
+		System.out.println("jsonText2: "+jsonText);
+		return jsonText;
+
+		
+	}
 }

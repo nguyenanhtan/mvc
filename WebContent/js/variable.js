@@ -38,7 +38,9 @@ var req_counter = 0;
 var dmarker;
 var pmarker;
 
-var directionsService = new google.maps.DirectionsService();
+
 var patt_pos=/^\(-{0,1}\d*\.{0,1}\d+,\s{0,1}-{0,1}\d*\.{0,1}\d+\)$/;	
 var patt_num=/^\d+$/;
 var patt_time=/^\d\d:\d\d$/;
+
+var data_response;

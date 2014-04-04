@@ -50,7 +50,7 @@ function resetOpt()
 	pos_pickup.value = "Position pickup";
 	pos_deliver.value = "Position deliver";
 	
-	ipt_weight.value = "0";
+	ipt_weight.value = "1";
 	ipt_Ep.value = "00:00";
 	ipt_Lp.value = "23:59";
 	ipt_Ed.value = "00:00";
@@ -306,7 +306,9 @@ function postData()
 				},
 				success:function(data)
 				{
-			    	alert("Data: " + data + "\nStatus: ");
+			    	alert("Data: " + data);
+			    	parseJSON(data);
+			    	calcRoute();
 			 	},
 				error:function(status,stt,err)
 				{
@@ -315,4 +317,9 @@ function postData()
 			}
 			);
 	//);
+}
+function parseJSON(data)
+{
+	obj = JSON.parse(data);
+	data_response = obj;	
 }
