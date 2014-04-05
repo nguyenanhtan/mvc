@@ -24,7 +24,7 @@
   <body>
  
 <!-- <p>You are successfully logged in!</p> -->
-<p id="header">Run best in browser support HTML5 and CSS3</p>
+<p id="header">Run best in browser supporting HTML5 and CSS3</p>
 
 <div id="map-canvas"></div>
 <div id="bound-right">
