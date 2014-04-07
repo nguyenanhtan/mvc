@@ -55,13 +55,16 @@ function resetOpt()
 	ipt_Lp.value = "23:59";
 	ipt_Ed.value = "00:00";
 	ipt_Ld.value = "23:59";
+	ipt_duration_pickup.value = 0;
+	ipt_duration_deliver.value = 0;
+	
 	//req_active = null;
 }
 function saveReq()
 {
 	if(req_active == req_counter)
 	{
-		tmp_request = new Request(req_counter,pmarker,dmarker,ipt_weight.value,ipt_Ep.value,ipt_Lp.value,ipt_Ed.value,ipt_Ld.value);
+		tmp_request = new Request(req_counter,pmarker,dmarker,ipt_weight.value,ipt_Ep.value,ipt_Lp.value,ipt_Ed.value,ipt_Ld.value,ipt_duration_pickup.value,ipt_duration_deliver.value);
 		req_counter++;
 		arr_request.push(tmp_request);
 		dmarker = new google.maps.Marker({});
@@ -89,6 +92,9 @@ function updateReq()
 				arr_request[i].Lp = ipt_Lp.value;
 				arr_request[i].Ed = ipt_Ed.value;
 				arr_request[i].Ld = ipt_Ld.value;
+				arr_request[i].duration_pickup = ipt_duration_pickup.value;
+				arr_request[i].duration_deliver = ipt_duration_deliver.value;
+				
 				break;
 			}
 		}
@@ -183,6 +189,9 @@ function loadReq(req)
 	ipt_Lp.value = req.Lp;
 	ipt_Ed.value = req.Ed;
 	ipt_Ld.value = req.Ld;
+	ipt_duration_pickup.value = req.duration_pickup;
+	ipt_duration_deliver.value = req.duration_deliver;
+	
 }
 function addReq(req)
 {
@@ -244,6 +253,12 @@ function getParameterRequest(prm)
 		case 'Ld':
 			drtn[i] = arr_request[i].Ld;
 			break;
+		case 'duration-pickup':
+			drtn[i] = arr_request[i].duration_pickup;
+			break;
+		case 'duration-deliver':
+			drtn[i] = arr_request[i].duration_deliver;
+			break;
 		default: return null;
 		}
 	}
@@ -290,12 +305,15 @@ function postData()
 	//alert(JSON.stringify(getParameterRequest("pickup-position")));
 	//alert(JSON.stringify(arr_matrix_distances.rows));
 	//alert(JSON.stringify(depot.getPosition()));
+	//alert(getParameterRequest("duration-pickup")+"****"+getParameterRequest("duration-deliver"));
+	
 	$.ajax(
 			{
 				url:"ControllerServlet",
 				type:"POST",
 				data:{
 					num_vehicle:JSON.stringify($("#num-vehicle").val()),
+					capacity_vehicle:JSON.stringify($("#capacity-vehicle").val()),
 					depot: JSON.stringify(depot.getPosition()),
 				    pickup: JSON.stringify(getParameterRequest("pickup-position")),
 				    deliver: JSON.stringify(getParameterRequest("deliver-position")),
@@ -304,7 +322,9 @@ function postData()
 				    Lp: JSON.stringify(getParameterRequest("Lp")),
 				    Ed: JSON.stringify(getParameterRequest("Ed")),
 				    Ld: JSON.stringify(getParameterRequest("Ld")),
-				    matrix_distances:JSON.stringify(arr_matrix_distances)
+				    duration_pickup: JSON.stringify(getParameterRequest("duration-pickup")),
+				    duration_deliver: JSON.stringify(getParameterRequest("duration-deliver")),
+				    matrix_distances:JSON.stringify(arr_matrix_distances)				    
 				},
 				success:function(data)
 				{

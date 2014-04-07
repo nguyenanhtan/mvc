@@ -26,6 +26,7 @@ import java.io.StringWriter;
 public class ControllerServlet extends HttpServlet {
 	int numVehicle = 0;
 	int numRequest = 0;
+	int capVehicle = 0;
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		try{
@@ -37,14 +38,18 @@ public class ControllerServlet extends HttpServlet {
 		String Ld = request.getParameter("Ld");
 		//String depot = request.getParameter("depot");
 		String snVehicle = request.getParameter("num_vehicle");
+		String scapVehicle = request.getParameter("capacity_vehicle");
+		String sdP = request.getParameter("duration_pickup");
+		String sdD = request.getParameter("duration_deliver");
 		
-		System.out.println(snVehicle);
 		//System.exit(0);
 		int[] arrWeight = parser(weight);
 		
 		try
 		{
 			numVehicle = Integer.parseInt(snVehicle.substring(1, snVehicle.length()-1));
+			capVehicle = Integer.parseInt(scapVehicle);
+			
 			System.out.println("numVehicle: "+numVehicle);
 		}catch(Exception e)
 		{
@@ -52,11 +57,17 @@ public class ControllerServlet extends HttpServlet {
 		}
 		numRequest = arrWeight.length;
 		
-		SolverDARP S = new SolverDARP(matrix,numVehicle,numRequest,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld));
+		SolverDARP S = new SolverDARP(matrix,numVehicle,numRequest,capVehicle,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld),parser(sdP),parser(sdD));
 
 		Solution Sol = S.LNSFFPA(1010, 12000);		
 		response.getWriter().write(encodeResponse(Sol.getS()));
-
+/*		for(int x:parser(sdP))
+		{
+			System.out.print(x+"\t");
+		}
+		System.out.println();
+		//S.println("parseD: "+parser(sdD));
+		System.out.println(sdP);*/
 	}
 
 	@Override
@@ -87,7 +98,7 @@ public class ControllerServlet extends HttpServlet {
 				}
 				else
 				{
-					System.out.println("weight");
+					//System.out.println("weight");
 					data[i] = Integer.parseInt(tg);
 				}
 				//System.out.println(data[i]);
@@ -95,14 +106,15 @@ public class ControllerServlet extends HttpServlet {
 			}
 		}catch(Exception e)
 		{
-			System.err.println(e.toString());
+			System.err.println("parse: "+e.toString());
+//			System.exit(0);
 		}
-		System.out.println("__________________");
-		for(int x:data)
-		{
-			System.out.print(x+"   ");
-		}
-		System.out.println("\n__________________");
+//		System.out.println("__________________");
+//		for(int x:data)
+//		{
+//			System.out.print(x+"   ");
+//		}
+//		System.out.println("\n__________________");
 		return data;
 	}
 	private String encodeResponse(int[] sol)

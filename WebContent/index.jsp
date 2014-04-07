@@ -83,15 +83,21 @@
 </div>
 </form>
 <div id="depot">
-<p>
+<div>
 	<img src="./img/bus-orange-icon.png">
-</p>
-<p>
-	<input type="number" id="num-vehicle" value="3" min="0"/>
-</p>
-<p class="red italic"> vehicles</p>
 </div>
-<p class="clear"></p>
+<div>
+	<p class="depot-title">Number vehicle</p>
+	<input type="number" id="num-vehicle" value="3" min="0"/>
+	<span class="red italic"> vehicles</span>
+</div>
+<div>
+	<p class="depot-title">Capacity</p>
+	<input type="number" id="capacity-vehicle" value="10" min="1"/>
+	<span class="red italic"> person</span>
+</div>
+</div>
+<!-- <p class="clear"></p> -->
 
 <div id="div-list-request">
 <ul id="list-request">
@@ -109,11 +115,22 @@
 <input type="button" id="get-matrix-distances" value="Get Matrix Distance" onclick="calculateDistances()"/>   
 <input type="button" id="post-data" value="Post" onclick="postData()"/>
 </div>
-<div id="div-console">
-<h4>Console <span id="clear-console">clear</span></h4>
-<p id="console"></p>
-</div>   
 </div>
 </div>
-  </body>
+<div class="clear"></div>
+<ul id="footer">
+	<li>
+		<p class="p-title">Console</p>
+		<div id="div-console">
+			<h4>Console </h4>
+			<span id="clear-console"><img src="./img/broom-icon.png"></span>
+			<p id="console"></p>
+		</div> 
+	
+	</li>	
+	<li>
+		<p class="p-title">Solution</p>
+	</li>
+</ul>
+</body>
 </html>

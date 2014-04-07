@@ -23,6 +23,8 @@ var ipt_Ep;
 var ipt_Lp;
 var ipt_Ed;
 var ipt_Ld;
+var ipt_duration_pickup;
+var ipt_duration_deliver;
 var btn_add;
 var btn_save;
 var btn_remove;

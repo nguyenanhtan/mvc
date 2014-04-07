@@ -17,6 +17,9 @@ window.onload = function(){
 	 cfm_yes = document.getElementById("cfm-yes");
 	 cfm_no = document.getElementById("cfm-no");
 	 box_console = document.getElementById("console");
+	 ipt_duration_pickup = document.getElementById("ipt-duration-pickup");
+	 ipt_duration_deliver = document.getElementById("ipt-duration-deliver");
+	 
 	 /*for(var i = 0;i < 59;i++)
 		{
 			out("cdsgs");
@@ -143,4 +146,11 @@ $(document).ready(function(){
 		$("#console").html("");
 	});
 	$("div#confirm").hide();
+	$("div#div-console").hide();
+	$("ul#footer li .p-title").click(function(){
+		$(this).next().slideToggle(300);
+	});
+	$("ul#footer li #div-console h4").click(function(){
+		$("ul#footer li #div-console").hide(300);
+	});
 });

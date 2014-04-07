@@ -17,16 +17,11 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
  {
  	cursor:pointer;
  	color:#ff0000;
- 	float:right;
+ 	position: absolute;
+	top: 5px;
+	right: 11px;
  }
-#console{
-  	color:#ff0000;
-  	overflow-y:scroll;
-  	height: 109px;
-	margin-top: 0;
-	padding:5px;
-	
-  }
+
 .labels {
 	 color: red;
 	 background-color: white;
@@ -181,16 +176,22 @@ div#div-list-request
 div#div-console
 {
 	border:1px solid #DFDBD4;
-	border-radius:10px;
+	border-radius:10px 10px 0 0;
 	height:150px;
 	margin-top:10px;
-	
+	position: fixed;
+	bottom: 30px;
+	width: 400px;
+	background: #fff;
 }
 div#div-console h4
 {
 	padding:5px;
 	margin:0;
-	border-bottom:1px solid #DFDBD4;
+	border-bottom:1px solid #4d4d4d;
+	color:#fff;
+	background: #030303;
+	border-radius: 10px 10px 0 0;
 }
 ul#list-request
 {
@@ -220,9 +221,9 @@ ul#list-request li
 {
 	margin-top:10px;
 	padding:5px;
-	/*border:1px solid #DFDBD4;
-	border-radius:10px;*/
-	height:30px;
+	border-bottom:1px solid #DFDBD4;
+	/* border-radius:10px; */
+	/* height:30px; */
 }
 #depot img
 {
@@ -230,11 +231,15 @@ ul#list-request li
 }
 #depot p
 {
-	float:left;
-	color:#f00;
+    float:left;
+	/* color:#f00; */
 	font-size:14px;
 	margin-left:3px;
-	font-style:italic;
+	/* font-style:italic; */
+}
+#depot div .depot-title
+{
+	width:110px;
 }
 .red
 {
@@ -258,3 +263,38 @@ div#box-button input
 {
 	padding:2px 3px;
 }
+ul#footer
+{
+	height:30px;
+	background:#050505;
+	position:fixed;
+	bottom:0;
+}
+ul#footer li
+{
+	display: block;
+	float: left;
+	border-right:1px solid #fff;
+}
+ul#footer li:hover
+{
+	
+}
+ul#footer li p.p-title
+{
+	color:#fff;
+	padding:5px;
+}
+ul#footer li p.p-title:hover
+{
+	background:#345;
+	cursor:pointer;
+}
+ul#footer li p#console{
+  	color:#ff0000;
+  	overflow-y:scroll;
+  	height: 109px;
+	margin-top: 0;
+	padding:5px;
+	
+  }

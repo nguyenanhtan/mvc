@@ -1,4 +1,4 @@
-function Request(id, pPos,dPos,weight,Ep,Lp,Ed,Ld)
+function Request(id, pPos,dPos,weight,Ep,Lp,Ed,Ld,dP,dD)
 {
 	this.pickup = pPos;
 	this.deliver = dPos;
@@ -8,6 +8,8 @@ function Request(id, pPos,dPos,weight,Ep,Lp,Ed,Ld)
 	this.Ed = Ed;
 	this.Ld = Ld;
 	this.id = id;
+	this.duration_pickup = dP;
+	this.duration_deliver = dD;
 	this.print = function()
 	{
 		alert(this.pickup+"///////"+this.deliver+"/"+this.weight+"/"+this.Ed+"/"+this.Ld);

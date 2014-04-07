@@ -95,12 +95,13 @@ public class SolverDARP {
 			}
 		}
 	}
-	public SolverDARP(String Jmatrix, int m, int n, int[] weight,int[] Ep,int[] Lp,int[] Ed,int[] Ld) {
+	public SolverDARP(String Jmatrix, int m, int n, int capacity, int[] weight,int[] Ep,int[] Lp,int[] Ed,int[] Ld,int[] dP,int[] dD) {
 		// TODO Auto-generated constructor stub
 //		map = new MapTransport("fileMap.drp");
+		SolverDARP.Q = capacity;
 		map = new MapGoogle(Jmatrix);
 		System.out.println(m+":"+n);
-		readProblem(m,n,weight,Ep,Lp,Ed,Ld);
+		readProblem(m,n,capacity,weight,Ep,Lp,Ed,Ld,dP,dD);
 		System.out.println(m+":"+n);
 		s = new int[2*(m+n)];
 		v = new int[2*(m+n)];
@@ -628,7 +629,7 @@ public class SolverDARP {
 		}
 		return routcost;
 	}
-	public void readProblem(int m,int n,int[] weight,int[] Ep,int[] Lp,int[] Ed,int[] Ld)
+	public void readProblem(int m,int n,int capacity, int[] weight,int[] Ep,int[] Lp,int[] Ed,int[] Ld,int[] durationP,int[] durationD)
 	{
 		this.m = m;
 		this.n = n;
@@ -666,8 +667,8 @@ public class SolverDARP {
 			requires[i].setEd(Ed[i]);
 			requires[i].setLp(Lp[i]);
 			requires[i].setLd(Ld[i]);
-			//requires[i].setDuarationPickup(i+1);
-			//requires[i].setDuarationDeliver(i+n+1);
+			requires[i].setDuarationPickup(durationP[i]);
+			requires[i].setDuarationDeliver(durationD[i]);
 			requires[i].setPickup(i+1);
 			requires[i].setDeliver(i+n+1);
 		}
