@@ -22,7 +22,9 @@
     </script>
   </head>
   <body>
- 
+<!--  <div id="popup">
+ 	<img src="./img/add-icon.png">
+ </div> -->
 <!-- <p>You are successfully logged in!</p> -->
 <p id="header">Run best in browser supporting HTML5 and CSS3</p>
 
@@ -109,28 +111,37 @@
 </div>
 
 <div class="clear"></div>
-<div id="box-button">
-<input type="button" id="route" value="Route" onclick="calcRoute(1,0)"/>     
-<input type="button" id="Out" value="Out" onclick="showOut()"/>   
-<input type="button" id="get-matrix-distances" value="Get Matrix Distance" onclick="calculateDistances()"/>   
-<input type="button" id="post-data" value="Post" onclick="postData()"/>
+
 </div>
 </div>
-</div>
+
 <div class="clear"></div>
-<ul id="footer">
-	<li>
-		<p class="p-title">Console</p>
-		<div id="div-console">
-			<h4>Console </h4>
-			<span id="clear-console"><img src="./img/broom-icon.png"></span>
-			<p id="console"></p>
-		</div> 
-	
-	</li>	
-	<li>
-		<p class="p-title">Solution</p>
-	</li>
-</ul>
+<div id="div-footer">
+	<ul id="footer">
+		<li>
+			<p class="p-title">Console</p>
+			<div id="div-console">
+				<h4>Console </h4>
+				<span id="clear-console"><img src="./img/broom-icon.png"></span>
+				<p id="console"></p>
+			</div> 
+		
+		</li>	
+		<li>
+			<p class="p-title">Solution</p>
+		</li>
+		<li>
+			
+		</li>
+	</ul>
+	<div id="box-button">
+		<input type="button" id="route" value="Route" onclick="calcRoute(1,0)"/>     
+		<input type="button" id="Out" value="Out" onclick="showOut()"/>   
+		<input type="button" id="get-matrix-distances" value="Get Matrix Distance" onclick="calculateDistances()"/>  
+		<input type="button" id="post-data" value="Post" onclick="postData()"/>
+		<input type="button" id="btn-save-session" value="Save Session">
+	</div>
+</div>
+<div id="height-35"></div>
 </body>
 </html>

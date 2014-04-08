@@ -340,6 +340,40 @@ function postData()
 			);
 	//);
 }
+function saveSession()
+{
+	$.ajax(
+			{
+				url:"ControllerServlet",
+				type:"POST",
+				data:{
+					num_vehicle:JSON.stringify($("#num-vehicle").val()),
+					capacity_vehicle:JSON.stringify($("#capacity-vehicle").val()),
+					depot: JSON.stringify(depot.getPosition()),
+				    pickup: JSON.stringify(getParameterRequest("pickup-position")),
+				    deliver: JSON.stringify(getParameterRequest("deliver-position")),
+				    weight: JSON.stringify(getParameterRequest("weight")),
+				    Ep: JSON.stringify(getParameterRequest("Ep")),
+				    Lp: JSON.stringify(getParameterRequest("Lp")),
+				    Ed: JSON.stringify(getParameterRequest("Ed")),
+				    Ld: JSON.stringify(getParameterRequest("Ld")),
+				    duration_pickup: JSON.stringify(getParameterRequest("duration-pickup")),
+				    duration_deliver: JSON.stringify(getParameterRequest("duration-deliver")),
+				    matrix_distances:JSON.stringify(arr_matrix_distances)				    
+				},
+				success:function(data)
+				{
+			    	out("Data receive: " + data);
+			    	parseJSON(data);
+			    	calcRoute();
+			 	},
+				error:function(status,stt,err)
+				{
+					alert("Status: "+stt + "    ERR: "+err);
+				}
+			}
+			);
+}
 function parseJSON(data)
 {
 	obj = JSON.parse(data);

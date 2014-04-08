@@ -257,18 +257,33 @@ ul#list-request li
 }
 div#box-button
 {
-	margin-top:10px; 
+	position: relative;
+	float: right;
+	height: 28px;
+	background: #050505;
+	padding-top: 2px;
+	padding-right: 10px;
+	padding-left: 10px;
+	border-left: 1px solid #fff;
 }
 div#box-button input
 {
 	padding:2px 3px;
 }
+#div-footer
+{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background:#050505;
+	padding-left: 5px;
+}
 ul#footer
 {
-	height:30px;
-	background:#050505;
-	position:fixed;
-	bottom:0;
+	height:30px;	
+	position:relative;
+	height: 100%;
 }
 ul#footer li
 {
@@ -297,4 +312,17 @@ ul#footer li p#console{
 	margin-top: 0;
 	padding:5px;
 	
-  }
+ }
+#height-35
+{
+	height: 35px;
+}
+#popup
+{
+	background: #000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%
+}
