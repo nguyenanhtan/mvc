@@ -1,12 +1,8 @@
 package com.javatpoint;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,13 +17,13 @@ import org.json.simple.JSONValue;
 import project.darp.SolverDARP;
 import project.darp.SolverDARP.Solution;
 
-import java.io.StringWriter;
+
 
 public class ControllerServlet extends HttpServlet {
 	int numVehicle = 0;
 	int numRequest = 0;
 	int capVehicle = 0;
-	@Override
+	@Override	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		try{
 		String matrix = request.getParameter("matrix_distances");

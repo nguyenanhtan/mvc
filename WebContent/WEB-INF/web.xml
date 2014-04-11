@@ -8,4 +8,12 @@
     <servlet-name>s1</servlet-name>
     <url-pattern>/ControllerServlet</url-pattern>
   </servlet-mapping>
+   <servlet>
+    <servlet-name>s2</servlet-name>
+    <servlet-class>com.javatpoint.ControllerModel</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>s2</servlet-name>
+    <url-pattern>/ControllerModel</url-pattern>
+  </servlet-mapping>
 </web-app>

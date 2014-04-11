@@ -120,7 +120,7 @@
 	<ul id="footer">
 		<li>
 			<p class="p-title">Console</p>
-			<div id="div-console">
+			<div id="div-console" class="li-content">
 				<h4>Console </h4>
 				<span id="clear-console"><img src="./img/broom-icon.png"></span>
 				<p id="console"></p>
@@ -128,7 +128,13 @@
 		
 		</li>	
 		<li>
-			<p class="p-title">Solution</p>
+			<p class="p-title">Sessions</p>
+			<div class="li-content">
+				<h4>Sessions</h4>
+				<div id="content-session">
+
+				</div>
+			</div>
 		</li>
 		<li>
 			
@@ -139,7 +145,7 @@
 		<input type="button" id="Out" value="Out" onclick="showOut()"/>   
 		<input type="button" id="get-matrix-distances" value="Get Matrix Distance" onclick="calculateDistances()"/>  
 		<input type="button" id="post-data" value="Post" onclick="postData()"/>
-		<input type="button" id="btn-save-session" value="Save Session">
+		<input type="button" id="btn-save-session" value="Save Session" onclick="saveSession()">
 	</div>
 </div>
 <div id="height-35"></div>

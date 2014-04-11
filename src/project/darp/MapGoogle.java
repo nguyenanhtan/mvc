@@ -22,17 +22,14 @@ public class MapGoogle extends MapTransport {
 			matrixDistance = new float[this.numdepot][this.numdepot];
 			while(it.hasNext())
 			{
-				//System.out.println("$$: "+it.next());
 				JSONArray elements = (JSONArray)it.next().get("elements");
-				Iterator<JSONObject> itEle = elements.iterator();
-				System.out.println("$$$");
+				Iterator<JSONObject> itEle = elements.iterator();				
 				int j = 0;
 				while(itEle.hasNext())
 				{
 					JSONObject obj = itEle.next();
 					JSONObject distance = (JSONObject)obj.get("distance");
 					float value = Float.parseFloat(distance.get("value").toString());
-					System.out.println(value);
 					matrixDistance[i][j] = value;
 					matrixDistance[j][i] = value;
 					
@@ -40,17 +37,21 @@ public class MapGoogle extends MapTransport {
 				}
 				i++;
 			}
-			System.out.println("jso = "+jso.size());
+			//System.out.println("jso = "+jso.size());
 			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		
 	}
+	public float[][] getMatrixDistance()
+	{
+		return matrixDistance;
+	}
 	@Override
 	public int getT(int i,int j)
 	{
-		return (int)matrixDistance[i][j]/30;
+		return (int)matrixDistance[i][j];
 	}
 	
 }

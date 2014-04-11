@@ -184,7 +184,7 @@ div#div-console
 	width: 400px;
 	background: #fff;
 }
-div#div-console h4
+div.li-content h4
 {
 	padding:5px;
 	margin:0;
@@ -305,7 +305,7 @@ ul#footer li p.p-title:hover
 	background:#345;
 	cursor:pointer;
 }
-ul#footer li p#console{
+ul#footer li p#console, ul#footer li div#content-session{
   	color:#ff0000;
   	overflow-y:scroll;
   	height: 109px;
@@ -313,6 +313,21 @@ ul#footer li p#console{
 	padding:5px;
 	
  }
+ ul#footer li div.li-content
+ {
+ 	border:1px solid #DFDBD4;
+	border-radius:10px 10px 0 0;
+	height:150px;
+	margin-top:10px;
+	position: fixed;
+	bottom: 30px;
+	width: 400px;
+	background: #fff;
+ }
+ul#footer li div.li-content a.a-session
+{
+	margin-right: 5px;
+}
 #height-35
 {
 	height: 35px;

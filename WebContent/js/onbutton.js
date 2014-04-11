@@ -344,12 +344,14 @@ function saveSession()
 {
 	$.ajax(
 			{
-				url:"ControllerServlet",
+				url:"ControllerModel",
 				type:"POST",
 				data:{
+					command: "saveSession",
 					num_vehicle:JSON.stringify($("#num-vehicle").val()),
 					capacity_vehicle:JSON.stringify($("#capacity-vehicle").val()),
 					depot: JSON.stringify(depot.getPosition()),
+
 				    pickup: JSON.stringify(getParameterRequest("pickup-position")),
 				    deliver: JSON.stringify(getParameterRequest("deliver-position")),
 				    weight: JSON.stringify(getParameterRequest("weight")),
@@ -357,15 +359,15 @@ function saveSession()
 				    Lp: JSON.stringify(getParameterRequest("Lp")),
 				    Ed: JSON.stringify(getParameterRequest("Ed")),
 				    Ld: JSON.stringify(getParameterRequest("Ld")),
+				    
 				    duration_pickup: JSON.stringify(getParameterRequest("duration-pickup")),
 				    duration_deliver: JSON.stringify(getParameterRequest("duration-deliver")),
 				    matrix_distances:JSON.stringify(arr_matrix_distances)				    
 				},
 				success:function(data)
 				{
-			    	out("Data receive: " + data);
-			    	parseJSON(data);
-			    	calcRoute();
+			    	out("Data model: " + data);
+			    	//parseJSON(data);			    	
 			 	},
 				error:function(status,stt,err)
 				{
@@ -373,6 +375,36 @@ function saveSession()
 				}
 			}
 			);
+}
+function loadSession()
+{
+	$.ajax({
+		url:"ControllerModel",
+		type:"POST",
+		data:{
+			command:"loadSession"
+		},
+		success:function(data)
+		{
+			//out(data);
+			$("#content-session").html(toStringSession(data));
+		},
+		error:function(status,stt,err)
+		{
+			alert("load ERROR");
+		}
+	});
+}
+function toStringSession(data)
+{
+	obj = JSON.parse(data);
+	var html = "";	
+	for(var i = 0;i < obj.length;i++)
+	{
+		html+= "<a href='#' class='a-session'>"+obj[i]+"</a> ";
+	}
+	return html;
+
 }
 function parseJSON(data)
 {

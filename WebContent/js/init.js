@@ -146,11 +146,14 @@ $(document).ready(function(){
 		$("#console").html("");
 	});
 	$("div#confirm").hide();
-	$("div#div-console").hide();
-	$("ul#footer li .p-title").click(function(){
+	$("div.li-content").hide();
+	$("ul#footer li .p-title").click(function(){		
+		$(this).parent().siblings().children(".li-content").slideUp(300);
 		$(this).next().slideToggle(300);
+
 	});
-	$("ul#footer li #div-console h4").click(function(){
-		$("ul#footer li #div-console").hide(300);
+	$("ul#footer li .li-content h4").click(function(){
+		$(this).parent().slideUp(300);
 	});
+	loadSession();
 });
