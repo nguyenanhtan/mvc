@@ -129,8 +129,9 @@
 		</li>	
 		<li>
 			<p class="p-title">Sessions</p>
-			<div class="li-content">
+			<div class="li-content" id="div-session">
 				<h4>Sessions</h4>
+				<span id="btn-loadsession" title="Load and merge sessions"><img src="./img/Misc-Download-Database-icon.png"></span>
 				<div id="content-session">
 
 				</div>
@@ -141,7 +142,7 @@
 		</li>
 	</ul>
 	<div id="box-button">
-		<input type="button" id="route" value="Route" onclick="calcRoute(1,0)"/>     
+		<input type="button" id="btn-new-session" value="New Session" onclick="newSession()"/>     
 		<input type="button" id="Out" value="Out" onclick="showOut()"/>   
 		<input type="button" id="get-matrix-distances" value="Get Matrix Distance" onclick="calculateDistances()"/>  
 		<input type="button" id="post-data" value="Post" onclick="postData()"/>

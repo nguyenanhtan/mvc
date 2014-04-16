@@ -367,6 +367,7 @@ function saveSession()
 				success:function(data)
 				{
 			    	out("Data model: " + data);
+			    	loadSession();
 			    	//parseJSON(data);			    	
 			 	},
 				error:function(status,stt,err)
@@ -398,10 +399,14 @@ function loadSession()
 function toStringSession(data)
 {
 	obj = JSON.parse(data);
-	var html = "";	
+	var html = "";// "<p class='row-session'>";	
 	for(var i = 0;i < obj.length;i++)
 	{
-		html+= "<a href='#' class='a-session'>"+obj[i]+"</a> ";
+		html+= "<div class='sp-session'><input type='checkbox' name='box-session' value='"+obj[i]+"' class='a-session'> "+obj[i]+"</div>";
+		// if((i+1)%10 == 0)
+		// {
+		// 	html+= "</p><p class='row-session'>"
+		// }
 	}
 	return html;
 
@@ -410,4 +415,17 @@ function parseJSON(data)
 {
 	obj = JSON.parse(data);
 	data_response = obj;	
+}
+function newSession()
+{
+	for(var i = 0;i < arr_request.length;i++)
+	{
+		arr_request[i].destroy();
+	}
+	arr_request = new Array();
+	$("#list-request").html("");
+	ele_focus = null;
+    req_active = 0;
+    req_counter = 0;
+	initialize();
 }

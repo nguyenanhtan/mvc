@@ -14,4 +14,9 @@ function Request(id, pPos,dPos,weight,Ep,Lp,Ed,Ld,dP,dD)
 	{
 		alert(this.pickup+"///////"+this.deliver+"/"+this.weight+"/"+this.Ed+"/"+this.Ld);
 	};
+	this.destroy = function()
+	{
+		this.pickup.setMap(null);
+		this.deliver.setMap(null);
+	}
 }
