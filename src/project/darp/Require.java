@@ -14,7 +14,21 @@ public class Require {
 	private int Lp;
 	private int Ed;
 	private int Ld;
-	
+	@Override
+	public String toString()
+	{
+		String rts = "";
+		rts += "weight:"+weight
+				+"\tpickup:"+pickup
+				+"\tdeliver:"+deliver
+				+"\tEp:"+Ep
+				+"\tLp:"+Lp
+				+"\tEd:"+Ed
+				+"\tLd:"+Ld
+				+"\tduarationPickup:"+duarationPickup
+				+"\tduarationDeliver:"+duarationDeliver;
+		return rts;
+	}
 	Require()
 	{
 		timewindow = new TreeMap<String, Time>();

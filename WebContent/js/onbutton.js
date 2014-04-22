@@ -428,4 +428,5 @@ function newSession()
     req_active = 0;
     req_counter = 0;
 	initialize();
+	resetOpt();
 }

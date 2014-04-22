@@ -44,8 +44,8 @@ public class ControllerServlet extends HttpServlet {
 		try
 		{
 			numVehicle = Integer.parseInt(snVehicle.substring(1, snVehicle.length()-1));
-			capVehicle = Integer.parseInt(scapVehicle);
-			
+			capVehicle = Integer.parseInt(scapVehicle.substring(1, scapVehicle.length()-1));
+			System.out.println("capVehicle: "+capVehicle);
 			System.out.println("numVehicle: "+numVehicle);
 		}catch(Exception e)
 		{
@@ -55,8 +55,8 @@ public class ControllerServlet extends HttpServlet {
 		
 		SolverDARP S = new SolverDARP(matrix,numVehicle,numRequest,capVehicle,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld),parser(sdP),parser(sdD));
 
-		Solution Sol = S.LNSFFPA(1010, 12000);		
-		response.getWriter().write(encodeResponse(Sol.getS()));
+		Solution Sol = S.LNSFFPA(1010, SolverDARP.TIME_LIMIT_LNSFFPA);		
+		response.getWriter().write(encodeResponse(Sol));
 /*		for(int x:parser(sdP))
 		{
 			System.out.print(x+"\t");
@@ -113,8 +113,9 @@ public class ControllerServlet extends HttpServlet {
 //		System.out.println("\n__________________");
 		return data;
 	}
-	private String encodeResponse(int[] sol)
+	private String encodeResponse(Solution solution)
 	{
+		int[] sol = solution.getS();
 		JSONObject erp = new JSONObject();
 		JSONArray arr = new JSONArray();		
 		for(int x:sol)
@@ -124,6 +125,7 @@ public class ControllerServlet extends HttpServlet {
 		erp.put("Solution", arr);
 		erp.put("numVehicle", numVehicle);
 		erp.put("numRequest", numRequest);
+		erp.put("routcost", solution.getRoutCost());
 		String jsonText = JSONValue.toJSONString(erp);
 		System.out.println("jsonText2: "+jsonText);
 		return jsonText;

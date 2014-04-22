@@ -9,10 +9,11 @@ import org.json.simple.parser.JSONParser;
 public class MapGoogle extends MapTransport {
 
 	private float[][] matrixDistance;
+	private float[][] matrixDuration;
 	public MapGoogle(String JMatrix) {
 		// TODO Auto-generated constructor stub
 		super(true);
-		JSONParser parser=new JSONParser();
+		JSONParser parser=new JSONParser();		
 		try
 		{
 			JSONArray jso = (JSONArray)parser.parse(JMatrix);		
@@ -20,6 +21,7 @@ public class MapGoogle extends MapTransport {
 			int i = 0;
 			this.numdepot = jso.size();
 			matrixDistance = new float[this.numdepot][this.numdepot];
+			matrixDuration= new float[this.numdepot][this.numdepot];
 			while(it.hasNext())
 			{
 				JSONArray elements = (JSONArray)it.next().get("elements");
@@ -33,6 +35,11 @@ public class MapGoogle extends MapTransport {
 					matrixDistance[i][j] = value;
 					matrixDistance[j][i] = value;
 					
+					JSONObject dua = (JSONObject)obj.get("duration");
+					float vadua = Float.parseFloat(dua.get("value").toString());
+					matrixDuration[i][j] = vadua;
+					matrixDuration[j][i] = vadua;
+					
 					j++;
 				}
 				i++;
@@ -40,6 +47,7 @@ public class MapGoogle extends MapTransport {
 			//System.out.println("jso = "+jso.size());
 			
 		} catch (ParseException e) {
+			System.out.println("jso = ");
 			e.printStackTrace();
 		}
 		
@@ -50,6 +58,10 @@ public class MapGoogle extends MapTransport {
 	}
 	@Override
 	public int getT(int i,int j)
+	{
+		return (int)matrixDuration[i][j];
+	}
+	public int getDistance(int i,int j)
 	{
 		return (int)matrixDistance[i][j];
 	}

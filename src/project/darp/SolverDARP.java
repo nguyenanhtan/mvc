@@ -20,8 +20,14 @@ public class SolverDARP {
 	private Require[] requires;
 	private HashSet<Integer> setUnassignRequest;
 	public static int Q = 10;
-	public static int L = 100;
-	
+	public static int L = 1400;
+	public static boolean SHOW_BREAK_POINT = false;
+	public static double EPS = 0.00001;
+	public static int MAX_INIT = 1000;
+	private Date startTime = new Date();
+	public static int TIME_LIMIT_TREESEARCH = 5000;
+	public static int TIME_LIMIT_LNSFFPA = 35000;
+	private Solution tmpSol = null;
 	public static void main(String[] args) {
 		SolverDARP S = new SolverDARP();
 		Solution Sol = S.LNSFFPA(100, 120);
@@ -30,7 +36,26 @@ public class SolverDARP {
 	}
 	public Solution LNSFFPA(int numiter, int timeLimt)
 	{
-		this.TreeSearch();
+		for(int i = 0;i < MAX_INIT;i++)
+		{
+			TreeSearch();
+			revert(tmpSol);
+			if(isSolution())
+			{
+				break;
+			}
+			else
+			{
+				init();
+			}			
+		}
+		if(!isSolution()){
+			printfError("Can't init!");
+		}
+		status();
+		//System.exit(0);
+//		if(true)
+//		return new Solution(s, v, location, 100);
 		Solution bestS = new Solution(this.s, this.v, this.t, getRoutingCost());
 		Solution currentS = new Solution(this.s, this.v, this.t, getRoutingCost());
 //		println("Rout cost: "+currentS.getRoutCost());
@@ -43,20 +68,34 @@ public class SolverDARP {
 		for(int i = this.n;i > 1;i--)
 		{
 			for(int k = 0;k < numiter;k++)
-			{
+			{				
 				relaxedSolution(i);
-				bol = TreeSearch();
-				if(bol == false)
+				if(isSolution())
 				{
 					continue;
 				}
+//				System.out.println("A Relax");
+//				status();
+				TreeSearch();
+				revert(tmpSol);
+				if(!isSolution())
+				{
+					continue;
+				}
+				else
+				{
+					status();
+				}
 				int rCost = getRoutingCost();
 				if(rCost < currentS.getRoutCost())
-				{
-					currentS.save(s, v, t, rCost);
+				{					
+					currentS = new Solution(s, v, t, rCost);
 					if(currentS.getRoutCost() < bestS.getRoutCost())
 					{
-						bestS.save(currentS.getS(), currentS.getV(), currentS.getT(), currentS.getRoutCost());
+						bestS = new Solution(currentS.getS(), currentS.getV(), currentS.getT(), currentS.getRoutCost());
+//						println("best: "+currentS.getRoutCost());
+//						println(currentS.getS());
+//						status();
 					}
 				}
 				if(isTimeOut(startTime, timeLimt))
@@ -69,6 +108,7 @@ public class SolverDARP {
 		println(currentS.getS());
 		println("Rout cost: "+bestS.getRoutCost());
 		println(bestS.getS());
+//		status();
 		return bestS;
 	}
 	private boolean isTimeOut(Date start, int maxSecond)
@@ -100,7 +140,8 @@ public class SolverDARP {
 //		map = new MapTransport("fileMap.drp");
 		SolverDARP.Q = capacity;
 		map = new MapGoogle(Jmatrix);
-		System.out.println(m+":"+n);
+//		println(map.getMatrixDistance());
+//		System.out.println(m+":"+n);
 		readProblem(m,n,capacity,weight,Ep,Lp,Ed,Ld,dP,dD);
 		System.out.println(m+":"+n);
 		s = new int[2*(m+n)];
@@ -108,6 +149,12 @@ public class SolverDARP {
 		t = new int[2*(m+n)];
 		l = new int[2*(m+n)];
 		location = new int[2*(m+n)];
+		init();
+		//status();
+	}
+	private void init()
+	{
+		
 		setUnassignRequest = new HashSet<Integer>();
 		for(int i = 0;i < n;i++)
 		{
@@ -118,16 +165,16 @@ public class SolverDARP {
 			t[i] = 0;
 			l[i] = 0;
 			v[i] = i;
-			s[i] = i + 2*n + m;
+			s[i] = i + 2*n + m;			
 			location[i] = 0;
 		}
 		for(int i = 2*n+m;i < 2*(n+m);i++)
 		{
 			s[i] = i - 2*n - m;
 			v[i] = i - 2*n - m;
-			location[i] = 0;
 			t[i] = 0;
 			l[i] = 0;
+			location[i] = 0;
 		}
 		for(int i = m;i < m+n;i++)
 		{
@@ -141,12 +188,46 @@ public class SolverDARP {
 			t[i+n] = -1;
 			
 			l[i] = -1;
-			l[i+n] = -1;
+			l[i+n] = -1;	
 			
 			location[i] = requires[i-m].getPickup();
-			location[i+n] = requires[i-m].getDeliver();			
+			location[i+n] = requires[i-m].getDeliver();	
 		}
+	}
+	public void status()
+	{
+		System.out.println("\n---------------STATUS-----------------");
+		println("m:"+this.m);
+		println("n:"+this.n);
+		System.out.print("s:\t");
 		println(s);
+		System.out.print("v:\t");
+		println(v);
+		System.out.print("t:\t");
+		println(t);
+		System.out.print("l:\t");
+		println(l);
+		System.out.print("location:\t");
+		println(location);
+		System.out.println("Require:\t");
+		println(requires);
+		println("Rout cost:");
+		//println(getRoutingCost()+"");
+		System.out.println("---------------END-----------------");
+	}
+	public void printBreakPoint(String s)
+	{
+		if(SHOW_BREAK_POINT)
+		{
+			println(s);
+		}
+	}
+	public void printBreakPoint(String s,boolean a)
+	{
+		if(SHOW_BREAK_POINT||a)
+		{
+			println(s);
+		}
 	}
 	public SolverDARP() {
 		// TODO Auto-generated constructor stub
@@ -158,50 +239,12 @@ public class SolverDARP {
 		t = new int[2*(m+n)];
 		l = new int[2*(m+n)];
 		location = new int[2*(m+n)];
-		setUnassignRequest = new HashSet<Integer>();
-		for(int i = 0;i < n;i++)
-		{
-			setUnassignRequest.add(new Integer(i));
-		}
-		for(int i = 0;i < m;i++)
-		{
-			t[i] = 0;
-			l[i] = 0;
-			v[i] = i;
-			s[i] = i + 2*n + m;
-			location[i] = 0;
-		}
-		for(int i = 2*n+m;i < 2*(n+m);i++)
-		{
-			s[i] = i - 2*n - m;
-			v[i] = i - 2*n - m;
-			location[i] = 0;
-			t[i] = 0;
-			l[i] = 0;
-		}
-		for(int i = m;i < m+n;i++)
-		{
-			s[i] = -1;
-			s[i+n] = -1;
-			
-			v[i] = -1;
-			v[i+n] = -1;
-			
-			t[i] = -1;
-			t[i+n] = -1;
-			
-			l[i] = -1;
-			l[i+n] = -1;
-			
-			location[i] = requires[i-m].getPickup();
-			location[i+n] = requires[i-m].getDeliver();			
-		}
-		println(s);
+		init();
 	}
 	//Update after insert a unsigned request
 	private void updateTimeservice(int request,int pickupAfterNode, int deliverAfterNode, boolean isInsert)
 	{
-		println(">>updateTimeservice<<");
+		printBreakPoint("--- updateTimeservice ---");
 		if(request > n || pickupAfterNode > m + 2*n || deliverAfterNode > m + 2 * n)
 		{
 			printfError("ERROR IN FUNCTION updateTimeservice: Value invalid");
@@ -214,10 +257,10 @@ public class SolverDARP {
 		if(isInsert)
 		{
 			//Update after insert
-			println("pickupAfterNode = "+pickupAfterNode);
-			println("deliverNodeAfter = "+deliverAfterNode);
-			println("m = "+m);
-			println("request = "+request);
+//			println("pickupAfterNode = "+pickupAfterNode);
+//			println("deliverNodeAfter = "+deliverAfterNode);
+//			println("m = "+m);
+//			println("request = "+request);
 			if(pickupAfterNode < m)
 			{
 				t[request + m] = t[pickupAfterNode] + map.getT(location[pickupAfterNode], location[request + m]);
@@ -234,7 +277,7 @@ public class SolverDARP {
 			
 			if(deliverAfterNode < m + n)
 			{
-				println(location[deliverAfterNode]+";"+ location[request + m + n]);
+//				println(location[deliverAfterNode]+";"+ location[request + m + n]);
 				t[request + m + n] = t[deliverAfterNode] + requires[deliverAfterNode - m].getDuarationPickup() + map.getT(location[deliverAfterNode], location[request + m + n]);
 			}
 			else
@@ -275,7 +318,7 @@ public class SolverDARP {
 	}
 	private void updateLoaded(int request,int pickupAfterNode, int deliverAfterNode)
 	{
-		println(">>updateLoaded<<");
+		printBreakPoint("--- updateLoaded ---");
 		l[request + m] = l[pickupAfterNode] + requires[request].getWeight();
 		int currentNode = request + m;
 		int beforCurrent = 0;
@@ -289,7 +332,7 @@ public class SolverDARP {
 	}
 	private float getDeltaTimeService(int request,int afterNode,boolean isPickup)//request < n
 	{		
-		println(">>getDeltaTimeService<<");
+		printBreakPoint("--- getDeltaTimeService ---");
 		if(request >= n || afterNode >= m + 2*n)
 		{
 			printfError("Error in getDeltaTimeService: Please check value variable!");
@@ -319,7 +362,7 @@ public class SolverDARP {
 	}
 	private void updateLoaded(int request)
 	{
-		println(">>updateLoaded<<");
+		printBreakPoint("--- updateLoaded ---");
 		if(s[request + m] < 0)
 		{
 			printfError("ERROR: Please update before modify value s[request + m]");
@@ -333,45 +376,76 @@ public class SolverDARP {
 		}
 	}
 	
-	private boolean TreeSearch()
+	private void TreeSearch()
 	{
-		println(">>TreeSearch<<");
+		printBreakPoint("--- TreeSearch ---");
+		//println("--- TreeSearch ---setUnassignRequest.size() = "+setUnassignRequest.size());
 		if(setUnassignRequest.size() == 0)
 		{
+			
 			if(isSolution())
 			{
-				return true;
-			}else
-			{
-				return false;
+				if(tmpSol == null)
+				{
+					tmpSol = new Solution(s, v, t, getRoutingCost());
+				}
+				else
+				{
+					if(tmpSol.getRoutCost() > getRoutingCost())
+					{
+						tmpSol = new Solution(s, v, t, getRoutingCost());						
+					}
+				}
+				
+//				return true;
 			}
+			return;
 		}
-		HashMap<Integer, ArrayList<int[]>> map = getUnassignedRequest();
-		if(map == null)
+		else
 		{
-			printfError("ERROR: in Treesearch function");
-		}
-		Iterator it = map.entrySet().iterator();
-		Map.Entry<Integer, ArrayList<int[]>> mapEntry = null;
-		if(it.hasNext())
-		{
-			mapEntry = (Map.Entry<Integer, ArrayList<int[]>>)it.next();			
-		}
-		for(int[] x:mapEntry.getValue())
-		{			
-			insertRequire(mapEntry.getKey(), x[0], x[1]);
-			TreeSearch();
-			if(isSolution())
+			HashMap<Integer, ArrayList<int[]>> map = getUnassignedRequest();
+			if(map == null)
 			{
-				return true;
+				printfError("ERROR: in Treesearch function");
 			}
-			removeRequire(mapEntry.getKey(), x[0], x[1]);
+			Iterator it = map.entrySet().iterator();
+			Map.Entry<Integer, ArrayList<int[]>> mapEntry = null;
+			if(it.hasNext())
+			{
+				mapEntry = (Map.Entry<Integer, ArrayList<int[]>>)it.next();			
+			}
+			for(int[] x:mapEntry.getValue())
+			{				
+				
+				insertRequire(mapEntry.getKey(), x[0], x[1]);
+				TreeSearch();				
+				removeRequire(mapEntry.getKey(), x[0], x[1]);	
+				//status();
+			}
+			if(isTimeOut(startTime, TIME_LIMIT_TREESEARCH))
+			{
+				println("TIMEOUT");
+				return;
+			}
+
 		}
-		return false;
+	}
+	private void revert(Solution s)
+	{
+		if(s != null)
+		{
+			this.s = s.getS();
+			this.t = s.getT();
+			this.v = s.getV();
+		}
+		else
+		{
+			println("Can't revert!");
+		}
 	}
 	private boolean isSolution()
 	{
-		println(">>isSolution<<");
+		printBreakPoint("--- isSolution ---");
 		if(getViolation(1, 1) > 0)
 		{
 			return false;
@@ -387,7 +461,8 @@ public class SolverDARP {
 	}
 	private HashMap<Integer, ArrayList<int[]>> getUnassignedRequest()
 	{
-		println(">>getUnassignedRequest<<");
+		printBreakPoint("--- getUnassignedRequest ---");
+//		println("--- getUnassignedRequest ---");
 		HashMap<Integer, ArrayList<int[]>> map = new HashMap<Integer, ArrayList<int[]>>();
 		TreeMap<Integer, Integer> mapSizeR = new TreeMap<Integer, Integer>();
 //		if(setUnassignRequest.isEmpty())
@@ -398,21 +473,26 @@ public class SolverDARP {
 		SUR.addAll(setUnassignRequest);
 		for(int i:SUR)
 		{
-			println(setUnassignRequest);
+//			println("---setUnassignRequest---");
+//			println(setUnassignRequest);
+//			println("---setUnassignRequest---");
 			ArrayList<int[]> tmpPoint = new ArrayList<int[]>();
 			for(int j = 0; j < m;j ++)
 			{
 				tmpPoint.addAll(getPointInsertIntoRout(i, j));
 			}
 			map.put(i, tmpPoint);
-			mapSizeR.put(tmpPoint.size(),i);
-		}
+//			println("*******************"+tmpPoint.size()+"*******"+i+"*****************");
+			mapSizeR.put(tmpPoint.size(),i);//to sort by number point available
+		}		
 		Iterator it = mapSizeR.entrySet().iterator();
 		if(it.hasNext())
 		{
 			Map.Entry<Integer, Integer> mapEntry = (Map.Entry<Integer, Integer>)it.next();			
 			HashMap<Integer, ArrayList<int[]>> rt = new HashMap<Integer, ArrayList<int[]>>();//
 			rt.put(mapEntry.getValue(),map.get(mapEntry.getValue()));
+//			println("--- getUnassignedRequest ---");
+//			println(rt);	
 			
 			return rt;
 		}
@@ -420,11 +500,12 @@ public class SolverDARP {
 		{
 			printfError("ERROR: getUnAssignRequest");
 		}
+//		println("--- getUnassignedRequest NULL ---");
 		return null;
 	}
 	private ArrayList<int[]> getPointInsertIntoRout(int r, int rout)//r C# [0, n]
 	{
-		println(">>getPointInsertIntoRout<<");
+		printBreakPoint("--- getPointInsertIntoRout ---");
 		if(r < 0 || r > n)
 		{
 			printfError("ERROR: Value r is invalid!");
@@ -442,19 +523,21 @@ public class SolverDARP {
 			{
 				break;
 			}
-			//println(">>>>>>>>>>>>>>>>>>>>>>>>");
+			
+			
 			insertRequire(r, point1, r+m);
-			if(getViolation(1, 1) == 0)
-			{
+			if(getViolation(1, 1)< EPS)
+			{				
 				removeRequire(r, point1, r+m);
 				int[] tmp = new int[2];
 				tmp[0] = point1;
 				tmp[1] = r + m;
+
 				arrInsPt.add(tmp);
-				//return true;
 			}
 			else
 			{
+				println("***else*****tmp: ");
 				removeRequire(r, point1, r+m);
 			}
 			while(true)
@@ -463,10 +546,10 @@ public class SolverDARP {
 				{
 					break;
 				}
-				println(">>>>>>>>>>>>>>>>>>>>>>>>");
+//				println(">>>>>>>>>>>>>>>>>>>>>>>>");
 				insertRequire(r, point1, point2);
-				println(">>>>>>>>>>>>>>>>>>>>>>>>");
-				if(getViolation(1, 1) == 0)
+//				println(">>>>>>>>>>>>>>>>>>>>>>>>");
+				if(getViolation(1, 1) < EPS)
 				{
 					removeRequire(r, point1, point2);
 					int[] tmp = new int[2];
@@ -483,12 +566,14 @@ public class SolverDARP {
 			}
 			point1 = s[point1];
 		}
-		
+//		System.out.print("arrInsPt:");
+//		println(arrInsPt);
+//		println("");
 		return arrInsPt;
 	}
 	private int getSlackAfterInsertion(int r)
 	{
-		println(">>getSlackAfterInsertion<<");
+		printBreakPoint("--- getSlackAfterInsertion ---");
 		int slack = 0;
 		slack = t[s[r+m]] - t[getNodeBeforePickup(r)];
 		slack += (t[s[r+m+n]] - t[getNodeBeforeDeliver(r)]);
@@ -497,7 +582,7 @@ public class SolverDARP {
 	}
 	private int getViolationLoad()
 	{
-		println(">>getViolationLoad<<");
+		printBreakPoint("--- getViolationLoad ---");
 		int violation = 0;
 		for(int i = m;i < m+2*n;i++)
 		{
@@ -507,25 +592,30 @@ public class SolverDARP {
 	}
 	private int getViolationRideTime()
 	{
-		println(">>getViolationRideTime<<");
+		printBreakPoint("--- getViolationRideTime ---");
 		int violation = 0;
 		for(int i = m;i < m+n;i++)
 		{
 			violation += Math.max(0,t[i+n] - t[i] - requires[i-m].getDuarationPickup() - SolverDARP.L);
 		}
+		//return 0;
 		return violation;
 	}
 	private int getViolation(float factorLoad,float factorRideTime)
 	{
-		println(">>getViolation<<");
+		printBreakPoint("--- getViolation ---");
 		int violation;
 		violation = (int)Math.ceil((factorLoad*getViolationLoad() + factorRideTime*getViolationRideTime())/(factorLoad+factorRideTime));
+		//println(getViolationLoad()+" _--_--_"+getViolationRideTime());
+		//return Math.ceil((factorLoad*getViolationLoad() + factorRideTime*getViolationRideTime())/(factorLoad+factorRideTime));
 		return violation;
 	}
 	private void insertRequire(int r,int pickupAfterNode,int deliverAfterNode)
 	{
-		println(">>insertRequire<<");
-		println(s);
+		printBreakPoint("--- insertRequire ---",true);
+		
+//		println("Before InsertRequire s -> ");
+//		println(s);
 		if(s[r + m] >= 0 || s[r + m + n]>=0)
 		{
 			println(r+"/"+s[r+m]+"  /   "+s[r+m+n]);
@@ -553,11 +643,14 @@ public class SolverDARP {
 		
 		updateTimeservice(r, pickupAfterNode, deliverAfterNode, true);
 		updateLoaded(r, pickupAfterNode, deliverAfterNode);
+//		println("After InsertRequire s -> ");
+//		println(s);
 	}
 	private void removeRequire(int r,int pickupAfterNode,int deliverAfterNode)
 	{
-		println(">>removeRequire<<");
-		println(s);
+		printBreakPoint("--- removeRequire ---",true);
+//		println("B Remove");
+//		println(s);
 		if(setUnassignRequest.contains(r))
 		{
 			printfError("ERROR: Require "+r+" didn't insert");
@@ -575,12 +668,12 @@ public class SolverDARP {
 		s[pickupAfterNode] = s[r + m];
 		s[r + m] = -1;
 		v[r + m] = -1;
-		
-		println(s);
+//		println("A Remove");
+//		println(s);
 	}
 	private int getNodeBeforePickup(int r)
 	{	
-		println(">>getNodeBeforePickup<<");
+		printBreakPoint("--- getNodeBeforePickup ---");
 		int currentNode = v[r+m];
 		
 		while(currentNode < m + 2*n)
@@ -599,7 +692,7 @@ public class SolverDARP {
 	}
 	private int getNodeBeforeDeliver(int r)
 	{
-		println(">>getNodeBeforeDeliver<<");
+		printBreakPoint("--- getNodeBeforeDeliver ---");
 		int currentNode = r + m;
 		if(currentNode < -1)
 		{
@@ -621,12 +714,15 @@ public class SolverDARP {
 	
 	private int getRoutingCost()
 	{
-		println(">>getRoutingCost<<");
+		printBreakPoint("--- getRoutingCost ---");
+//		println("--- getRoutingCost ---");
 		int routcost = 0;
-		for(int i = m + 2*n;i < 2*(m+n);i++)
+		for(int i = 0;i < m + 2*n;i++)
 		{
-			routcost += t[i];
+			routcost += map.getDistance(location[i], location[s[i]]);
+//			println("("+location[i]+";"+location[s[i]]+") -->"+map.getDistance(location[i], location[s[i]]));
 		}
+//		println("--->"+routcost);
 		return routcost;
 	}
 	public void readProblem(int m,int n,int capacity, int[] weight,int[] Ep,int[] Lp,int[] Ed,int[] Ld,int[] durationP,int[] durationD)
@@ -717,14 +813,55 @@ public class SolverDARP {
 	}
 	private void printfError(String msg)
 	{
-		System.err.println("-----ERROR-------");
+		System.err.println("\n-----ERROR-------");
 		System.err.println(msg);
 		System.err.println("-----------------");
 		System.exit(0);
 	}
+	public void println(ArrayList<int[]> x)
+	{
+		for(int[] a:x)
+		{
+			String s = "";
+			for(int y:a)
+			{
+				s+= y;
+				s+= ",";
+			}
+			s = s.substring(0, s.length() - 1);
+			s = "--->["+s+"]";
+			println(s);
+		}
+	}
+	public void println(HashMap<Integer, ArrayList<int[]>> x)
+	{
+		Iterator it = x.entrySet().iterator();
+		while(it.hasNext())
+		{
+			Map.Entry<Integer, ArrayList<int[]>> me = (Map.Entry<Integer, ArrayList<int[]>>)it.next();
+			int key = me.getKey();
+			ArrayList<int[]> val = me.getValue();
+			println("key: "+key);
+			for(int[] z:val)
+			{
+				System.out.print("(--");
+				for(int v:z)
+				{
+					System.out.print(v+"--");
+				}
+				System.out.print(")\t");
+			}
+			println("");
+			
+		}
+	}
 	public void println(String msg)
 	{
 		System.out.println(msg);
+	}
+	public void print(String msg)
+	{
+		System.out.print(msg);
 	}
 	private void println(HashSet<Integer> x)
 	{
@@ -733,6 +870,17 @@ public class SolverDARP {
 			println(y+"");
 		}
 	}
+	public void println(TreeMap<Integer, Integer> x)
+	{
+		Iterator it = x.entrySet().iterator();
+		String s = "";
+		while(it.hasNext())
+		{
+			Map.Entry<Integer, Integer> me = (Map.Entry<Integer, Integer>)it.next();
+			s+="("+me.getKey()+" : "+me.getValue()+")\t";
+		}
+		println("");
+	}
 	public void println(int[] x)
 	{
 		for(int y:x)
@@ -740,6 +888,30 @@ public class SolverDARP {
 			System.out.print(y+"\t");
 		}
 		println("");
+	}
+	public void println(float[] x)
+	{
+		for(float y:x)
+		{
+			System.out.print(y+"\t");
+		}
+		println("");
+	}
+	public void println(Require[] z)
+	{
+		System.out.println("-------------------------------");
+		for(Require x:z)
+		{
+			System.out.println(x.toString());
+			System.out.println("-------------------------------");
+		}
+	}
+	public void println(float[][] x)
+	{
+		for(float [] y:x)
+		{
+			println(y);
+		}
 	}
 	public class Solution
 	{
