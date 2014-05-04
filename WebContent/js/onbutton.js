@@ -264,6 +264,7 @@ function getParameterRequest(prm)
 	}
 	return drtn;
 }
+var numrange = 10;
 function getRangeMatrix()
 {
 	var pk = getParameterRequest("pickup-position");
@@ -273,12 +274,33 @@ function getRangeMatrix()
 	//out(dp.concat(pk,dl));
 	return dp.concat(pk,dl);
 }
-function calculateDistances() {
+function getRangeMatrix(group)
+{
+	return getRangeMatrix().slice(group*numrange,group*numrange+10);	
+}
+function calculateDistances()
+{
+	var rangeMatrix = new Array();
+	rangeMatrix = getRangeMatrix();
+	for(var grow = 0; grow <= rangeMatrix.length/numrange;grow++)
+	{
+		for(var gcol = 0; gcol <= rangeMatrix.length/numrange;gcol++)	
+		{
+			calculateDistances(grow,gcol);
+		}
+	}
+}
+var cur_grow = 0;
+var cur_gcol = 0;
+function calculateDistances(grow,gcol) {
+
 	  var service = new google.maps.DistanceMatrixService();
+	  cur_gcol = gcol;
+	  cur_grow = grow;
 	  service.getDistanceMatrix(
 	    {
-	      origins: getRangeMatrix(),
-	      destinations: getRangeMatrix(),
+	      origins: getRangeMatrix(grow),
+	      destinations: getRangeMatrix(gcol),
 	      travelMode: google.maps.TravelMode.DRIVING,
 	      unitSystem: google.maps.UnitSystem.METRIC,
 	      avoidHighways: false,
@@ -367,7 +389,7 @@ function saveSession()
 				success:function(data)
 				{
 			    	out("Data model: " + data);
-			    	loadSession();
+			    	loadIdSession();
 			    	//parseJSON(data);			    	
 			 	},
 				error:function(status,stt,err)
@@ -377,18 +399,38 @@ function saveSession()
 			}
 			);
 }
-function loadSession()
+function loadIdSession()
 {
 	$.ajax({
 		url:"ControllerModel",
 		type:"POST",
 		data:{
-			command:"loadSession"
+			command:"loadIdSession"
 		},
 		success:function(data)
 		{
 			//out(data);
 			$("#content-session").html(toStringSession(data));
+		},
+		error:function(status,stt,err)
+		{
+			alert("load ERROR");
+		}
+	});
+}
+function loadSession()
+{
+	alert("loadSession");
+	$.ajax({
+		url:"ControllerModel",
+		type:"POST",
+		data:{
+			command:"loadSession",
+			ids:JSON.stringify($(".sp-session").children("input").val())
+		},
+		success:function(data)
+		{
+			out(data);		
 		},
 		error:function(status,stt,err)
 		{

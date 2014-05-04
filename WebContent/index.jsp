@@ -131,7 +131,7 @@
 			<p class="p-title">Sessions</p>
 			<div class="li-content" id="div-session">
 				<h4>Sessions</h4>
-				<span id="btn-loadsession" title="Load and merge sessions"><img src="./img/Misc-Download-Database-icon.png"></span>
+				<span id="btn-loadsession" title="Load and merge sessions"><img src="./img/Misc-Download-Database-icon.png" onclick="loadSession()"></span>
 				<div id="content-session">
 
 				</div>

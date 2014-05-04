@@ -27,12 +27,22 @@ public class ControllerModel extends HttpServlet{
 		{
 			doSaveSession(request,response);
 		}
-		else if(cmd.equals("loadSession"))
+		else if(cmd.equals("loadIdSession"))
 		{
-			//doLoadSession(request, response);
+			doLoadIdSession(request, response);
 			System.out.println("load Session");
 		}
-		doLoadSession(request, response);
+		else if(cmd.equals("loadSession"))
+		{
+			doLoadSession(request, response);
+		}
+		//doLoadSession(request, response);
+	}
+	private void doLoadSession(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
+		String Ep = request.getParameter("ids");
+		System.out.println("ids:"+Ep);
+		response.getWriter().write("OK doLoadSession");
 	}
 	private String encodeArray(ArrayList<Integer> arr)
 	{
@@ -44,7 +54,7 @@ public class ControllerModel extends HttpServlet{
 		String jsonText = JSONValue.toJSONString(arrJSON);
 		return jsonText;
 	}
-	private void doLoadSession(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void doLoadIdSession(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ComModel cModel = new ComModel();
 		try
 		{

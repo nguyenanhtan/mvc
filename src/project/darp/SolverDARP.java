@@ -23,10 +23,10 @@ public class SolverDARP {
 	public static int L = 1400;
 	public static boolean SHOW_BREAK_POINT = false;
 	public static double EPS = 0.00001;
-	public static int MAX_INIT = 1000;
+	public static int MAX_INIT = 5000;
 	private Date startTime = new Date();
-	public static int TIME_LIMIT_TREESEARCH = 5000;
-	public static int TIME_LIMIT_LNSFFPA = 35000;
+	public static int TIME_LIMIT_TREESEARCH = 9000;
+	public static int TIME_LIMIT_LNSFFPA = 305000;
 	private Solution tmpSol = null;
 	public static void main(String[] args) {
 		SolverDARP S = new SolverDARP();
@@ -49,10 +49,11 @@ public class SolverDARP {
 				init();
 			}			
 		}
+		status();
 		if(!isSolution()){
 			printfError("Can't init!");
 		}
-		status();
+		
 		//System.exit(0);
 //		if(true)
 //		return new Solution(s, v, location, 100);

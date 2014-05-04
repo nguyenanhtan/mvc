@@ -155,5 +155,5 @@ $(document).ready(function(){
 	$("ul#footer li .li-content h4").click(function(){
 		$(this).parent().slideUp(300);
 	});
-	loadSession();
+	loadIdSession();
 });
