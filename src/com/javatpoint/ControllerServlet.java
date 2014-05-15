@@ -1,7 +1,27 @@
 package com.javatpoint;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.util.Iterator;
+
+
+
+
+
+
+
+
+
+
 
 
 import javax.servlet.ServletException;
@@ -26,7 +46,7 @@ public class ControllerServlet extends HttpServlet {
 	@Override	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		try{
-		String matrix = request.getParameter("matrix_distances");
+//		String matrix = request.getParameter("matrix_distances");
 		String weight = request.getParameter("weight");
 		String Ep = request.getParameter("Ep");
 		String Lp= request.getParameter("Lp");
@@ -37,7 +57,10 @@ public class ControllerServlet extends HttpServlet {
 		String scapVehicle = request.getParameter("capacity_vehicle");
 		String sdP = request.getParameter("duration_pickup");
 		String sdD = request.getParameter("duration_deliver");
+		String srangeMatrix = request.getParameter("rangeMatrix");
+				
 		
+		System.out.println();
 		//System.exit(0);
 		int[] arrWeight = parser(weight);
 		
@@ -53,9 +76,10 @@ public class ControllerServlet extends HttpServlet {
 		}
 		numRequest = arrWeight.length;
 		
-		SolverDARP S = new SolverDARP(matrix,numVehicle,numRequest,capVehicle,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld),parser(sdP),parser(sdD));
+		SolverDARP S = new SolverDARP(srangeMatrix,numVehicle,numRequest,capVehicle,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld),parser(sdP),parser(sdD));
 
-		Solution Sol = S.LNSFFPA(1010, SolverDARP.TIME_LIMIT_LNSFFPA);		
+		
+		Solution Sol = S.LNSFFPA();		
 		response.getWriter().write(encodeResponse(Sol));
 /*		for(int x:parser(sdP))
 		{
@@ -66,6 +90,7 @@ public class ControllerServlet extends HttpServlet {
 		System.out.println(sdP);*/
 	}
 
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -132,4 +157,5 @@ public class ControllerServlet extends HttpServlet {
 
 		
 	}
+	
 }

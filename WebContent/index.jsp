@@ -87,6 +87,7 @@
 <div id="depot">
 <div>
 	<img src="./img/bus-orange-icon.png">
+	<input type="text" readonly="readonly" id="latlng-depot" class="opacity-60">
 </div>
 <div>
 	<p class="depot-title">Number vehicle</p>
@@ -131,6 +132,7 @@
 			<p class="p-title">Sessions</p>
 			<div class="li-content" id="div-session">
 				<h4>Sessions</h4>
+				<span id="btn-deletesession" title="Delete sessions"><img src="./img/Close-2-icon.png" onclick="deleteSession()"></span>
 				<span id="btn-loadsession" title="Load and merge sessions"><img src="./img/Misc-Download-Database-icon.png" onclick="loadSession()"></span>
 				<div id="content-session">
 
@@ -144,8 +146,8 @@
 	<div id="box-button">
 		<input type="button" id="btn-new-session" value="New Session" onclick="newSession()"/>     
 		<input type="button" id="Out" value="Out" onclick="showOut()"/>   
-		<input type="button" id="get-matrix-distances" value="Get Matrix Distance" onclick="calculateDistances()"/>  
-		<input type="button" id="post-data" value="Post" onclick="postData()"/>
+		<!-- <input type="button" id="get-matrix-distances" value="Get Matrix Distance" onclick="calculateDistances()"/>   -->
+		<input type="button" id="post-data" value="LNS-FFPA" onclick="postData()"/>
 		<input type="button" id="btn-save-session" value="Save Session" onclick="saveSession()">
 	</div>
 </div>

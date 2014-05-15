@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class ComModel {
 
@@ -37,7 +38,7 @@ public class ComModel {
 	int[] Lp;
 	int[] Ed;
 	int[] Ld;
-	float[][] matrixDistance;
+	int[][] matrixDistance;
 	int numVehicle;
 	int capacity;
 	String depot;
@@ -116,7 +117,7 @@ public class ComModel {
 	{
 		depot = dp;
 	}
-	public void set(float[][] mt)
+	public void set(int[][] mt)
 	{
 		matrixDistance = mt;
 	}
@@ -167,6 +168,100 @@ public class ComModel {
 		}
 
 	}
+	public void deleteSession(int [] x) throws SQLException
+	{
+		for(int i:x)
+		{
+			deleteSession(i);
+		}
+	}
+	public void deleteSession(int id) throws SQLException
+	{
+		
+		
+		deleteTable(TABLE_REQUEST, "id_session = "+id);
+//		ResultSet rs = selectTable(TABLE_REQUEST, "id_session = "+id);
+//		while(rs.next())
+//		{
+//			int id_p = rs.getInt("id_pickup");
+//			int id_d = rs.getInt("id_deliver");			
+//			/*deleteTable(TABLE_ROUTCOST, "id_position_1 = "+id_p);
+//			deleteTable(TABLE_ROUTCOST, "id_position_2 = "+id_p);
+//			deleteTable(TABLE_ROUTCOST, "id_position_1 = "+id_d);
+//			deleteTable(TABLE_ROUTCOST, "id_position_2 = "+id_d);*/
+//			deleteTable(TABLE_POSITIONS, "id = "+id_p);
+//			deleteTable(TABLE_POSITIONS, "id = "+id_d);						
+//		}
+//		deleteTable(TABLE_REQUEST, "id_session = "+id);
+		ResultSet rs = selectTable(TABLE_SESSION, "id = "+id);
+		rs.next();
+		int depot = rs.getInt("depot");
+//		deleteTable(TABLE_SESSION, "id = "+id);	
+		deleteTable(TABLE_POSITIONS, "id = "+depot);
+	}
+	public TreeMap<String, String> getSession(int id) throws SQLException
+	{
+		TreeMap<String, String> data = new TreeMap<String, String>();
+		data.put("id", id+"");
+		ResultSet session = selectTable(TABLE_SESSION, "id = "+id);
+		int depot = -1;		
+		if(session.next())
+		{
+			depot = session.getInt("depot");
+			data.put("num_vehicle", session.getInt("num_vehicle")+"");
+			data.put("capacity", session.getInt("capacity")+"");
+		}
+		ResultSet rs = selectTable(TABLE_POSITIONS, "id = "+depot);
+		if(rs.next())
+		{
+			data.put("depot", rs.getString("Latlng"));
+		}
+		return data;
+	}
+	public ArrayList<TreeMap<String, String>> getRequestsSession(int[] list) throws SQLException
+	{
+		ArrayList<TreeMap<String, String>> data = new ArrayList<TreeMap<String,String>>();
+		for(int ids:list)
+		{
+			data.addAll(getRequestsSession(ids));
+		}
+		return data;
+	}
+	public ArrayList<TreeMap<String, String>> getRequestsSession(int idSession) throws SQLException
+	{			
+		ResultSet requests = selectTable(TABLE_REQUEST, "id_session = "+idSession);
+		
+		
+		ArrayList<TreeMap<String, String>> data = new ArrayList<TreeMap<String,String>>();
+		
+		while(requests.next())
+		{
+			TreeMap<String, String> rq = new TreeMap<String, String>();
+			rq.put("id", requests.getInt("id")+"");
+			rq.put("weight", requests.getInt("weight")+"");
+			rq.put("Ep", requests.getString("Ep"));
+			rq.put("Ed", requests.getString("Ed"));
+			rq.put("Lp", requests.getString("Lp"));
+			rq.put("Ld", requests.getString("Ld"));
+			int idP = requests.getInt("id_pickup");
+			int idD = requests.getInt("id_deliver");
+			ResultSet setP = selectTable(TABLE_POSITIONS, "id = "+idP);
+			ResultSet setD = selectTable(TABLE_POSITIONS, "id = "+idD);
+			if(setP.next())
+			{
+				rq.put("pickup", setP.getString("LatLng"));
+				rq.put("duration_pickup", setP.getInt("duration")+"");
+			}
+			if(setD.next())
+			{
+				rq.put("deliver", setD.getString("LatLng"));
+				rq.put("duration_deliver", setD.getInt("duration")+"");
+			}
+			
+			data.add(rq);
+		}
+		return data;
+	}
 	public ArrayList<Integer> getSetIdSession() throws SQLException
 	{
 		ArrayList<Integer> data = new ArrayList<Integer>();
@@ -191,6 +286,19 @@ public class ComModel {
 		PreparedStatement prs = conn.prepareStatement(query);
 		return prs.executeQuery();
 	}
+	public ResultSet selectTable(String nTable,String where) throws SQLException
+	{
+		String query = "SELECT * FROM "+nTable+" WHERE "+where;
+		PreparedStatement prs = conn.prepareStatement(query);
+		return prs.executeQuery();
+	}
+	public void deleteTable(String nTable, String where) throws SQLException
+	{
+		String query = "DELETE FROM "+nTable+" WHERE "+where;
+		PreparedStatement prs = conn.prepareStatement(query);
+		prs.execute();
+	}
+	
 	public void close()
 	{
 	        if (conn != null)

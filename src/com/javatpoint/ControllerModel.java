@@ -3,6 +3,7 @@ package com.javatpoint;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.TreeMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,19 +31,62 @@ public class ControllerModel extends HttpServlet{
 		else if(cmd.equals("loadIdSession"))
 		{
 			doLoadIdSession(request, response);
-			System.out.println("load Session");
+			System.out.println("load Id Session");
 		}
 		else if(cmd.equals("loadSession"))
 		{
 			doLoadSession(request, response);
 		}
+		else if(cmd.equals("deleteSession"))
+		{
+			doDeleteSession(request, response);
+			doLoadIdSession(request, response);
+		}
 		//doLoadSession(request, response);
 	}
 	private void doLoadSession(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		String Ep = request.getParameter("ids");
-		System.out.println("ids:"+Ep);
-		response.getWriter().write("OK doLoadSession");
+		String ids = request.getParameter("ids");
+		int[] arrIds = parser(ids);
+		ArrayList<TreeMap<String, String>> reqs = new ArrayList<TreeMap<String,String>>();
+		TreeMap<String, String> session = new TreeMap<String, String>();
+		ComModel cm = new ComModel();
+		try
+		{
+			reqs = cm.getRequestsSession(arrIds);	
+			session = cm.getSession(arrIds[0]);
+		}catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		System.out.println(encode(reqs, session));
+		response.getWriter().write(encode(reqs, session));
+	}
+	private void doDeleteSession(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
+		String ids = request.getParameter("ids");
+		int[] arrIds = parser(ids);
+		ComModel cm = new ComModel();
+		try
+		{
+			cm.deleteSession(arrIds);
+		}catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	private String encode(ArrayList<TreeMap<String, String>> reqs, TreeMap<String, String> sess)
+	{
+		JSONObject Job = new JSONObject();
+		JSONArray jarr = new JSONArray();
+		for(TreeMap<String, String> x:reqs)
+		{
+			jarr.add(x);
+		}
+		Job.put("session", sess);
+		Job.put("requests", jarr);
+		String jsonText = JSONValue.toJSONString(Job);
+		return jsonText;
 	}
 	private String encodeArray(ArrayList<Integer> arr)
 	{
@@ -69,7 +113,7 @@ public class ControllerModel extends HttpServlet{
 		}
 	}
 	private void doSaveSession(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String matrix = request.getParameter("matrix_distances");
+		String matrix = request.getParameter("rangeMatrix");
 		String weight = request.getParameter("weight");
 		String Ep = request.getParameter("Ep");
 		String Lp= request.getParameter("Lp");

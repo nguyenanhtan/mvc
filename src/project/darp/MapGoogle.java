@@ -6,58 +6,26 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 
-public class MapGoogle extends MapTransport {
+import com.javatpoint.PreProcess;
 
-	private float[][] matrixDistance;
-	private float[][] matrixDuration;
+public class MapGoogle {
+
+	private int[][] matrixDistance;
+	private int[][] matrixDuration;
 	public MapGoogle(String JMatrix) {
-		// TODO Auto-generated constructor stub
-		super(true);
-		JSONParser parser=new JSONParser();		
-		try
-		{
-			JSONArray jso = (JSONArray)parser.parse(JMatrix);		
-			Iterator<JSONObject> it = jso.iterator();
-			int i = 0;
-			this.numdepot = jso.size();
-			matrixDistance = new float[this.numdepot][this.numdepot];
-			matrixDuration= new float[this.numdepot][this.numdepot];
-			while(it.hasNext())
-			{
-				JSONArray elements = (JSONArray)it.next().get("elements");
-				Iterator<JSONObject> itEle = elements.iterator();				
-				int j = 0;
-				while(itEle.hasNext())
-				{
-					JSONObject obj = itEle.next();
-					JSONObject distance = (JSONObject)obj.get("distance");
-					float value = Float.parseFloat(distance.get("value").toString());
-					matrixDistance[i][j] = value;
-					matrixDistance[j][i] = value;
-					
-					JSONObject dua = (JSONObject)obj.get("duration");
-					float vadua = Float.parseFloat(dua.get("value").toString());
-					matrixDuration[i][j] = vadua;
-					matrixDuration[j][i] = vadua;
-					
-					j++;
-				}
-				i++;
-			}
-			//System.out.println("jso = "+jso.size());
-			
-		} catch (ParseException e) {
-			System.out.println("jso = ");
-			e.printStackTrace();
-		}
-		
+		// TODO Auto-generated constructor stub		
+		matrixDistance = PreProcess.getMatrix(PreProcess.parserRange(JMatrix),PreProcess.MATRIX_DISTANCE);
+		matrixDuration = PreProcess.getMatrix(PreProcess.parserRange(JMatrix),PreProcess.MATRIX_DURATION);
 	}
-	public float[][] getMatrixDistance()
+	public int[][] getMatrixDistance()
 	{
 		return matrixDistance;
 	}
-	@Override
-	public int getT(int i,int j)
+	public int getT(int i, int j)
+	{
+		return getDuration(i, j);
+	}
+	public int getDuration(int i,int j)
 	{
 		return (int)matrixDuration[i][j];
 	}

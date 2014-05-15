@@ -17,6 +17,10 @@ function initialize()
   }
 function putDepot(location)
 {
+	if(depot!=null)
+	{
+		depot.setMap(null);
+	}
 	depot = new google.maps.Marker({
 	      position: location,
 	      map: map,
@@ -25,6 +29,100 @@ function putDepot(location)
 //	      animation: google.maps.Animation.BOUNCE,
 	      icon: icon_depot,
 	  });
+	$("#latlng-depot").val(depot.getPosition());
+	google.maps.event.addListener(depot, 'mouseup', function() {
+  		$("#latlng-depot").val(depot.getPosition());
+    });
+}
+function putMarker(id,lat,lng,icon)
+{
+	loca= new google.maps.LatLng(lat,lng);
+
+	if(icon == icon_deliver_nact)
+	  {		 
+		  rdata = new google.maps.Marker({
+	  	      position: loca,
+	  	      map: map,
+	  	      draggable:true,
+	  	      title:"R "+id,
+	  	      icon: icon,
+	  	      id:id,
+	  	  });
+	  	  
+		  google.maps.event.addListener(rdata, 'mouseover', function() {	
+
+		  });
+		  google.maps.event.addListener(rdata, 'click', function() {
+			  //box_console.innerHTML += "click<br/>";
+			  if(dmarker != this && dmarker != null)
+		      {
+				  dmarker.setMap(null);
+				  if(pmarker != null)
+			      {
+					  pmarker.setMap(null);
+			      }
+		      }
+			  
+			activeRequest(this.id);
+		  });
+		  google.maps.event.addListener(rdata, 'mouseout', function() {
+
+		  });
+		  google.maps.event.addListener(rdata, 'mouseup', function() {
+			  if(this.id == req_active)
+			  {
+				  pos_deliver.value = this.getPosition();
+			  }
+		  });
+	  }
+	  else if(icon = icon_pickup_nact)
+	  {		  
+		  rdata = new google.maps.Marker({
+	  	      position: loca,
+	  	      map: map,
+	  	      draggable:true,
+//	  	      animation: google.maps.Animation.BOUNCE,
+	  	      title:"R"+id,
+	  	      icon: icon,
+	  	      id:id
+	  	  });
+		  google.maps.event.addListener(rdata, 'mouseover', function() {
+		  	      //this.setAnimation(null); 
+		  });
+		  google.maps.event.addListener(rdata, 'click', function() {
+			  
+			  if(pmarker != this && pmarker != null)
+		      {
+				  pmarker.setMap(null);
+				  if(dmarker != null)
+			      {
+					  dmarker.setMap(null);
+			      }
+		      }
+			  activeRequest(this.id);		  	    
+		  });
+		  google.maps.event.addListener(rdata, 'mouseout', function() {
+//			  if(this.id == req_active)
+//		  	  {
+//		  		  this.setAnimation(google.maps.Animation.BOUNCE);
+//		  	  }
+		  });
+		  google.maps.event.addListener(rdata, 'mouseup', function() {
+		  	    //alert(pmarker.getPosition());
+			  if(this.id == req_active)
+			  {
+				  pos_pickup.value = this.getPosition();
+			  }
+		  });
+		  //markers.push(pmarker);
+		  
+	  }
+	  else
+	  {
+		  //alert("NO");
+	  }
+
+	  return rdata;
 }
   function placeMarker(location) {	 
 	  //alert( ele_focus.id+"/"+btn_deliver+"/"+btn_pickup);

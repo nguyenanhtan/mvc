@@ -123,7 +123,9 @@ window.onload = function(){
 		 resetOpt();
 	 };
 	 
+	 
  };
+
 $(document).ready(function(){	
 	//$("#console").hide();
 	$("*").focus(function(){

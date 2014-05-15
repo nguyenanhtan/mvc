@@ -2,7 +2,9 @@ var map;
 var directionsDisplay;
 var markers = new Array();
 var arr_request = new Array();
-var arr_matrix_distances;
+var arr_matrix_distances = new Array();
+var arr_matrix_duration = new Array();
+
 
 var icon_pickup = "./img/Map-Marker-Ball-Azure-icon.png";
 var icon_deliver = "./img/Map-Marker-Ball-Pink-icon.png";

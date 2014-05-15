@@ -23,22 +23,26 @@ public class SolverDARP {
 	public static int L = 1400;
 	public static boolean SHOW_BREAK_POINT = false;
 	public static double EPS = 0.00001;
-	public static int MAX_INIT = 5000;
+	public static int MAX_INIT = 5;
 	private Date startTime = new Date();
-	public static int TIME_LIMIT_TREESEARCH = 9000;
-	public static int TIME_LIMIT_LNSFFPA = 305000;
+	public static int TIME_LIMIT_TREESEARCH = 19;
+	public static int TIME_LIMIT_LNSFFPA = 60;
+	public static int TIME_LIMIT_INIT = 90;
+	public static int MAX_SIZE = 0;
+	public static int RANGE = 0;
+	public static int NUM_ITER = 100;
 	private Solution tmpSol = null;
 	public static void main(String[] args) {
 		SolverDARP S = new SolverDARP();
-		Solution Sol = S.LNSFFPA(100, 120);
+		Solution Sol = S.LNSFFPA();
 		S.println("Rout cost: "+Sol.getRoutCost());
 		S.println(Sol.getS());
 	}
-	public Solution LNSFFPA(int numiter, int timeLimt)
+	public Solution LNSFFPA()
 	{
 		for(int i = 0;i < MAX_INIT;i++)
 		{
-			TreeSearch();
+			TreeSearch(true);
 			revert(tmpSol);
 			if(isSolution())
 			{
@@ -54,54 +58,57 @@ public class SolverDARP {
 			printfError("Can't init!");
 		}
 		
-		//System.exit(0);
-//		if(true)
-//		return new Solution(s, v, location, 100);
 		Solution bestS = new Solution(this.s, this.v, this.t, getRoutingCost());
 		Solution currentS = new Solution(this.s, this.v, this.t, getRoutingCost());
-//		println("Rout cost: "+currentS.getRoutCost());
-//		println(currentS.getS());
-//		println("Rout cost: "+bestS.getRoutCost());
-//		println(bestS.getS());
-//		printfError("");
-		Date startTime = new Date();
-		boolean bol;
-		for(int i = this.n;i > 1;i--)
+		startTime = new Date();
+		if(MAX_SIZE == 0)
 		{
-			for(int k = 0;k < numiter;k++)
-			{				
-				relaxedSolution(i);
-				if(isSolution())
-				{
-					continue;
-				}
-//				System.out.println("A Relax");
-//				status();
-				TreeSearch();
-				revert(tmpSol);
-				if(!isSolution())
-				{
-					continue;
-				}
-				else
-				{
-					status();
-				}
-				int rCost = getRoutingCost();
-				if(rCost < currentS.getRoutCost())
-				{					
-					currentS = new Solution(s, v, t, rCost);
-					if(currentS.getRoutCost() < bestS.getRoutCost())
+			MAX_SIZE = n;
+		}
+		if(RANGE == 0)
+		{
+			RANGE = (MAX_SIZE-2)*2/3;
+		}
+		println("MAX_SIZE: "+MAX_SIZE);
+		println("RANGE = "+RANGE);
+		for(int i = 2;i <= MAX_SIZE - RANGE;i++)
+		{
+			for(int j = 0;j <= RANGE;j++)
+			{
+				println("- - - ");
+				for(int k = 0;k < NUM_ITER;k++)
+				{							
+					relaxedSolution(i+j);
+					if(isSolution())
 					{
-						bestS = new Solution(currentS.getS(), currentS.getV(), currentS.getT(), currentS.getRoutCost());
-//						println("best: "+currentS.getRoutCost());
-//						println(currentS.getS());
-//						status();
+						continue;
 					}
-				}
-				if(isTimeOut(startTime, timeLimt))
-				{
-					return bestS;
+	//				System.out.println("A Relax");
+	//				status();
+					TreeSearch(false);
+					revert(tmpSol);
+					if(!isSolution())
+					{
+						continue;
+					}
+					else
+					{
+						status();
+					}
+					int rCost = getRoutingCost();
+					if(rCost < currentS.getRoutCost())
+					{	
+						println("-");
+						currentS = new Solution(s, v, t, rCost);
+						if(currentS.getRoutCost() < bestS.getRoutCost())
+						{
+							bestS = new Solution(currentS.getS(), currentS.getV(), currentS.getT(), currentS.getRoutCost());
+						}
+					}
+					if(isTimeOut(startTime, TIME_LIMIT_LNSFFPA))
+					{
+						return bestS;
+					}
 				}
 			}
 		}
@@ -377,9 +384,10 @@ public class SolverDARP {
 		}
 	}
 	
-	private void TreeSearch()
+	private void TreeSearch(boolean isInit)
 	{
 		printBreakPoint("--- TreeSearch ---");
+		
 		//println("--- TreeSearch ---setUnassignRequest.size() = "+setUnassignRequest.size());
 		if(setUnassignRequest.size() == 0)
 		{
@@ -404,6 +412,22 @@ public class SolverDARP {
 		}
 		else
 		{
+			if(isInit)
+			{
+				if(isTimeOut(startTime, TIME_LIMIT_INIT))
+				{
+					println("TIMEOUT: Init a solution is timeout");
+					return;
+				}
+			}
+			else
+			{
+				if(isTimeOut(startTime, TIME_LIMIT_TREESEARCH))
+				{
+					println("TIMEOUT: Treesearch is timeout");
+					return;
+				}
+			}
 			HashMap<Integer, ArrayList<int[]>> map = getUnassignedRequest();
 			if(map == null)
 			{
@@ -416,18 +440,11 @@ public class SolverDARP {
 				mapEntry = (Map.Entry<Integer, ArrayList<int[]>>)it.next();			
 			}
 			for(int[] x:mapEntry.getValue())
-			{				
-				
+			{								
 				insertRequire(mapEntry.getKey(), x[0], x[1]);
-				TreeSearch();				
+				TreeSearch(isInit);				
 				removeRequire(mapEntry.getKey(), x[0], x[1]);	
-				//status();
-			}
-			if(isTimeOut(startTime, TIME_LIMIT_TREESEARCH))
-			{
-				println("TIMEOUT");
-				return;
-			}
+			}			
 
 		}
 	}
@@ -613,7 +630,7 @@ public class SolverDARP {
 	}
 	private void insertRequire(int r,int pickupAfterNode,int deliverAfterNode)
 	{
-		printBreakPoint("--- insertRequire ---",true);
+		printBreakPoint("--- insertRequire ---",false);
 		
 //		println("Before InsertRequire s -> ");
 //		println(s);
@@ -649,7 +666,7 @@ public class SolverDARP {
 	}
 	private void removeRequire(int r,int pickupAfterNode,int deliverAfterNode)
 	{
-		printBreakPoint("--- removeRequire ---",true);
+		printBreakPoint("--- removeRequire ---",false);
 //		println("B Remove");
 //		println(s);
 		if(setUnassignRequest.contains(r))
@@ -834,6 +851,30 @@ public class SolverDARP {
 			println(s);
 		}
 	}
+	public static void println(Object[] o)
+	{
+		for(Object x:o)
+		{
+			println(x.toString());
+		}
+		println("");
+	}
+	public static void print(Object[][] o)
+	{
+		for(Object[] x:o)
+		{
+			println(x);
+		}
+		println("");
+	}
+	public static void println(int[][] x)
+	{
+		for(int[] c:x)
+		{
+			println(c);
+		}
+		println("");
+	}
 	public void println(HashMap<Integer, ArrayList<int[]>> x)
 	{
 		Iterator it = x.entrySet().iterator();
@@ -856,7 +897,7 @@ public class SolverDARP {
 			
 		}
 	}
-	public void println(String msg)
+	public static void println(String msg)
 	{
 		System.out.println(msg);
 	}
@@ -864,7 +905,7 @@ public class SolverDARP {
 	{
 		System.out.print(msg);
 	}
-	private void println(HashSet<Integer> x)
+	public void println(HashSet<Integer> x)
 	{
 		for(int y:x)
 		{
@@ -882,7 +923,7 @@ public class SolverDARP {
 		}
 		println("");
 	}
-	public void println(int[] x)
+	public static void println(int[] x)
 	{
 		for(int y:x)
 		{
