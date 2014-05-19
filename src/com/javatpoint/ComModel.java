@@ -1,4 +1,6 @@
 package com.javatpoint;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.Properties;
 
 public class ComModel {
 
@@ -137,7 +140,40 @@ public class ComModel {
 		}
 		return true;
 	}
-	ComModel()
+	 public Connection createConnection() throws IOException, ClassNotFoundException, SQLException {
+		 
+	        Connection connection;
+	         
+	        Properties prop = new Properties();
+	        System.out.println("test");
+	        prop.load(new FileInputStream(System.getProperty("user.home") + "/mydb.cfg"));
+	        System.out.println("user.home: "+System.getProperty("user.home"));
+	        String host = prop.getProperty("host").toString();
+	        String username = prop.getProperty("username").toString();
+	        String password = prop.getProperty("password").toString();
+	        String driver = prop.getProperty("driver").toString();
+	 
+	        System.out.println("host: " + host + "username: " + username + "password: " + password + "\ndriver: " + driver);
+	 
+	        Class.forName(driver);
+	        System.out.println("--------------------------");
+	        System.out.println("DRIVER: " + driver);
+	        connection = DriverManager.getConnection(host, username, password);
+	        System.out.println("CONNECTION: " + connection);
+	 
+	        return connection;
+	    }
+	 ComModel()
+	 {
+		 try
+		 {
+			 conn = createConnection();
+		 }catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
+	 }
+	/*ComModel()
 	{
 		try{
 			Class.forName("com.mysql.jdbc.Driver").newInstance ();
@@ -167,7 +203,7 @@ public class ComModel {
 		    System.out.println("VendorError: " + ex.getErrorCode());
 		}
 
-	}
+	}*/
 	public void deleteSession(int [] x) throws SQLException
 	{
 		for(int i:x)
