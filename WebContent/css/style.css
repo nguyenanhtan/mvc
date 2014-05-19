@@ -37,6 +37,7 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 	padding-left:5%;
 	height:100%;
 	width:95%;
+	overflow-y: scroll;
 }
 .btn-opt-require
 {
@@ -48,7 +49,8 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 	cursor:pointer;
 }
 #btn-add{
-	background: url("../img/add-icon-32-32.png") center no-repeat
+	background: url("../img/add-icon-32-32.png") center no-repeat;
+	display: none;
 }
 #btn-remove
 {
@@ -56,7 +58,12 @@ body { height: 100%; margin: 0; padding: 0; padding-left:10px; }
 }
 #btn-save
 {
-	background: url("../img/3floppy-unmount-icon.png") center no-repeat
+	/*background: url("../img/3floppy-unmount-icon.png") center no-repeat !important;*/
+	/*position: relative;
+	float: left;
+	top: -3px;
+	margin-right: 5px;
+	border: none !important;*/
 }
 #btn-pickup
 {
@@ -172,6 +179,7 @@ div#div-list-request
 	display:-webkit-box;
 	/* min-height:50px; */
 	margin-top:5px;
+	margin-bottom: 40px;
 }
 div#div-console
 {
@@ -190,7 +198,7 @@ div.li-content h4
 	margin:0;
 	border-bottom:1px solid #4d4d4d;
 	color:#fff;
-	background: #030303;
+	background: #002E4D;
 	border-radius: 10px 10px 0 0;
 }
 ul#list-request
@@ -272,7 +280,10 @@ div#box-button
 }
 div#box-button input
 {
-	padding:2px 3px;
+	padding: 4px 10px;
+	border-radius: 11px;
+	border: 1px solid #C7C9CC;
+	cursor: pointer;
 }
 #div-footer
 {
@@ -310,7 +321,7 @@ ul#footer li p.p-title:hover
 	cursor:pointer;
 }
 ul#footer li p#console, ul#footer li div#content-session{
-  	color:#ff0000;
+  	color:#00052B;
   	overflow-y:scroll;
   	height: 109px;
 	margin-top: 0;
@@ -343,12 +354,15 @@ ul#footer li div.li-content a.a-session
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 100%
+	height: 100%;
+	z-index: 998;
+	opacity: 0.6;
+	display: none;
 }
 
 .sp-session
 {
-	background: #000;
+	background: #c7c7c7;
 	padding: 5px;
 	/*margin-right: 1px;*/
 	width: 42px;
@@ -359,7 +373,7 @@ ul#footer li div.li-content a.a-session
 }
 .sp-session:hover
 {
-	background: #123;
+	background: #BFCC78;
 	cursor: pointer;
 }
 #btn-loadsession
@@ -385,4 +399,50 @@ ul#footer li div.li-content a.a-session
  #latlng-depot 
 {
 	width: 200px !important;
+}
+#start-time, #back-time
+{
+	width:95px !important;
+}
+#select-route
+{
+	width:45px;
+}
+#detail-route
+{
+
+}
+.row-detail
+{
+
+}
+.box-detail-vehicle
+{
+	border: 1px solid;
+	padding: 5px;
+	margin-bottom: 5px;
+	background: #E6FFDA;
+}
+.box-detail-vehicle ol
+{
+	list-style-position: inside;
+}
+div.box-detail-vehicle:hover
+{
+	background: #E1F1AB;
+	cursor: pointer;
+}
+#box-detail
+{
+	background: #fff;
+	border: 1px solid #000;
+	width: 60%;
+	overflow-y: scroll;
+	z-index: 999;
+	position: absolute;
+	top: 10%;
+	left: 18%;
+	padding: 1%;
+	display: none;
+	max-height: 60%;
 }

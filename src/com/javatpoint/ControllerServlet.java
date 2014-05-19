@@ -52,6 +52,8 @@ public class ControllerServlet extends HttpServlet {
 		String Lp= request.getParameter("Lp");
 		String Ed = request.getParameter("Ed");
 		String Ld = request.getParameter("Ld");
+		String levTime = request.getParameter("leave_depot_time");
+		String backlastest = request.getParameter("back_lastest");
 		//String depot = request.getParameter("depot");
 		String snVehicle = request.getParameter("num_vehicle");
 		String scapVehicle = request.getParameter("capacity_vehicle");
@@ -60,7 +62,7 @@ public class ControllerServlet extends HttpServlet {
 		String srangeMatrix = request.getParameter("rangeMatrix");
 				
 		
-		System.out.println();
+//		System.out.println("lev: "+levTime);
 		//System.exit(0);
 		int[] arrWeight = parser(weight);
 		
@@ -74,10 +76,14 @@ public class ControllerServlet extends HttpServlet {
 		{
 			System.out.println(e.toString());
 		}
-		numRequest = arrWeight.length;
+		numRequest = arrWeight.length;		
+		levTime = levTime.substring(1, levTime.length()-1);
+		SolverDARP.LEAVE_DEPOT_TIME = Integer.parseInt(levTime.split(":")[0])*60+Integer.parseInt(levTime.split(":")[1]);		
 		
+		backlastest = backlastest.substring(1, backlastest.length()-1);
+		SolverDARP.BACK_LASTEST_TIME = Integer.parseInt(backlastest.split(":")[0])*60+Integer.parseInt(backlastest.split(":")[1]);
 		SolverDARP S = new SolverDARP(srangeMatrix,numVehicle,numRequest,capVehicle,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld),parser(sdP),parser(sdD));
-
+		
 		
 		Solution Sol = S.LNSFFPA();		
 		response.getWriter().write(encodeResponse(Sol));
@@ -159,3 +165,4 @@ public class ControllerServlet extends HttpServlet {
 	}
 	
 }
+

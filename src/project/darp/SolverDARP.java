@@ -20,14 +20,16 @@ public class SolverDARP {
 	private Require[] requires;
 	private HashSet<Integer> setUnassignRequest;
 	public static int Q = 10;
-	public static int L = 1400;
+//	public static int L = 1400;
+	public static int LEAVE_DEPOT_TIME = 0;
+	public static int BACK_LASTEST_TIME = 0;
 	public static boolean SHOW_BREAK_POINT = false;
 	public static double EPS = 0.00001;
 	public static int MAX_INIT = 5;
 	private Date startTime = new Date();
-	public static int TIME_LIMIT_TREESEARCH = 19;
-	public static int TIME_LIMIT_LNSFFPA = 60;
-	public static int TIME_LIMIT_INIT = 90;
+	public static int TIME_LIMIT_TREESEARCH = 200;
+	public static int TIME_LIMIT_LNSFFPA = 600;
+	public static int TIME_LIMIT_INIT = 200;
 	public static int MAX_SIZE = 0;
 	public static int RANGE = 0;
 	public static int NUM_ITER = 100;
@@ -42,6 +44,7 @@ public class SolverDARP {
 	{
 		for(int i = 0;i < MAX_INIT;i++)
 		{
+			println("Turn init "+i);
 			TreeSearch(true);
 			revert(tmpSol);
 			if(isSolution())
@@ -51,11 +54,15 @@ public class SolverDARP {
 			else
 			{
 				init();
-			}			
+			}				
 		}
 		status();
 		if(!isSolution()){
 			printfError("Can't init!");
+		}
+		else
+		{
+			println("Inited a solution!");
 		}
 		
 		Solution bestS = new Solution(this.s, this.v, this.t, getRoutingCost());
@@ -69,13 +76,13 @@ public class SolverDARP {
 		{
 			RANGE = (MAX_SIZE-2)*2/3;
 		}
-		println("MAX_SIZE: "+MAX_SIZE);
-		println("RANGE = "+RANGE);
+//		println("MAX_SIZE: "+MAX_SIZE);
+//		println("RANGE = "+RANGE);
 		for(int i = 2;i <= MAX_SIZE - RANGE;i++)
 		{
 			for(int j = 0;j <= RANGE;j++)
 			{
-				println("- - - ");
+//				println("- - "+i*(MAX_SIZE - RANGE)+j+" - - ");
 				for(int k = 0;k < NUM_ITER;k++)
 				{							
 					relaxedSolution(i+j);
@@ -134,14 +141,18 @@ public class SolverDARP {
 	{
 		Random rand = new Random();
 		int x;
+		println("----------RELAX "+numR+"--------------");
+		int nr = 0;
 		for(int i = 0; i < numR;i++)
 		{
 			x = rand.nextInt(n);
 			if(!setUnassignRequest.contains(x))
 			{
 				removeRequire(x, getNodeBeforePickup(x), getNodeBeforeDeliver(x));
+				nr++;
 			}
 		}
+		println(nr+"");
 	}
 	public SolverDARP(String Jmatrix, int m, int n, int capacity, int[] weight,int[] Ep,int[] Lp,int[] Ed,int[] Ld,int[] dP,int[] dD) {
 		// TODO Auto-generated constructor stub
@@ -161,8 +172,8 @@ public class SolverDARP {
 		//status();
 	}
 	private void init()
-	{
-		
+	{		
+		startTime = new Date();
 		setUnassignRequest = new HashSet<Integer>();
 		for(int i = 0;i < n;i++)
 		{
@@ -170,7 +181,7 @@ public class SolverDARP {
 		}
 		for(int i = 0;i < m;i++)
 		{
-			t[i] = 0;
+			t[i] = LEAVE_DEPOT_TIME;
 			l[i] = 0;
 			v[i] = i;
 			s[i] = i + 2*n + m;			
@@ -220,7 +231,7 @@ public class SolverDARP {
 		System.out.println("Require:\t");
 		println(requires);
 		println("Rout cost:");
-		//println(getRoutingCost()+"");
+		println(getRoutingCost()+"");
 		System.out.println("---------------END-----------------");
 	}
 	public void printBreakPoint(String s)
@@ -480,46 +491,95 @@ public class SolverDARP {
 	private HashMap<Integer, ArrayList<int[]>> getUnassignedRequest()
 	{
 		printBreakPoint("--- getUnassignedRequest ---");
-//		println("--- getUnassignedRequest ---");
 		HashMap<Integer, ArrayList<int[]>> map = new HashMap<Integer, ArrayList<int[]>>();
-		TreeMap<Integer, Integer> mapSizeR = new TreeMap<Integer, Integer>();
-//		if(setUnassignRequest.isEmpty())
-//		{
-//			println("Un Assigned Request is Empty");
-//		}
+		TreeMap<Integer, ArrayList<Integer>> mapSizeR = new TreeMap<Integer, ArrayList<Integer>>();
 		HashSet<Integer> SUR = new HashSet<Integer>();
 		SUR.addAll(setUnassignRequest);
 		for(int i:SUR)
 		{
-//			println("---setUnassignRequest---");
-//			println(setUnassignRequest);
-//			println("---setUnassignRequest---");
 			ArrayList<int[]> tmpPoint = new ArrayList<int[]>();
 			for(int j = 0; j < m;j ++)
 			{
 				tmpPoint.addAll(getPointInsertIntoRout(i, j));
 			}
 			map.put(i, tmpPoint);
-//			println("*******************"+tmpPoint.size()+"*******"+i+"*****************");
-			mapSizeR.put(tmpPoint.size(),i);//to sort by number point available
+			if(!mapSizeR.containsKey(tmpPoint.size()))
+			{
+				ArrayList<Integer> x = new ArrayList<Integer>();
+				x.add(i);
+				mapSizeR.put(tmpPoint.size(),x);//to sort by number point available
+			}
+			else
+			{
+				mapSizeR.get(tmpPoint.size()).add(i);
+			}
 		}		
 		Iterator it = mapSizeR.entrySet().iterator();
 		if(it.hasNext())
 		{
-			Map.Entry<Integer, Integer> mapEntry = (Map.Entry<Integer, Integer>)it.next();			
+			Map.Entry<Integer, ArrayList<Integer>> mapEntry = (Map.Entry<Integer, ArrayList<Integer>>)it.next();			
 			HashMap<Integer, ArrayList<int[]>> rt = new HashMap<Integer, ArrayList<int[]>>();//
-			rt.put(mapEntry.getValue(),map.get(mapEntry.getValue()));
-//			println("--- getUnassignedRequest ---");
-//			println(rt);	
-			
+			//println("MaxS = "+maxS+"/"+mapEntry.getKey());
+			int index = 0;
+			try
+			{
+				index = (int)Math.random()*(mapEntry.getValue().size()-1);
+			}catch(Exception e)
+			{
+				index = 0;
+			}
+			rt.put(mapEntry.getValue().get(index),map.get(mapEntry.getValue().get(index)));
 			return rt;
 		}
 		else
 		{
 			printfError("ERROR: getUnAssignRequest");
 		}
-//		println("--- getUnassignedRequest NULL ---");
 		return null;
+	}
+	private boolean checkPoint(int point)
+	{
+		if(point < m+n)
+		{
+			
+			if(t[point] > requires[point - m].getLp())
+			{
+				return false;
+			}
+		}
+		else if(point < m+2*n)
+		{
+			if(t[point] > requires[point - m - n].getLd())
+			{
+				return false;
+			}
+		}
+		else
+		{
+			if(t[point] > BACK_LASTEST_TIME)
+			{
+				return false;
+			}
+		}
+		return true;
+		
+	}
+	private boolean forwadChecking(int startPoint)
+	{
+		int curPoint = startPoint;
+		while(curPoint < m*2+2*n && curPoint >= m)
+		{
+			if(checkPoint(curPoint))
+			{
+				curPoint = s[curPoint];
+			}
+			else
+			{
+//				println("checking false");
+				return false;
+			}
+		}
+		return true;
 	}
 	private ArrayList<int[]> getPointInsertIntoRout(int r, int rout)//r C# [0, n]
 	{
@@ -544,7 +604,8 @@ public class SolverDARP {
 			
 			
 			insertRequire(r, point1, r+m);
-			if(getViolation(1, 1)< EPS)
+			//if(getViolation(1, 1)< EPS)
+			if(forwadChecking(r))
 			{				
 				removeRequire(r, point1, r+m);
 				int[] tmp = new int[2];
@@ -555,7 +616,7 @@ public class SolverDARP {
 			}
 			else
 			{
-				println("***else*****tmp: ");
+//				println("Cut branch!");
 				removeRequire(r, point1, r+m);
 			}
 			while(true)
@@ -564,10 +625,9 @@ public class SolverDARP {
 				{
 					break;
 				}
-//				println(">>>>>>>>>>>>>>>>>>>>>>>>");
 				insertRequire(r, point1, point2);
-//				println(">>>>>>>>>>>>>>>>>>>>>>>>");
-				if(getViolation(1, 1) < EPS)
+				//if(getViolation(1, 1) < EPS)
+				if(forwadChecking(r))
 				{
 					removeRequire(r, point1, point2);
 					int[] tmp = new int[2];
@@ -612,11 +672,11 @@ public class SolverDARP {
 	{
 		printBreakPoint("--- getViolationRideTime ---");
 		int violation = 0;
-		for(int i = m;i < m+n;i++)
+		for(int i = m+2*n;i < 2*(m+n);i++)
 		{
-			violation += Math.max(0,t[i+n] - t[i] - requires[i-m].getDuarationPickup() - SolverDARP.L);
+			violation += Math.max(0,t[i]-BACK_LASTEST_TIME);
 		}
-		//return 0;
+
 		return violation;
 	}
 	private int getViolation(float factorLoad,float factorRideTime)

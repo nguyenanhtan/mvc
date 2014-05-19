@@ -1,20 +1,36 @@
 var directionsService = new google.maps.DirectionsService();
+var directionsDisplay;//
+var poly;
 function initialize() 
 {	
-	directionsDisplay = new google.maps.DirectionsRenderer();
+	// directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
     center: new google.maps.LatLng(21.006738,105.84138),
     zoom: 16
     };
     map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);       
+    // directionsDisplay.setMap(map);
+    directionsDisplay = new google.maps.DirectionsRenderer();
     directionsDisplay.setMap(map);
-
     google.maps.event.addListener(map, 'click', function(event) {
     	  placeMarker(event.latLng);
       });
     putDepot(new google.maps.LatLng(21.006738,105.84138));
-
-  }
+    var lineSymbol = {
+    	path: google.maps.SymbolPath.FORWARD_OPEN_ARROW
+    };
+    var polyOptions = {
+	    strokeColor: '#ff0000',
+	    strokeOpacity: 1.0,
+	    strokeWeight: 2,
+	    icons: [{
+	      icon: lineSymbol,
+	      repeat: '50px'
+	    }]
+    };
+    poly = new google.maps.Polyline(polyOptions);
+    poly.setMap(map);
+}
 function putDepot(location)
 {
 	if(depot!=null)
@@ -237,18 +253,33 @@ function putMarker(id,lat,lng,icon)
 //	  	       infowindow.open(map,pmarker);
 //	  	  });
 	  }	  
-    }
+    }    
+
   function calcRoute() {	
 	  out("Calc Route");
-	  var start = depot;
-	  var end = depot;//arr_request[0].pickup;
-	  //out(depot.getPosition());
-	  for(var k = 0;k < data_response.numVehicle;k++)
+	  //arr_request[0].pickup;
+	  //out(depot.getPosition());	  	  
+	  var data = '{"routcost":18072,"numVehicle":3,"Solution":[7,3,19,4,6,12,10,8,14,16,5,18,13,11,15,9,17,0,1,2],"numRequest":7}'	 ;
+	  parseJSON(data);
+	  var maxV = data_response.numVehicle;
+	  for(var k = 0;k < maxV;k++)
 	  {
-		  waypts = getRoute(k);
-		  //out("way.len = "+waypts.length);
-		  if(waypts.length > 0)
-		  {
+		  // drawRoute(k);
+	  }
+	}
+	function drawRoute(k)
+	{
+		var start = depot;
+	    var end = depot;
+		waypts = getRoute(k);
+		  //out("way.len = "+waypts.length);		
+		if(waypts.length > 8)
+		{
+			drawPolyline(toPolyline(k));
+		}
+
+		else if(waypts.length > 0)
+		{
 			  var request = {
 			      origin:start.getPosition(),
 			      destination:end.getPosition(),
@@ -256,28 +287,47 @@ function putMarker(id,lat,lng,icon)
 			      travelMode: google.maps.TravelMode.DRIVING,
 			      optimizeWaypoints: false
 			  };
-			  //ut("__k___"+k+"____");
+
+			  
+			  
 			  directionsService.route(request, function(response, status) {
 				  out("Status: "+status);
 			    if (status == google.maps.DirectionsStatus.OK) {
 			      directionsDisplay.setDirections(response);
 			    }
 			    else
-			    {
+			    {			    	
 			    	alert("Error route: "+status);
 			    }
-			  });
+			  });			
 		  }
 		  else
-		  {
-			  out("****NO ROUTE***");
+		  {		  	
+			  out("****The vehicle "+k+" is not used***");
 		  }
-	  }
 	}
+function drawPolyline(line)
+{
+	poly.setPath(line);
+}
+function toPolyline(i)
+{
+	waypts = getRoute(i);
+	var planeLine = new Array();
+	planeLine[0] = depot.getPosition();
+	for(var j = 0;j < waypts.length;j++)
+	{
+		planeLine[j+1] = waypts[j].location;
+	}
+	planeLine[waypts.length+1] = depot.getPosition();
+	return planeLine;
+
+}
 function getRoute(i)
 {
 	var waypts = [];
-	Solution = data_response.Solution;
+	//Solution = data_response.Solution;	
+	Solution = data_response.Solution;	
 	pcurrent = Solution[i];
 	m = data_response.numVehicle;
 	n = data_response.numRequest;

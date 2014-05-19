@@ -200,7 +200,10 @@ function addReq(req)
 }
 function showOut()
 {
-	out(arr_request[0].Ep);
+	calcRoute();
+	var idr=prompt("What rout do you want to view?");
+	drawRoute(idr);
+
 }
 function clickReq(id)
 {
@@ -274,234 +277,9 @@ function getRangeMatrix()
 	//out(dp.concat(pk,dl));
 	return dp.concat(pk,dl);
 }
-// function getRangeMatrixByGroup(group)
-// {
-// 	//console.log("group: "+group);
-// 	return getRangeMatrix().slice(group*numrange,(group+1)*numrange);	
-// }
-// var valSynch = true;
-// var cur_grow = 0;
-// var cur_gcol = 0;
-// var MAX_GROUP;
-// // function calculateDistances2()
-// // {
-// // 	var rangeMatrix = new Array();
-// // 	rangeMatrix = getRangeMatrix();
-	
-// // 	out(rangeMatrix);
-// // 	for(var grow = 0; grow <= MAX_GROUP;grow++)
-// // 	{
-// // 		for(var gcol = 0; gcol <= MAX_GROUP;gcol++)	
-// // 		{		
-// // 			valSynch = false;	
-// // 			cur_gcol = gcol;
-// // 			cur_grow = grow;			
-// // 			calculate(grow,gcol);
-// // 			setTimeout(function(){},3000);
-// // 			// $waitUntil(
-// // 			// 	function(){return valSynch;},
-// // 			// 	function(){}
-// // 			// 	);
-// // 			out(grow+":"+gcol+"______________________");
-// // 		}
-// // 	}
-// // 	out("arr_matrix_distances: "+arr_matrix_distances);
-// // }
-// function calculateDistances()
-// {
-// 	var rangeMatrix = new Array();
-// 	rangeMatrix = getRangeMatrix();
-// 	out(rangeMatrix);
-// 	MAX_GROUP = rangeMatrix.length/numrange;
-// 	cur_grow = 0;
-// 	cur_gcol = 0;
-// 	for(grow = 0; grow <= MAX_GROUP;grow++)
-// 	{
-// 		for(gcol = 0; gcol <= MAX_GROUP;gcol++)	
-// 		{	
-								
-// 			$waitUntil(
-// 				function(){return fsync(grow,gcol);},
-// 				function(){calculate(grow,gcol);},
-// 				1000
-// 				);
-// 		}
-// 	}
-// 	//out("arr_matrix_distances: "+arr_matrix_distances);
-// }
-// function fsync(pgrow,pgcol)
-// {
-// 	//out("fsync: "+grow+"/"+gcol);
-// 	out(pgrow+"/"+pgcol+"/");
-// 	if(pgcol == cur_gcol && pgrow == cur_grow)
-// 	{
-// 		out(pgrow+"/"+pgcol+"/true");
-// 		return true;
-// 	}
-// 	return false;
-// }
-// function calculate(grow,gcol) {
 
-// 	  var service = new google.maps.DistanceMatrixService();
-// 	  var rorigins = getRangeMatrixByGroup(grow);
-// 	  var rdestinations = getRangeMatrixByGroup(gcol);	  
-// 	  service.getDistanceMatrix(
-// 	    {
-// 	      origins: rorigins,
-// 	      destinations: rdestinations,
-// 	      travelMode: google.maps.TravelMode.DRIVING,
-// 	      unitSystem: google.maps.UnitSystem.METRIC,
-// 	      avoidHighways: false,
-// 	      avoidTolls: false
-// 	    }, callback);
-	  
-// }
-// function nextGroup()
-// {
-// 	if(cur_gcol<MAX_GROUP)
-// 	{
-// 		cur_gcol++;
-// 	}
-// 	else
-// 	{
-// 		cur_grow++;
-// 		cur_gcol = 0;
-// 	}
-// 	out("nextGroup: "+cur_grow+"/"+cur_gcol);
-// }
-// function callback(response, status) {
-	
-// 	  // var cur_grow = getGroup(response.originAddresses);
-// 	  // var cur_gcol = getGroup(response.destinationAddresses);	  
-// 	  out("in callback: "+cur_grow+"/"+cur_gcol);
-// 	  if (status != google.maps.DistanceMatrixStatus.OK) 
-// 	  {
-// 	    //alert('Error was: ' + status);
-// 	    out("Can't get matrix distance");
-// 	    //arr_matrix_distances = null;
-// 	  } else {
-// 		  updateMatrixDisAndDur(cur_grow,cur_gcol,jsonToArrayMatrixDis(response),jsonToArrayMatrixDur(response));		  
-// 		  out("Get success!"+cur_grow+"/"+cur_gcol);  
-// 	  }	
-// 	  nextGroup();	  
-// }
-// function $waitUntil(check,onComplete,delay,timeout) {
-//   // if the check returns true, execute onComplete immediately
-//   if (check()) {
-//       onComplete();
-//       return;
-//   }
-
-//   if (!delay) delay=100;
-
-//   var timeoutPointer;
-//   var intervalPointer=setInterval(function () {
-//     if (!check()) {} // if check didn't return true, means we need another check in the next interval
-//   	else
-//   	{
-// 	      // if the check returned true, means we're done here. clear the interval and the timeout and execute onComplete
-// 	      clearInterval(intervalPointer);
-// 	      if (timeoutPointer) clearTimeout(timeoutPointer);
-// 	      onComplete();
-//   	}
-//   },delay);
-//   // if after timeout milliseconds function doesn't return true, abort
-//   if (timeout) timeoutPointer=setTimeout(function () {
-//       clearInterval(intervalPointer);
-//   },timeout);
-// }
-// // function getGroup(range)
-// // {
-// // 	var allRange = getRangeMatrix();
-// // 	//alert(range);
-// // 	for(var grp = 0;grp < allRange.length/numrange;grp++)
-// // 	{
-// // 		if(likeHood(range,getRangeMatrixByGroup(grp))>0.5)
-// // 		{
-// // 			return grp;
-// // 		}
-// // 	}
-// // 	return null;
-// // }
-// // function likeHood(range1,range2)
-// // {
-// // 	out("___________________");
-// // 	out("range1: "+range1);
-// // 	out("range2: "+range2)
-// // 	out("___________________");
-// // 	if(range2.length != range1.length)
-// // 	{
-// // 		return 0;
-// // 	}
-// // 	else
-// // 	{
-// // 		var dem = 0;
-// // 		for(var i = 0; i < range1.length;i++)
-// // 		{
-// // 			if(range1[i]===range2[i])
-// // 			{
-// // 				dem++;
-// // 			}
-// // 		}
-// // 	}
-// // 	return dem/range2.length;
-// // }
-// function updateMatrixDisAndDur(irow,icol,arrDis,arrDur)
-// {	
-// 	for(var i = 0;i < arrDis.length;i++)
-// 	{
-// 		if(arr_matrix_distances[i+irow])
-// 		{
-// 			out("arr: "+arr_matrix_distances[i+irow]);
-// 		}else
-// 		{
-// 			out("arr else");
-// 		}
-// 		arr_matrix_distances[i+irow] = new Array();
-// 		arr_matrix_duration[i+irow] = new Array();
-// 		for(var j = 0;j < arrDis[i].length;j++)
-// 		{
-// 			arr_matrix_distances[i+irow][j+icol]=arrDis[i][j];
-// 			arr_matrix_duration[i+irow][j+icol]=arrDur[i][j];
-			
-// 		}
-// 	}
-// }
-// function jsonToArrayMatrixDis(sjson)
-// {
-// 	jrows = sjson.rows;
-// 	rdata = new Array();
-// 	//out("Json: "+jrows);
-// 	for(var i = 0;i < jrows.length;i++)
-// 	{
-// 		jrow = jrows[i].elements;
-// 		out("jrow: "+jrow);
-// 		rdata[i] = new Array();
-// 		for(var j = 0;j < jrow.length;j++)
-// 		{
-// 			rdata[i][j] = jrow[j].distance.value;
-// 		}
-// 	}
-// 	return rdata;
-// }
-// function jsonToArrayMatrixDur(sjson)
-// {
-// 	jrows = sjson.rows;
-// 	// out("Json: "+jrows);
-// 	rdata = new Array();
-// 	for(var i = 0;i < jrows.length;i++)
-// 	{
-// 		jrow = jrows[i].elements;
-// 		rdata[i] = new Array();
-// 		for(var j = 0;j < jrow.length;j++)
-// 		{
-// 			rdata[i][j] = jrow[j].duration.value;
-// 		}
-// 	}
-// 	return rdata;
-// }
 function postData()
-{
+{	
 	$.ajax(
 			{
 				url:"ControllerServlet",
@@ -520,13 +298,17 @@ function postData()
 				    Ld: JSON.stringify(getParameterRequest("Ld")),
 				    duration_pickup: JSON.stringify(getParameterRequest("duration-pickup")),
 				    duration_deliver: JSON.stringify(getParameterRequest("duration-deliver")),
-				    matrix_distances:JSON.stringify(arr_matrix_distances)				    
+				    matrix_distances:JSON.stringify(arr_matrix_distances),
+				    leave_depot_time: JSON.stringify($("#start-time").val()),
+				    back_lastest: JSON.stringify($("#back-time").val())
+				    		    
 				},
 				success:function(data)
 				{
 			    	out("Data receive: " + data);
 			    	parseJSON(data);
-			    	calcRoute();
+			    	appendSelectRoute(data_response.numVehicle);
+			    	drawRoute(0);
 			 	},
 				error:function(status,stt,err)
 				{
@@ -534,6 +316,15 @@ function postData()
 				}
 			}
 			);
+}
+function appendSelectRoute(num)
+{
+	str = "";
+	for(var i = 0;i < num;i++)
+	{
+		str+="<option value='"+i+"'>"+i+"</option>";
+	}
+	$("#select-route").html(str);
 }
 function saveSession()
 {
@@ -635,6 +426,7 @@ function loadSession()
 				repickup = putMarker(requests[i].id,latgP.k,latgP.A,icon_pickup_nact);
 				redelivery = putMarker(requests[i].id,latgD.k,latgD.A,icon_deliver_nact);
 				arr_request[i] = new Request(requests[i].id,repickup,redelivery,requests[i].weight,numberToTime(requests[i].Ep),numberToTime(requests[i].Lp),numberToTime(requests[i].Ed),numberToTime(requests[i].Ld),requests[i].duration_pickup,requests[i].duration_deliver);
+				addReq(arr_request[i]);
 				
 			}
 		},
@@ -674,7 +466,7 @@ function deleteSession()
 }
 function numberToTime(num)
 {
-	out("-->"+Math.floor(num/60)+":"+num%60);
+	// out("-->"+Math.floor(num/60)+":"+num%60);
 	h = Math.floor(num/60)+"";
 	m = Math.floor(num%60)+"";
 	if(h.length==1)
@@ -721,4 +513,5 @@ function newSession()
     req_counter = 0;
 	initialize();
 	resetOpt();
+	data_response = null;
 }

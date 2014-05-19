@@ -30,6 +30,7 @@ public class ControllerModel extends HttpServlet{
 		}
 		else if(cmd.equals("loadIdSession"))
 		{
+			System.out.println("load Id Session");
 			doLoadIdSession(request, response);
 			System.out.println("load Id Session");
 		}
@@ -101,7 +102,7 @@ public class ControllerModel extends HttpServlet{
 	private void doLoadIdSession(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ComModel cModel = new ComModel();
 		try
-		{
+		{ 
 			ArrayList<Integer> idSession = cModel.getSetIdSession();
 			response.getWriter().write(encodeArray(idSession));
 		}catch(SQLException ex)

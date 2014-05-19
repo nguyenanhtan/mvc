@@ -20,6 +20,8 @@
     </script>
     <script type="text/javascript" src="./js/init.js">    
     </script>
+    <script type="text/javascript" src="./js/popup_result.js">    
+    </script>
   </head>
   <body>
 <!--  <div id="popup">
@@ -27,14 +29,15 @@
  </div> -->
 <!-- <p>You are successfully logged in!</p> -->
 <p id="header">Run best in browser supporting HTML5 and CSS3</p>
-
+<div id="popup"></div>
+<div id="box-detail"></div>
 <div id="map-canvas"></div>
 <div id="bound-right">
 <div id="right">
 
 
 <input type="button" id="btn-add" class="btn-opt-require" title="New require"/>
-<input type="button" id="btn-save" class="btn-opt-require" title="Save require"/>
+<!-- <input type="button" id="btn-save" class="btn-opt-require" title="Save require"/> -->
 <!-- <input type="button" id="btn-remove" class="btn-opt-require" title="Remove require"/> -->
 <div id="confirm">	
 	<p id="message"> sad</p>
@@ -44,7 +47,8 @@
 </div>
 <form id="form-opt-require">
 <div id="box-require">
-	<h3 class="header-box">Input require</h3>
+	<h3 class="header-box">Input require </h3>
+	<span></span>
 	<div class="row-opt">
 		<input type="button" id="btn-pickup" class="btn-opt-require" title="Marker pickup"/>
 		<input type="text" value="Position pickup" title="Position pickup" class="opacity-60" id="pos-pickup" readonly="readonly"/>
@@ -90,6 +94,14 @@
 	<input type="text" readonly="readonly" id="latlng-depot" class="opacity-60">
 </div>
 <div>
+	<p class="depot-title">Start time</p>
+	<input type="time" id="start-time" value="06:00"/>	
+</div>
+<div>
+	<p class="depot-title">Back latest</p>
+	<input type="time" id="back-time" value="20:00"/>	
+</div>
+<div>
 	<p class="depot-title">Number vehicle</p>
 	<input type="number" id="num-vehicle" value="3" min="0"/>
 	<span class="red italic"> vehicles</span>
@@ -98,6 +110,13 @@
 	<p class="depot-title">Capacity</p>
 	<input type="number" id="capacity-vehicle" value="10" min="1"/>
 	<span class="red italic"> person</span>
+</div>
+<div>
+	<p class="depot-title">Draw route</p>
+	<select id="select-route" onchange="drawRoute(this.value)">
+
+	</select>	
+	<input type="button" id="detail-route" value="Detail" onclick="detail()">
 </div>
 </div>
 <!-- <p class="clear"></p> -->
@@ -143,7 +162,10 @@
 			
 		</li>
 	</ul>
+
 	<div id="box-button">
+		<input type="button" id="btn-adjust-data" value="Ajust"  title="Adjust input data"/>
+		<input type="button" id="btn-save" value="Save require"  title="Save require"/>
 		<input type="button" id="btn-new-session" value="New Session" onclick="newSession()"/>     
 		<input type="button" id="Out" value="Out" onclick="showOut()"/>   
 		<!-- <input type="button" id="get-matrix-distances" value="Get Matrix Distance" onclick="calculateDistances()"/>   -->

@@ -1,5 +1,4 @@
 var map;
-var directionsDisplay;
 var markers = new Array();
 var arr_request = new Array();
 var arr_matrix_distances = new Array();
