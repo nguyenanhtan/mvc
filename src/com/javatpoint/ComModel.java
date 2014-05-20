@@ -140,7 +140,7 @@ public class ComModel {
 		}
 		return true;
 	}
-	 public Connection createConnection() throws IOException, ClassNotFoundException, SQLException {
+	/* public Connection createConnection() throws IOException, ClassNotFoundException, SQLException {
 		 
 	        Connection connection;
 	         
@@ -172,8 +172,9 @@ public class ComModel {
 		 {
 			 e.printStackTrace();
 		 }
-	 }
-	/*ComModel()
+	 }*/
+	
+	ComModel()
 	{
 		try{
 			Class.forName("com.mysql.jdbc.Driver").newInstance ();
@@ -186,6 +187,7 @@ public class ComModel {
 			String userName = "root";
 	        String password = "1234567890";
 	        String url = "jdbc:mysql://127.0.0.1:3306/darp?useUnicode=true&characterEncoding=UTF-8";
+	        //String url = "jdbc:mysql://mysql-dial-a-ride.whelastic.net/darp";
 	        conn = DriverManager.getConnection (url,userName, password);
 
 		    if(!conn.isClosed())
@@ -203,7 +205,7 @@ public class ComModel {
 		    System.out.println("VendorError: " + ex.getErrorCode());
 		}
 
-	}*/
+	}
 	public void deleteSession(int [] x) throws SQLException
 	{
 		for(int i:x)
@@ -402,6 +404,6 @@ public class ComModel {
 		return idS.getInt(1);
 	}
 	public static void main(String[] args) {
-		//ComModel cm = new ComModel();
+		ComModel cm = new ComModel();
 	}
 }

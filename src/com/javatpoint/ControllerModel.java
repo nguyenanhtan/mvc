@@ -107,11 +107,13 @@ public class ControllerModel extends HttpServlet{
 			response.getWriter().write(encodeArray(idSession));
 		}catch(SQLException ex)
 		{
+			response.getWriter().write("CANT");
 			System.err.println("ERROR SQL: "+ex.toString());
 			System.out.println("SQLException: " + ex.getMessage());
 		    System.out.println("SQLState: " + ex.getSQLState());
 		    System.out.println("VendorError: " + ex.getErrorCode());
 		}
+		
 	}
 	private void doSaveSession(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String matrix = request.getParameter("rangeMatrix");

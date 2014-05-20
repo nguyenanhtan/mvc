@@ -146,6 +146,7 @@ public class SolverDARP {
 		for(int i = 0; i < numR;i++)
 		{
 			x = rand.nextInt(n);
+			System.out.print(x+"; ");
 			if(!setUnassignRequest.contains(x))
 			{
 				removeRequire(x, getNodeBeforePickup(x), getNodeBeforeDeliver(x));
@@ -230,8 +231,8 @@ public class SolverDARP {
 		println(location);
 		System.out.println("Require:\t");
 		println(requires);
-		println("Rout cost:");
-		println(getRoutingCost()+"");
+//		println("Rout cost:");
+//		println(getRoutingCost()+"");
 		System.out.println("---------------END-----------------");
 	}
 	public void printBreakPoint(String s)

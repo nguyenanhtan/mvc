@@ -515,3 +515,8 @@ function newSession()
 	resetOpt();
 	data_response = null;
 }
+function adjustTimeWindow()
+{
+	sol = data_response.Solution;
+	
+}

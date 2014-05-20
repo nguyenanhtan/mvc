@@ -147,16 +147,24 @@ public class ControllerServlet extends HttpServlet {
 	private String encodeResponse(Solution solution)
 	{
 		int[] sol = solution.getS();
+		int[] t = solution.getT();
 		JSONObject erp = new JSONObject();
-		JSONArray arr = new JSONArray();		
+		JSONArray arr = new JSONArray();
+		JSONArray arrT = new JSONArray();
+		
 		for(int x:sol)
 		{
 			arr.add(x);
+		}
+		for(int y:t)
+		{
+			arrT.add(y);
 		}
 		erp.put("Solution", arr);
 		erp.put("numVehicle", numVehicle);
 		erp.put("numRequest", numRequest);
 		erp.put("routcost", solution.getRoutCost());
+		erp.put("timeService",arrT);
 		String jsonText = JSONValue.toJSONString(erp);
 		System.out.println("jsonText2: "+jsonText);
 		return jsonText;
