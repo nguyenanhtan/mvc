@@ -479,6 +479,11 @@ function numberToTime(num)
 	}
 	return h+":"+m;
 }
+function timeToNumber(time)
+{
+	arr = time.split(":");
+	return arr[0]*60+arr[1];
+}
 function toStringSession(data)
 {
 	out(data);
@@ -517,6 +522,27 @@ function newSession()
 }
 function adjustTimeWindow()
 {
-	sol = data_response.Solution;
-	
+	if(data_response == null)
+	{
+		return;
+	}
+	sol = data_response.timeService;
+	//timeService = data_response.timeService;
+	var m = data_response.numRequest;
+	var n = data_response.numVehicle;
+	for(var i = 0;i < m;i++)
+	{
+		nr = Math.floor(Math.random()*(sol[n+i] - sol[0]));
+		arr_request[i].Ep = numberToTime(sol[n+i] - nr);
+		nr = Math.floor(Math.random()*(sol[n+2*m]-sol[n+i]));
+		arr_request[i].Lp = numberToTime(sol[n+i] + nr);
+
+		nr = Math.floor(Math.random()*(sol[n+i+m] - sol[0]));
+		arr_request[i].Ed = numberToTime(sol[n+i+m] - nr);
+		nr = Math.floor(Math.random()*(sol[n+2*m] - sol[n+i+m]));
+		arr_request[i].Ld = numberToTime(sol[n+i+m] + nr);
+		out(m+"--"+n);
+		out("---"+nr+"---");
+		out(arr_request[i].toString());
+	}
 }

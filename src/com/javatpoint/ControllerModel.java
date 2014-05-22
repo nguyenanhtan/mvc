@@ -152,7 +152,7 @@ public class ControllerModel extends HttpServlet{
 			System.out.println(pk);
 			System.out.println(delv);
 			MapGoogle mg = new MapGoogle(matrix);
-			cModel.set(mg.getMatrixDistance());
+			cModel.set(mg.getMatrixDistance(),mg.getMatrixDuration());
 			try
 			{
 				cModel.insert();

@@ -164,7 +164,7 @@
 	</ul>
 
 	<div id="box-button">
-		<input type="button" id="btn-adjust-data" value="Ajust"  title="Adjust input data"/>
+		<input type="button" id="btn-adjust-data" value="Ajust"  onclick="adjustTimeWindow()" title="Adjust input data"/>
 		<input type="button" id="btn-save" value="Save require"  title="Save require"/>
 		<input type="button" id="btn-new-session" value="New Session" onclick="newSession()"/>     
 		<input type="button" id="Out" value="Out" onclick="showOut()"/>   

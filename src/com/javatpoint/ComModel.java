@@ -42,6 +42,7 @@ public class ComModel {
 	int[] Ed;
 	int[] Ld;
 	int[][] matrixDistance;
+	int[][] matrixDuration;
 	int numVehicle;
 	int capacity;
 	String depot;
@@ -61,15 +62,15 @@ public class ComModel {
 			arrIdDeliver[i] = idDeliver;
 			insertRequest(idPickup, idDeliver, weight[i], Ep[i], Lp[i], Ed[i], Ld[i], idSession);
 			
-			insertRoutCost(idDepot, idPickup, matrixDistance[0][i+1], matrixDistance[0][i+1]);
-			insertRoutCost(idDepot, idDeliver, matrixDistance[0][i+1+m], matrixDistance[0][i+1+m]);
-			insertRoutCost(idPickup, idDeliver, matrixDistance[i+1][i+1+m], matrixDistance[i+1][i+1+m]);
+			insertRoutCost(idDepot, idPickup, matrixDistance[0][i+1], matrixDuration[0][i+1]);
+			insertRoutCost(idDepot, idDeliver, matrixDistance[0][i+1+m], matrixDuration[0][i+1+m]);
+			insertRoutCost(idPickup, idDeliver, matrixDistance[i+1][i+1+m], matrixDuration[i+1][i+1+m]);
 			for(int j = 0;j < i;j++)
 			{
-				insertRoutCost(arrIdPickup[j], idPickup, matrixDistance[j+1][i+1], matrixDistance[j+1][i+1]);
-				insertRoutCost(arrIdDeliver[j], idPickup, matrixDistance[j+1+m][i+1], matrixDistance[j+1+m][i+1]);
-				insertRoutCost(arrIdPickup[j], idDeliver, matrixDistance[j+1][i+1+m], matrixDistance[j+1][i+1+m]);
-				insertRoutCost(arrIdDeliver[j], idDeliver, matrixDistance[j+1+m][i+1+m], matrixDistance[j+1+m][i+1+m]);
+				insertRoutCost(arrIdPickup[j], idPickup, matrixDistance[j+1][i+1], matrixDuration[j+1][i+1]);
+				insertRoutCost(arrIdDeliver[j], idPickup, matrixDistance[j+1+m][i+1], matrixDuration[j+1+m][i+1]);
+				insertRoutCost(arrIdPickup[j], idDeliver, matrixDistance[j+1][i+1+m], matrixDuration[j+1][i+1+m]);
+				insertRoutCost(arrIdDeliver[j], idDeliver, matrixDistance[j+1+m][i+1+m], matrixDuration[j+1+m][i+1+m]);
 				
 			}
 		}
@@ -120,9 +121,10 @@ public class ComModel {
 	{
 		depot = dp;
 	}
-	public void set(int[][] mt)
+	public void set(int[][] mt,int[][] du)
 	{
 		matrixDistance = mt;
+		matrixDuration = du;
 	}
 	public boolean set(int x,int prm)
 	{
@@ -206,6 +208,7 @@ public class ComModel {
 		}
 
 	}
+	
 	public void deleteSession(int [] x) throws SQLException
 	{
 		for(int i:x)
@@ -216,24 +219,25 @@ public class ComModel {
 	public void deleteSession(int id) throws SQLException
 	{
 		
-		
-		deleteTable(TABLE_REQUEST, "id_session = "+id);
-//		ResultSet rs = selectTable(TABLE_REQUEST, "id_session = "+id);
-//		while(rs.next())
-//		{
-//			int id_p = rs.getInt("id_pickup");
-//			int id_d = rs.getInt("id_deliver");			
-//			/*deleteTable(TABLE_ROUTCOST, "id_position_1 = "+id_p);
-//			deleteTable(TABLE_ROUTCOST, "id_position_2 = "+id_p);
-//			deleteTable(TABLE_ROUTCOST, "id_position_1 = "+id_d);
-//			deleteTable(TABLE_ROUTCOST, "id_position_2 = "+id_d);*/
-//			deleteTable(TABLE_POSITIONS, "id = "+id_p);
-//			deleteTable(TABLE_POSITIONS, "id = "+id_d);						
-//		}
-//		deleteTable(TABLE_REQUEST, "id_session = "+id);
 		ResultSet rs = selectTable(TABLE_SESSION, "id = "+id);
 		rs.next();
 		int depot = rs.getInt("depot");
+		System.out.println("depot: "+depot);
+//		deleteTable(TABLE_REQUEST, "id_session = "+id);
+		rs = selectTable(TABLE_REQUEST, "id_session = "+id);
+		while(rs.next())
+		{
+			int id_p = rs.getInt("id_pickup");
+			int id_d = rs.getInt("id_deliver");			
+			/*deleteTable(TABLE_ROUTCOST, "id_position_1 = "+id_p);
+			deleteTable(TABLE_ROUTCOST, "id_position_2 = "+id_p);
+			deleteTable(TABLE_ROUTCOST, "id_position_1 = "+id_d);
+			deleteTable(TABLE_ROUTCOST, "id_position_2 = "+id_d);*/
+			deleteTable(TABLE_POSITIONS, "id = "+id_p);
+			deleteTable(TABLE_POSITIONS, "id = "+id_d);						
+		}
+		deleteTable(TABLE_REQUEST, "id_session = "+id);
+		
 //		deleteTable(TABLE_SESSION, "id = "+id);	
 		deleteTable(TABLE_POSITIONS, "id = "+depot);
 	}

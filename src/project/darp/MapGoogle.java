@@ -21,6 +21,10 @@ public class MapGoogle {
 	{
 		return matrixDistance;
 	}
+	public int[][] getMatrixDuration()
+	{
+		return matrixDuration;
+	}
 	public int getT(int i, int j)
 	{
 		return getDuration(i, j);

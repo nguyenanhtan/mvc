@@ -14,6 +14,13 @@ function Request(id, pPos,dPos,weight,Ep,Lp,Ed,Ld,dP,dD)
 	{
 		alert(this.pickup+"///////"+this.deliver+"/"+this.weight+"/"+this.Ed+"/"+this.Ld);
 	};
+	this.toString = function()
+	{
+		str = this.id+"-->  ";
+		str+= "p["+this.Ep+":"+this.Lp+"]   ";
+		str+= "d["+this.Ed+":"+this.Ld+"]";
+		return str;
+	};
 	this.destroy = function()
 	{
 		this.pickup.setMap(null);

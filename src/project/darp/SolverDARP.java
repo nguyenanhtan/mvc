@@ -25,11 +25,11 @@ public class SolverDARP {
 	public static int BACK_LASTEST_TIME = 0;
 	public static boolean SHOW_BREAK_POINT = false;
 	public static double EPS = 0.00001;
-	public static int MAX_INIT = 5;
+	public static int MAX_INIT = 1;
 	private Date startTime = new Date();
-	public static int TIME_LIMIT_TREESEARCH = 200;
-	public static int TIME_LIMIT_LNSFFPA = 600;
-	public static int TIME_LIMIT_INIT = 200;
+	public static int TIME_LIMIT_TREESEARCH = 600;
+	public static int TIME_LIMIT_LNSFFPA = 2000;
+	public static int TIME_LIMIT_INIT = 3000;
 	public static int MAX_SIZE = 0;
 	public static int RANGE = 0;
 	public static int NUM_ITER = 100;
@@ -58,7 +58,8 @@ public class SolverDARP {
 		}
 		status();
 		if(!isSolution()){
-			printfError("Can't init!");
+			println("Can't init!");
+			return null;
 		}
 		else
 		{
@@ -119,6 +120,7 @@ public class SolverDARP {
 				}
 			}
 		}
+		status();
 		println("Rout cost: "+currentS.getRoutCost());
 		println(currentS.getS());
 		println("Rout cost: "+bestS.getRoutCost());
@@ -141,19 +143,19 @@ public class SolverDARP {
 	{
 		Random rand = new Random();
 		int x;
-		println("----------RELAX "+numR+"--------------");
+		//println("----------RELAX "+numR+"--------------");
 		int nr = 0;
 		for(int i = 0; i < numR;i++)
 		{
 			x = rand.nextInt(n);
-			System.out.print(x+"; ");
+			//System.out.print(x+"; ");
 			if(!setUnassignRequest.contains(x))
 			{
 				removeRequire(x, getNodeBeforePickup(x), getNodeBeforeDeliver(x));
 				nr++;
 			}
 		}
-		println(nr+"");
+		//println(nr+"");
 	}
 	public SolverDARP(String Jmatrix, int m, int n, int capacity, int[] weight,int[] Ep,int[] Lp,int[] Ed,int[] Ld,int[] dP,int[] dD) {
 		// TODO Auto-generated constructor stub
@@ -192,7 +194,7 @@ public class SolverDARP {
 		{
 			s[i] = i - 2*n - m;
 			v[i] = i - 2*n - m;
-			t[i] = 0;
+			t[i] = LEAVE_DEPOT_TIME;
 			l[i] = 0;
 			location[i] = 0;
 		}
@@ -231,6 +233,8 @@ public class SolverDARP {
 		println(location);
 		System.out.println("Require:\t");
 		println(requires);
+		println("Violation load: "+getViolationLoad());
+		println("Violation time: "+getViolationRideTime());
 //		println("Rout cost:");
 //		println(getRoutingCost()+"");
 		System.out.println("---------------END-----------------");
@@ -326,29 +330,46 @@ public class SolverDARP {
 		{
 			deltaD = -deltaD;
 		}
+//		if(deltaD*deltaP < 0)
+//		{
+//			printfError("1. DeltaP or deltaD is invalid 1");
+//		}
+//		if(isInsert && (deltaP + deltaD)<0)
+//		{
+//			printfError("2. DeltaP or deltaD is invalid");
+//		}
 		currentNode = s[request + m + n];
-		while(currentNode < m + 2*n)
+		//println(deltaP +"/"+ deltaD+"");
+		while(currentNode < 2*n+m) 
 		{
 			t[currentNode] += (deltaP + deltaD);
 			currentNode = s[currentNode];
 		}
+		//println(currentNode+"---");
 		t[currentNode] += (deltaP + deltaD);
-		
+//		if(currentNode == 10&&s[8] == 10)
+//		println(t[8]+"---"+t[currentNode]+"/"+(deltaP + deltaD));
 		
 	}
 	private void updateLoaded(int request,int pickupAfterNode, int deliverAfterNode)
 	{
-		printBreakPoint("--- updateLoaded ---");
-		l[request + m] = l[pickupAfterNode] + requires[request].getWeight();
-		int currentNode = request + m;
-		int beforCurrent = 0;
-		while(currentNode != request + m + n)
+		try
 		{
-			l[s[currentNode]] = l[currentNode] + requires[request].getWeight();
-			beforCurrent = currentNode;
-			currentNode = s[currentNode];
+			printBreakPoint("--- updateLoaded ---");
+			l[request + m] = l[pickupAfterNode] + requires[request].getWeight();
+			int currentNode = request + m;
+			int beforCurrent = 0;
+			while(currentNode != request + m + n)
+			{
+				l[s[currentNode]] = l[currentNode] + requires[request].getWeight();
+				beforCurrent = currentNode;
+				currentNode = s[currentNode];
+			}
+			l[request + m + n] = l[beforCurrent] - requires[request].getWeight();
+		}catch(Exception e)
+		{
+			printfError("Loadupdate: "+e.toString());
 		}
-		l[request + m + n] = l[beforCurrent] - requires[request].getWeight();
 	}
 	private float getDeltaTimeService(int request,int afterNode,boolean isPickup)//request < n
 	{		
@@ -360,18 +381,28 @@ public class SolverDARP {
 		}
 		if(isPickup)
 		{
+//			println("pickuip");
+//			println(map.getT(location[afterNode], location[request + m])+"");
+//			println(map.getT(location[request + m], location[s[request + m]])+"");
+//			println(requires[request].getDuarationPickup()+"");
+//			println(map.getT(location[afterNode], location[s[request + m]])+"");
 			return 
 				map.getT(location[afterNode], location[request + m])+
-				map.getT(location[request + m], location[s[afterNode]])+
+				map.getT(location[request + m], location[s[request + m]])+
 				requires[request].getDuarationPickup()-
-				map.getT(location[afterNode], location[s[afterNode]]);
+				map.getT(location[afterNode], location[s[request + m]]);
 		}else
 		{
+//			println("delivery");
+//			println(map.getT(location[afterNode], location[request + m + n])+"");
+//			println(map.getT(location[request + m + n], location[s[request + m + n]])+"");
+//			println(requires[request].getDuarationDeliver()+"");
+//			println(map.getT(location[afterNode], location[s[request + m + n]])+"");
 			return 
 					map.getT(location[afterNode], location[request + m + n])+
-					map.getT(location[request + m + n], location[s[afterNode]])+
+					map.getT(location[request + m + n], location[s[request + m + n]])+
 					requires[request].getDuarationDeliver()-
-					map.getT(location[afterNode], location[s[afterNode]]);
+					map.getT(location[afterNode], location[s[request + m + n]]);
 		}
 		
 	}
@@ -399,11 +430,10 @@ public class SolverDARP {
 	private void TreeSearch(boolean isInit)
 	{
 		printBreakPoint("--- TreeSearch ---");
-		
+		//println("treesearch");
 		//println("--- TreeSearch ---setUnassignRequest.size() = "+setUnassignRequest.size());
 		if(setUnassignRequest.size() == 0)
 		{
-			
 			if(isSolution())
 			{
 				if(tmpSol == null)
@@ -417,9 +447,10 @@ public class SolverDARP {
 						tmpSol = new Solution(s, v, t, getRoutingCost());						
 					}
 				}
-				
+				//println("out treesearch");
 //				return true;
 			}
+			//status();
 			return;
 		}
 		else
@@ -450,7 +481,7 @@ public class SolverDARP {
 			if(it.hasNext())
 			{
 				mapEntry = (Map.Entry<Integer, ArrayList<int[]>>)it.next();			
-			}
+			}			
 			for(int[] x:mapEntry.getValue())
 			{								
 				insertRequire(mapEntry.getKey(), x[0], x[1]);
@@ -565,20 +596,27 @@ public class SolverDARP {
 		return true;
 		
 	}
-	private boolean forwadChecking(int startPoint)
+	private boolean forwadChecking(int req)
 	{
-		int curPoint = startPoint;
-		while(curPoint < m*2+2*n && curPoint >= m)
+		printBreakPoint("forward: "+req);
+		int curPoint = req+m;
+		try
 		{
-			if(checkPoint(curPoint))
+			while(curPoint < m*2+2*n && curPoint >= m)
 			{
-				curPoint = s[curPoint];
+				if(checkPoint(curPoint))
+				{
+					curPoint = s[curPoint];
+				}
+				else
+				{
+	//				println("checking false");
+					return false;
+				}
 			}
-			else
-			{
-//				println("checking false");
-				return false;
-			}
+		}catch(Exception e)
+		{
+			printfError("forward checking: "+e.toString());
 		}
 		return true;
 	}
@@ -712,13 +750,19 @@ public class SolverDARP {
 		{
 			setUnassignRequest.remove(r);
 		}
-		s[r+m] = s[pickupAfterNode];
-		s[pickupAfterNode] = r + m;
-		v[r+m] = v[pickupAfterNode];
-		
-		s[r + m + n] = s[deliverAfterNode];
-		s[deliverAfterNode] = r + m + n;
-		v[r+m+n] = v[pickupAfterNode];
+		try
+		{
+			s[r+m] = s[pickupAfterNode];
+			s[pickupAfterNode] = r + m;
+			v[r+m] = v[pickupAfterNode];
+			
+			s[r + m + n] = s[deliverAfterNode];
+			s[deliverAfterNode] = r + m + n;
+			v[r+m+n] = v[pickupAfterNode];
+		}catch(Exception e)
+		{
+			printfError("Insert: "+e.toString());
+		}
 		
 		updateTimeservice(r, pickupAfterNode, deliverAfterNode, true);
 		updateLoaded(r, pickupAfterNode, deliverAfterNode);
