@@ -312,7 +312,8 @@ function postData()
 			 	},
 				error:function(status,stt,err)
 				{
-					alert("Status: "+stt + "    ERR: "+err);
+					//alert("Status: "+stt + "    ERR: "+err);
+					alert("Can't find a feasible solution!");
 				}
 			}
 			);
@@ -345,6 +346,8 @@ function saveSession()
 				    Lp: JSON.stringify(getParameterRequest("Lp")),
 				    Ed: JSON.stringify(getParameterRequest("Ed")),
 				    Ld: JSON.stringify(getParameterRequest("Ld")),
+				    left: JSON.stringify($("#start-time").val()),
+				    back: JSON.stringify($("#back-time").val()),
 				    
 				    duration_pickup: JSON.stringify(getParameterRequest("duration-pickup")),
 				    duration_deliver: JSON.stringify(getParameterRequest("duration-deliver")),				   			   
@@ -413,6 +416,10 @@ function loadSession()
 
 			loc = new google.maps.LatLng(ld.k,ld.A);
 			putDepot(loc);
+			out("session back: "+session.back);
+			$("#start-time").val(numberToTime(session.left));
+			$("#back-time").val(numberToTime(session.back));
+			
 			// for(var i = 0;i < arr_request.length;i++)
 			// {
 			// 	arr_request[i].destroy();
@@ -467,8 +474,10 @@ function deleteSession()
 function numberToTime(num)
 {
 	// out("-->"+Math.floor(num/60)+":"+num%60);
-	h = Math.floor(num/60)+"";
-	m = Math.floor(num%60)+"";
+	var h = Math.floor(num/3600)+"";
+	var m = Math.floor(num%3600);
+	m = Math.floor(m/60)+"";
+	//out(num+":"+m+":"+h);
 	if(h.length==1)
 	{
 		h = "0"+h;
@@ -482,7 +491,7 @@ function numberToTime(num)
 function timeToNumber(time)
 {
 	arr = time.split(":");
-	return arr[0]*60+arr[1];
+	return arr[0]*3600+arr[1]*60;
 }
 function toStringSession(data)
 {

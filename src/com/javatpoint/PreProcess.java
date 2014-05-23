@@ -21,7 +21,7 @@ public class PreProcess {
 		int [][] mat = new int[range.length][range.length];
 		NUM_RANGE = 10;
 		MAX_RANGE = range.length/NUM_RANGE + Math.min(range.length%NUM_RANGE, 1);
-		System.out.println("MAX_RANE: "+MAX_RANGE);
+		//System.out.println("MAX_RANE: "+MAX_RANGE);
 		try
 		{
 			for(int i = 0;i < MAX_RANGE;i++)
@@ -140,7 +140,7 @@ public class PreProcess {
 		sdes = sdes.substring(0, sdes.length()-1);
 		s += "origins="+sorg;
 		s += "&destinations="+sdes;
-		s += "&key=AIzaSyDgaadJHrg37wH05ZRMDmpe_oC2DwL8iyg&sensor=true&avoid=highways";
+		s += "&key=AIzaSyDgaadJHrg37wH05ZRMDmpe_oC2DwL8iyg&sensor=true&avoid=highways&mode=driving";
 		return s;
 	}
 	private static String[] getRangeByGroup(String[] r, int g,int NUM)

@@ -33,7 +33,8 @@ public class SolverDARP {
 	public static int MAX_SIZE = 0;
 	public static int RANGE = 0;
 	public static int NUM_ITER = 100;
-	private Solution tmpSol = null;
+	public static double TEST_ACCEPT = 0.5;
+//	private Solution tmpSol = null;
 	public static void main(String[] args) {
 		SolverDARP S = new SolverDARP();
 		Solution Sol = S.LNSFFPA();
@@ -46,7 +47,7 @@ public class SolverDARP {
 		{
 			println("Turn init "+i);
 			TreeSearch(true);
-			revert(tmpSol);
+//			revert(tmpSol);
 			if(isSolution())
 			{
 				break;
@@ -79,13 +80,15 @@ public class SolverDARP {
 		}
 //		println("MAX_SIZE: "+MAX_SIZE);
 //		println("RANGE = "+RANGE);
+		int numbetter = 0;
 		for(int i = 2;i <= MAX_SIZE - RANGE;i++)
 		{
 			for(int j = 0;j <= RANGE;j++)
 			{
 //				println("- - "+i*(MAX_SIZE - RANGE)+j+" - - ");
 				for(int k = 0;k < NUM_ITER;k++)
-				{							
+				{			
+//					println("Relax "+(i+j));
 					relaxedSolution(i+j);
 					if(isSolution())
 					{
@@ -94,19 +97,22 @@ public class SolverDARP {
 	//				System.out.println("A Relax");
 	//				status();
 					TreeSearch(false);
-					revert(tmpSol);
+//					revert(tmpSol);
 					if(!isSolution())
 					{
 						continue;
 					}
 					else
 					{
-						status();
+						//status();
+//						println("New solution");
 					}
 					int rCost = getRoutingCost();
-					if(rCost < currentS.getRoutCost())
+					double d = Math.random();
+					if(rCost < currentS.getRoutCost()||d < TEST_ACCEPT)
 					{	
-						println("-");
+						numbetter++;
+//						println("-"+rCost);
 						currentS = new Solution(s, v, t, rCost);
 						if(currentS.getRoutCost() < bestS.getRoutCost())
 						{
@@ -120,12 +126,19 @@ public class SolverDARP {
 				}
 			}
 		}
-		status();
-		println("Rout cost: "+currentS.getRoutCost());
-		println(currentS.getS());
-		println("Rout cost: "+bestS.getRoutCost());
-		println(bestS.getS());
 //		status();
+//		println("Rout cost: "+currentS.getRoutCost());
+//		println(currentS.getS());
+		println("Rout cost: "+bestS.getRoutCost());
+		println("bets S: ");
+		println(bestS.getS());
+		println("betst T: ");
+		println(bestS.getT());
+//		status();
+//		println(map.toString());
+		println("num better: "+numbetter);
+		println("START: "+LEAVE_DEPOT_TIME);
+		println("BACK: "+BACK_LASTEST_TIME);
 		return bestS;
 	}
 	private boolean isTimeOut(Date start, int maxSecond)
@@ -165,7 +178,7 @@ public class SolverDARP {
 //		println(map.getMatrixDistance());
 //		System.out.println(m+":"+n);
 		readProblem(m,n,capacity,weight,Ep,Lp,Ed,Ld,dP,dD);
-		System.out.println(m+":"+n);
+		//System.out.println(m+":"+n);
 		s = new int[2*(m+n)];
 		v = new int[2*(m+n)];
 		t = new int[2*(m+n)];
@@ -434,23 +447,23 @@ public class SolverDARP {
 		//println("--- TreeSearch ---setUnassignRequest.size() = "+setUnassignRequest.size());
 		if(setUnassignRequest.size() == 0)
 		{
-			if(isSolution())
-			{
-				if(tmpSol == null)
-				{
-					tmpSol = new Solution(s, v, t, getRoutingCost());
-				}
-				else
-				{
-					if(tmpSol.getRoutCost() > getRoutingCost())
-					{
-						tmpSol = new Solution(s, v, t, getRoutingCost());						
-					}
-				}
-				//println("out treesearch");
-//				return true;
-			}
-			//status();
+//			if(isSolution())
+//			{
+//				if(tmpSol == null)
+//				{
+//					tmpSol = new Solution(s, v, t, getRoutingCost());
+//				}
+//				else
+//				{
+//					if(tmpSol.getRoutCost() > getRoutingCost())
+//					{
+//						tmpSol = new Solution(s, v, t, getRoutingCost());						
+//					}
+//				}
+//				//println("out treesearch");
+////				return true;
+//			}
+//			//status();
 			return;
 		}
 		else
@@ -485,7 +498,11 @@ public class SolverDARP {
 			for(int[] x:mapEntry.getValue())
 			{								
 				insertRequire(mapEntry.getKey(), x[0], x[1]);
-				TreeSearch(isInit);				
+				TreeSearch(isInit);	
+				if(isSolution())
+				{
+					break;
+				}
 				removeRequire(mapEntry.getKey(), x[0], x[1]);	
 			}			
 
@@ -493,21 +510,21 @@ public class SolverDARP {
 	}
 	private void revert(Solution s)
 	{
-		if(s != null)
-		{
-			this.s = s.getS();
-			this.t = s.getT();
-			this.v = s.getV();
-		}
-		else
-		{
-			println("Can't revert!");
-		}
+//		if(s != null)
+//		{
+//			this.s = s.getS();
+//			this.t = s.getT();
+//			this.v = s.getV();
+//		}
+//		else
+//		{
+//			println("Can't revert!");
+//		}
 	}
 	private boolean isSolution()
 	{
 		printBreakPoint("--- isSolution ---");
-		if(getViolation(1, 1) > 0)
+		if(getViolation() > 0)
 		{
 			return false;
 		}
@@ -727,6 +744,10 @@ public class SolverDARP {
 		//return Math.ceil((factorLoad*getViolationLoad() + factorRideTime*getViolationRideTime())/(factorLoad+factorRideTime));
 		return violation;
 	}
+	private int getViolation()
+	{
+		return getViolationLoad()+getViolationRideTime();
+	}
 	private void insertRequire(int r,int pickupAfterNode,int deliverAfterNode)
 	{
 		printBreakPoint("--- insertRequire ---",false);
@@ -886,8 +907,8 @@ public class SolverDARP {
 			requires[i].setEd(Ed[i]);
 			requires[i].setLp(Lp[i]);
 			requires[i].setLd(Ld[i]);
-			requires[i].setDuarationPickup(durationP[i]);
-			requires[i].setDuarationDeliver(durationD[i]);
+			requires[i].setDuarationPickup(durationP[i]*60);
+			requires[i].setDuarationDeliver(durationD[i]*60);
 			requires[i].setPickup(i+1);
 			requires[i].setDeliver(i+n+1);
 		}

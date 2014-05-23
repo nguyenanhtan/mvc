@@ -131,6 +131,14 @@ public class ControllerModel extends HttpServlet{
 		String sdD = request.getParameter("duration_deliver");
 		String pk = request.getParameter("pickup");
 		String delv = request.getParameter("deliver");
+		String left = request.getParameter("left");
+		String back = request.getParameter("back");
+		System.out.println("left-back: "+left+"/"+back);
+		String[] arrtg = back.substring(1, back.length()-1).split(":");
+		int timeBack = Integer.parseInt(arrtg[0])*3600 + Integer.parseInt(arrtg[1])*60;
+		String[] arrtg2 = left.substring(1, left.length()-1).split(":");
+		int timeLeft = Integer.parseInt(arrtg2[0])*3600 + Integer.parseInt(arrtg2[1])*60;
+		
 /*		try
 		{*/
 			ComModel cModel = new ComModel();		
@@ -141,7 +149,8 @@ public class ControllerModel extends HttpServlet{
 			cModel.set(parser(Ld),ComModel.LD);
 			cModel.set(parser(sdP),ComModel.DURATION_PICKUP);
 			cModel.set(parser(sdD),ComModel.DURATION_DELIVER);
-			
+			cModel.set(timeBack,ComModel.TIME_BACK);
+			cModel.set(timeLeft,ComModel.TIME_LEFT);
 			cModel.set(parser(pk,true),ComModel.PICKUP);
 			cModel.set(parser(delv,true),ComModel.DELIVER);
 			
@@ -200,7 +209,7 @@ public class ControllerModel extends HttpServlet{
 				if(tg.contains(":"))
 				{
 					String[] arrtg = tg.split(":");
-					data[i] = Integer.parseInt(arrtg[0])*60 + Integer.parseInt(arrtg[1]);
+					data[i] = Integer.parseInt(arrtg[0])*3600 + Integer.parseInt(arrtg[1])*60;
 				}
 				else
 				{

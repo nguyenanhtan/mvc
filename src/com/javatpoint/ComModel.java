@@ -26,6 +26,10 @@ public class ComModel {
 	public static final int NUMBER_VEHICLE = 10;
 	public static final int CAPACITY = 11;
 	public static final int DEPOT = 12;
+	public static final int TIME_LEFT = 13;
+	public static final int TIME_BACK = 14;
+	
+	
 	public static final String TABLE_SESSION = "SESSIONS";
 	public static final String TABLE_REQUEST = "REQUEST";
 	public static final String TABLE_POSITIONS = "POSITIONS";
@@ -45,12 +49,13 @@ public class ComModel {
 	int[][] matrixDuration;
 	int numVehicle;
 	int capacity;
+	int left,back;
 	String depot;
 	
 	public void insert() throws SQLException
 	{
 		int idDepot = insertMarker(depot, 0);
-		int idSession = insertSession(idDepot, numVehicle, capacity);
+		int idSession = insertSession(idDepot, numVehicle, capacity, back, left);
 		int[] arrIdPickup = new int[pickup.length];
 		int[] arrIdDeliver = new int[pickup.length];
 		int m = pickup.length;
@@ -135,6 +140,14 @@ public class ComModel {
 		if(prm == CAPACITY)
 		{
 			capacity = x;
+		}
+		else if(prm == TIME_BACK)
+		{
+			back = x;
+		}
+		else if(prm == TIME_LEFT)
+		{
+			left = x;
 		}
 		else
 		{
@@ -252,6 +265,9 @@ public class ComModel {
 			depot = session.getInt("depot");
 			data.put("num_vehicle", session.getInt("num_vehicle")+"");
 			data.put("capacity", session.getInt("capacity")+"");
+			data.put("left", session.getInt("timeleft")+"");
+			data.put("back", session.getInt("back")+"");
+			
 		}
 		ResultSet rs = selectTable(TABLE_POSITIONS, "id = "+depot);
 		if(rs.next())
@@ -374,15 +390,16 @@ public class ComModel {
 		idM.next();
 		return idM.getInt(1);
 	}
-	public int insertSession(int idDepot,int numVehicle, int capacity) throws SQLException
+	public int insertSession(int idDepot,int numVehicle, int capacity,int back,int left) throws SQLException
 	{		
-		String query = "INSERT INTO SESSIONS (depot,num_vehicle,capacity) VALUES (?,?,?)";
+		String query = "INSERT INTO SESSIONS (depot,num_vehicle,capacity,back,timeleft) VALUES (?,?,?,?,?)";
 		PreparedStatement prs = conn.prepareStatement(query);
-
+//		System.out.println("left-back:  "+left+"---"+back);
 		prs.setInt(1, idDepot);
 		prs.setInt(2, numVehicle);
 		prs.setInt(3, capacity);
-
+		prs.setInt(4, back);
+		prs.setInt(5, left);
 		prs.execute();
 
 		ResultSet idS = prs.getGeneratedKeys();

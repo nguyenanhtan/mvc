@@ -70,18 +70,16 @@ public class ControllerServlet extends HttpServlet {
 		{
 			numVehicle = Integer.parseInt(snVehicle.substring(1, snVehicle.length()-1));
 			capVehicle = Integer.parseInt(scapVehicle.substring(1, scapVehicle.length()-1));
-			System.out.println("capVehicle: "+capVehicle);
-			System.out.println("numVehicle: "+numVehicle);
 		}catch(Exception e)
 		{
 			System.out.println(e.toString());
 		}
 		numRequest = arrWeight.length;		
 		levTime = levTime.substring(1, levTime.length()-1);
-		SolverDARP.LEAVE_DEPOT_TIME = Integer.parseInt(levTime.split(":")[0])*60+Integer.parseInt(levTime.split(":")[1]);		
+		SolverDARP.LEAVE_DEPOT_TIME = Integer.parseInt(levTime.split(":")[0])*3600+Integer.parseInt(levTime.split(":")[1])*60;		
 		
 		backlastest = backlastest.substring(1, backlastest.length()-1);
-		SolverDARP.BACK_LASTEST_TIME = Integer.parseInt(backlastest.split(":")[0])*60+Integer.parseInt(backlastest.split(":")[1]);
+		SolverDARP.BACK_LASTEST_TIME = Integer.parseInt(backlastest.split(":")[0])*3600+Integer.parseInt(backlastest.split(":")[1])*60;
 		SolverDARP S = new SolverDARP(srangeMatrix,numVehicle,numRequest,capVehicle,arrWeight,parser(Ep),parser(Lp),parser(Ed),parser(Ld),parser(sdP),parser(sdD));
 		
 		
@@ -117,11 +115,10 @@ public class ControllerServlet extends HttpServlet {
 			while(it.hasNext())
 			{
 				String tg = it.next();
-				int re;
 				if(tg.contains(":"))
 				{
 					String[] arrtg = tg.split(":");
-					data[i] = Integer.parseInt(arrtg[0])*60 + Integer.parseInt(arrtg[1]);
+					data[i] = Integer.parseInt(arrtg[0])*3600 + Integer.parseInt(arrtg[1])*60;
 				}
 				else
 				{

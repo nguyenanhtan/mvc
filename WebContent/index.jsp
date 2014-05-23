@@ -86,6 +86,7 @@
 	<div class="row-opt">
 		<p>Ld:</p><input class="ipt-text" type="time" value="23:59" id="ipt-Ld"/>
 	</div>
+	<input type="button" id="btn-save" value="Save require"  title="Save require"/>
 </div>
 </form>
 <div id="depot">
@@ -165,7 +166,7 @@
 
 	<div id="box-button">
 		<input type="button" id="btn-adjust-data" value="Ajust"  onclick="adjustTimeWindow()" title="Adjust input data"/>
-		<input type="button" id="btn-save" value="Save require"  title="Save require"/>
+		
 		<input type="button" id="btn-new-session" value="New Session" onclick="newSession()"/>     
 		<input type="button" id="Out" value="Out" onclick="showOut()"/>   
 		<!-- <input type="button" id="get-matrix-distances" value="Get Matrix Distance" onclick="calculateDistances()"/>   -->

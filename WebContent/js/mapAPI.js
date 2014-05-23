@@ -272,9 +272,12 @@ function putMarker(id,lat,lng,icon)
 		var start = depot;
 	    var end = depot;
 		waypts = getRoute(k);
-		  //out("way.len = "+waypts.length);		
+		  //out("way.len = "+waypts.length);	
+		  poly.setMap(null)	;
+		  directionsDisplay.setMap(null);
 		if(waypts.length > 8)
 		{
+			poly.setMap(map);
 			drawPolyline(toPolyline(k));
 		}
 
@@ -289,7 +292,7 @@ function putMarker(id,lat,lng,icon)
 			  };
 
 			  
-			  
+			  directionsDisplay.setMap(map);
 			  directionsService.route(request, function(response, status) {
 				  out("Status: "+status);
 			    if (status == google.maps.DirectionsStatus.OK) {
