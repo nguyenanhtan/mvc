@@ -3,7 +3,10 @@ import org.w3c.dom.*;
 
 import javax.xml.parsers.*;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,13 +30,13 @@ public class SolverDARP {
 	public static double EPS = 0.00001;
 	public static int MAX_INIT = 1;
 	private Date startTime = new Date();
-	public static int TIME_LIMIT_TREESEARCH = 600;
-	public static int TIME_LIMIT_LNSFFPA = 2000;
-	public static int TIME_LIMIT_INIT = 3000;
+	//public static int TIME_LIMIT_TREESEARCH = 300;
+	public static int TIME_LIMIT_LNSFFPA = 1800;
+	public static int TIME_LIMIT_INIT = 900;
 	public static int MAX_SIZE = 0;
 	public static int RANGE = 0;
-	public static int NUM_ITER = 100;
-	public static double TEST_ACCEPT = 0.5;
+	public static int NUM_ITER = 300;
+	public static double TEST_ACCEPT = 0.3;
 //	private Solution tmpSol = null;
 	public static void main(String[] args) {
 		SolverDARP S = new SolverDARP();
@@ -42,7 +45,9 @@ public class SolverDARP {
 		S.println(Sol.getS());
 	}
 	public Solution LNSFFPA()
-	{
+	{		
+		TreeMap<Long, Integer> gpr = new TreeMap<Long, Integer>();
+		long pStart = System.currentTimeMillis();
 		for(int i = 0;i < MAX_INIT;i++)
 		{
 			println("Turn init "+i);
@@ -57,6 +62,7 @@ public class SolverDARP {
 				init();
 			}				
 		}
+		long pStop = System.currentTimeMillis();
 		status();
 		if(!isSolution()){
 			println("Can't init!");
@@ -64,12 +70,13 @@ public class SolverDARP {
 		}
 		else
 		{
-			println("Inited a solution!");
+			gpr.put(pStop - pStart,getRoutingCost());
+			println("Inited a solution in "+(pStop - pStart));
 		}
 		
 		Solution bestS = new Solution(this.s, this.v, this.t, getRoutingCost());
 		Solution currentS = new Solution(this.s, this.v, this.t, getRoutingCost());
-		startTime = new Date();
+		startTime = new Date();		
 		if(MAX_SIZE == 0)
 		{
 			MAX_SIZE = n;
@@ -111,12 +118,15 @@ public class SolverDARP {
 					double d = Math.random();
 					if(rCost < currentS.getRoutCost()||d < TEST_ACCEPT)
 					{	
-						numbetter++;
+						
 //						println("-"+rCost);
 						currentS = new Solution(s, v, t, rCost);
 						if(currentS.getRoutCost() < bestS.getRoutCost())
 						{
+							numbetter++;
 							bestS = new Solution(currentS.getS(), currentS.getV(), currentS.getT(), currentS.getRoutCost());
+							long tm = System.currentTimeMillis() - pStart;
+							gpr.put(tm, bestS.getRoutCost());
 						}
 					}
 					if(isTimeOut(startTime, TIME_LIMIT_LNSFFPA))
@@ -126,6 +136,8 @@ public class SolverDARP {
 				}
 			}
 		}
+		long tm = System.currentTimeMillis() - pStart;
+		gpr.put(tm, bestS.getRoutCost());
 //		status();
 //		println("Rout cost: "+currentS.getRoutCost());
 //		println(currentS.getS());
@@ -136,9 +148,12 @@ public class SolverDARP {
 		println(bestS.getT());
 //		status();
 //		println(map.toString());
+		pStop = System.currentTimeMillis();
+		println("runtime: "+(pStop - pStart));
 		println("num better: "+numbetter);
 		println("START: "+LEAVE_DEPOT_TIME);
 		println("BACK: "+BACK_LASTEST_TIME);
+		file(gpr,"./darp");
 		return bestS;
 	}
 	private boolean isTimeOut(Date start, int maxSecond)
@@ -151,6 +166,11 @@ public class SolverDARP {
 			return false;
 		}
 		return true;
+	}
+	private int runTime(Date start)
+	{
+		
+		return 0;
 	}
 	private void relaxedSolution(int numR)
 	{
@@ -478,7 +498,7 @@ public class SolverDARP {
 			}
 			else
 			{
-				if(isTimeOut(startTime, TIME_LIMIT_TREESEARCH))
+				if(isTimeOut(startTime, TIME_LIMIT_LNSFFPA))
 				{
 					println("TIMEOUT: Treesearch is timeout");
 					return;
@@ -1079,6 +1099,44 @@ public class SolverDARP {
 		for(float [] y:x)
 		{
 			println(y);
+		}
+	}
+	public void file(TreeMap<Long, Integer> x, String path)
+	{
+		String tp = path;
+		try
+		{
+			File f = null;
+			int i = 0;
+			while(true)
+			{
+				f = new File(tp+".dat");
+				if(!f.exists())
+				{
+					f.createNewFile();
+					break;
+				}
+				else
+				{
+					tp=path+"_"+i;
+					i++;
+				}
+			}
+			FileWriter fw = new FileWriter(f.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write("n = "+n+"\n");
+			bw.write("m = "+m+"\n");
+			Iterator it = x.entrySet().iterator();
+			while(it.hasNext())
+			{
+				Map.Entry<Long, Integer> me = (Map.Entry<Long, Integer>)it.next();
+				bw.write(me.getKey()+"\t"+me.getValue()+"\n");
+				println(me.getKey()+"\t"+me.getValue()+"\n");
+			}
+			bw.close();
+		}catch(IOException e)
+		{
+			e.printStackTrace();
 		}
 	}
 	public class Solution

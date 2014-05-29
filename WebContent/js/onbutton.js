@@ -309,6 +309,7 @@ function postData()
 			    	parseJSON(data);
 			    	appendSelectRoute(data_response.numVehicle);
 			    	drawRoute(0);
+			    	alert("Searching is successful!");
 			 	},
 				error:function(status,stt,err)
 				{
