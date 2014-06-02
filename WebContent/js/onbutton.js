@@ -1,4 +1,3 @@
-
 function checkOpt()
 {
 	//alert("ddd");
@@ -49,7 +48,7 @@ function resetOpt()
 {
 	pos_pickup.value = "Position pickup";
 	pos_deliver.value = "Position deliver";
-	
+
 	ipt_weight.value = "1";
 	ipt_Ep.value = "00:00";
 	ipt_Lp.value = "23:59";
@@ -57,7 +56,7 @@ function resetOpt()
 	ipt_Ld.value = "23:59";
 	ipt_duration_pickup.value = 0;
 	ipt_duration_deliver.value = 0;
-	
+
 	//req_active = null;
 }
 function saveReq()
@@ -94,7 +93,7 @@ function updateReq()
 				arr_request[i].Ld = ipt_Ld.value;
 				arr_request[i].duration_pickup = ipt_duration_pickup.value;
 				arr_request[i].duration_deliver = ipt_duration_deliver.value;
-				
+
 				break;
 			}
 		}
@@ -163,7 +162,7 @@ function activeRequest(id)
 		arr_request[i].deliver.setIcon(icon_deliver_nact);
 		arr_request[i].pickup.setDraggable(false);
 		arr_request[i].deliver.setDraggable(false);
-		
+
 	}
 	for(var i = 0;i < arr_request.length;i++)
 	{
@@ -191,7 +190,7 @@ function loadReq(req)
 	ipt_Ld.value = req.Ld;
 	ipt_duration_pickup.value = req.duration_pickup;
 	ipt_duration_deliver.value = req.duration_deliver;
-	
+
 }
 function addReq(req)
 {
@@ -301,7 +300,7 @@ function postData()
 				    matrix_distances:JSON.stringify(arr_matrix_distances),
 				    leave_depot_time: JSON.stringify($("#start-time").val()),
 				    back_lastest: JSON.stringify($("#back-time").val())
-				    		    
+
 				},
 				success:function(data)
 				{
@@ -349,7 +348,7 @@ function saveSession()
 				    Ld: JSON.stringify(getParameterRequest("Ld")),
 				    left: JSON.stringify($("#start-time").val()),
 				    back: JSON.stringify($("#back-time").val()),
-				    
+
 				    duration_pickup: JSON.stringify(getParameterRequest("duration-pickup")),
 				    duration_deliver: JSON.stringify(getParameterRequest("duration-deliver")),				   			   
 				},
@@ -396,7 +395,7 @@ function loadSession()
 			idsArr.push($(this).attr("value"));
 		}
 	});
-	
+
 	$.ajax({
 		url:"ControllerModel",
 		type:"POST",
@@ -420,7 +419,7 @@ function loadSession()
 			out("session back: "+session.back);
 			$("#start-time").val(numberToTime(session.left));
 			$("#back-time").val(numberToTime(session.back));
-			
+
 			// for(var i = 0;i < arr_request.length;i++)
 			// {
 			// 	arr_request[i].destroy();
@@ -435,7 +434,7 @@ function loadSession()
 				redelivery = putMarker(requests[i].id,latgD.k,latgD.A,icon_deliver_nact);
 				arr_request[i] = new Request(requests[i].id,repickup,redelivery,requests[i].weight,numberToTime(requests[i].Ep),numberToTime(requests[i].Lp),numberToTime(requests[i].Ed),numberToTime(requests[i].Ld),requests[i].duration_pickup,requests[i].duration_deliver);
 				addReq(arr_request[i]);
-				
+
 			}
 		},
 		error:function(status,stt,err)

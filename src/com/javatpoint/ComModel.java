@@ -200,7 +200,7 @@ public class ComModel {
 		}
 		try {
 			String userName = "root";
-	        String password = "1234567890";
+	        String password = "";
 	        String url = "jdbc:mysql://127.0.0.1:3306/darp?useUnicode=true&characterEncoding=UTF-8";
 	        //String url = "jdbc:mysql://mysql-dial-a-ride.whelastic.net/darp";
 	        conn = DriverManager.getConnection (url,userName, password);

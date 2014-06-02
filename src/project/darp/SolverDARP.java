@@ -30,14 +30,14 @@ public class SolverDARP {
 	public static double EPS = 0.00001;
 	public static int MAX_INIT = 1;
 	private Date startTime = new Date();
-	//public static int TIME_LIMIT_TREESEARCH = 300;
+	public static int TIME_LIMIT_TREESEARCH = 900;
 	public static int TIME_LIMIT_LNSFFPA = 1800;
 	public static int TIME_LIMIT_INIT = 900;
 	public static int MAX_SIZE = 0;
 	public static int RANGE = 0;
 	public static int NUM_ITER = 300;
 	public static double TEST_ACCEPT = 0.3;
-//	private Solution tmpSol = null;
+	private Solution tmpSol = null;
 	public static void main(String[] args) {
 		SolverDARP S = new SolverDARP();
 		Solution Sol = S.LNSFFPA();
@@ -498,7 +498,7 @@ public class SolverDARP {
 			}
 			else
 			{
-				if(isTimeOut(startTime, TIME_LIMIT_LNSFFPA))
+				if(isTimeOut(startTime, TIME_LIMIT_TREESEARCH))
 				{
 					println("TIMEOUT: Treesearch is timeout");
 					return;
@@ -528,8 +528,8 @@ public class SolverDARP {
 
 		}
 	}
-	private void revert(Solution s)
-	{
+//	private void revert(Solution s)
+//	{
 //		if(s != null)
 //		{
 //			this.s = s.getS();
@@ -540,7 +540,7 @@ public class SolverDARP {
 //		{
 //			println("Can't revert!");
 //		}
-	}
+//	}
 	private boolean isSolution()
 	{
 		printBreakPoint("--- isSolution ---");
