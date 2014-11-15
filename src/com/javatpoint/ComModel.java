@@ -51,7 +51,8 @@ public class ComModel {
 	int capacity;
 	int left,back;
 	String depot;
-	
+	//hrhrhrhrhrr
+	String s;
 	public void insert() throws SQLException
 	{
 		int idDepot = insertMarker(depot, 0);
